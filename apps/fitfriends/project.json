@@ -1,0 +1,28 @@
+{
+  "name": "fitfriends",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/fitfriends/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "buildTarget": "fitfriends:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "fitfriends:build:development"
+        },
+        "production": {
+          "buildTarget": "fitfriends:build:production"
+        }
+      }
+    }
+  }
+}
