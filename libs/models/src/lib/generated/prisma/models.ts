@@ -7,7 +7,11 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Guitars.js'
-export type * from './models/User.js'
-export type * from './models/RefreshSessions.js'
-export type * from './commonInputTypes.js'
+export type * from './models/User'
+export type * from './models/RefreshSessions'
+export type * from './models/Training'
+export type * from './models/Questionnaire'
+export type * from './models/Balance'
+export type * from './models/Order'
+export type * from './models/Feedback'
+export type * from './commonInputTypes'

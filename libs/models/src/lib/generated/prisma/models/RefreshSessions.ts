@@ -8,8 +8,8 @@
  * 🟢 You can import this file directly.
  */
 import * as runtime from "@prisma/client/runtime/library"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model RefreshSessions
@@ -26,28 +26,28 @@ export type AggregateRefreshSessions = {
 export type RefreshSessionsMinAggregateOutputType = {
   id: string | null
   tokenId: string | null
-  userId: string | null
   expiresIn: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  userId: string | null
 }
 
 export type RefreshSessionsMaxAggregateOutputType = {
   id: string | null
   tokenId: string | null
-  userId: string | null
   expiresIn: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  userId: string | null
 }
 
 export type RefreshSessionsCountAggregateOutputType = {
   id: number
   tokenId: number
-  userId: number
   expiresIn: number
   createdAt: number
   updatedAt: number
+  userId: number
   _all: number
 }
 
@@ -55,28 +55,28 @@ export type RefreshSessionsCountAggregateOutputType = {
 export type RefreshSessionsMinAggregateInputType = {
   id?: true | runtime.Types.Skip
   tokenId?: true | runtime.Types.Skip
-  userId?: true | runtime.Types.Skip
   expiresIn?: true | runtime.Types.Skip
   createdAt?: true | runtime.Types.Skip
   updatedAt?: true | runtime.Types.Skip
+  userId?: true | runtime.Types.Skip
 }
 
 export type RefreshSessionsMaxAggregateInputType = {
   id?: true | runtime.Types.Skip
   tokenId?: true | runtime.Types.Skip
-  userId?: true | runtime.Types.Skip
   expiresIn?: true | runtime.Types.Skip
   createdAt?: true | runtime.Types.Skip
   updatedAt?: true | runtime.Types.Skip
+  userId?: true | runtime.Types.Skip
 }
 
 export type RefreshSessionsCountAggregateInputType = {
   id?: true | runtime.Types.Skip
   tokenId?: true | runtime.Types.Skip
-  userId?: true | runtime.Types.Skip
   expiresIn?: true | runtime.Types.Skip
   createdAt?: true | runtime.Types.Skip
   updatedAt?: true | runtime.Types.Skip
+  userId?: true | runtime.Types.Skip
   _all?: true | runtime.Types.Skip
 }
 
@@ -155,10 +155,10 @@ export type RefreshSessionsGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 export type RefreshSessionsGroupByOutputType = {
   id: string
   tokenId: string
-  userId: string
   expiresIn: Date
   createdAt: Date
   updatedAt: Date
+  userId: string
   _count: RefreshSessionsCountAggregateOutputType | null
   _min: RefreshSessionsMinAggregateOutputType | null
   _max: RefreshSessionsMaxAggregateOutputType | null
@@ -185,20 +185,20 @@ export type RefreshSessionsWhereInput = {
   NOT?: Prisma.RefreshSessionsWhereInput | Prisma.RefreshSessionsWhereInput[] | runtime.Types.Skip
   id?: Prisma.StringFilter<"RefreshSessions"> | string | runtime.Types.Skip
   tokenId?: Prisma.StringFilter<"RefreshSessions"> | string | runtime.Types.Skip
-  userId?: Prisma.StringFilter<"RefreshSessions"> | string | runtime.Types.Skip
   expiresIn?: Prisma.DateTimeFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
+  userId?: Prisma.StringFilter<"RefreshSessions"> | string | runtime.Types.Skip
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput> | runtime.Types.Skip
 }
 
 export type RefreshSessionsOrderByWithRelationInput = {
   id?: Prisma.SortOrder | runtime.Types.Skip
   tokenId?: Prisma.SortOrder | runtime.Types.Skip
-  userId?: Prisma.SortOrder | runtime.Types.Skip
   expiresIn?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
+  userId?: Prisma.SortOrder | runtime.Types.Skip
   user?: Prisma.UserOrderByWithRelationInput | runtime.Types.Skip
 }
 
@@ -208,20 +208,20 @@ export type RefreshSessionsWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.RefreshSessionsWhereInput | Prisma.RefreshSessionsWhereInput[] | runtime.Types.Skip
   OR?: Prisma.RefreshSessionsWhereInput[] | runtime.Types.Skip
   NOT?: Prisma.RefreshSessionsWhereInput | Prisma.RefreshSessionsWhereInput[] | runtime.Types.Skip
-  userId?: Prisma.StringFilter<"RefreshSessions"> | string | runtime.Types.Skip
   expiresIn?: Prisma.DateTimeFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
+  userId?: Prisma.StringFilter<"RefreshSessions"> | string | runtime.Types.Skip
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput> | runtime.Types.Skip
 }, "id" | "tokenId">
 
 export type RefreshSessionsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder | runtime.Types.Skip
   tokenId?: Prisma.SortOrder | runtime.Types.Skip
-  userId?: Prisma.SortOrder | runtime.Types.Skip
   expiresIn?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
+  userId?: Prisma.SortOrder | runtime.Types.Skip
   _count?: Prisma.RefreshSessionsCountOrderByAggregateInput | runtime.Types.Skip
   _max?: Prisma.RefreshSessionsMaxOrderByAggregateInput | runtime.Types.Skip
   _min?: Prisma.RefreshSessionsMinOrderByAggregateInput | runtime.Types.Skip
@@ -233,10 +233,10 @@ export type RefreshSessionsScalarWhereWithAggregatesInput = {
   NOT?: Prisma.RefreshSessionsScalarWhereWithAggregatesInput | Prisma.RefreshSessionsScalarWhereWithAggregatesInput[] | runtime.Types.Skip
   id?: Prisma.StringWithAggregatesFilter<"RefreshSessions"> | string | runtime.Types.Skip
   tokenId?: Prisma.StringWithAggregatesFilter<"RefreshSessions"> | string | runtime.Types.Skip
-  userId?: Prisma.StringWithAggregatesFilter<"RefreshSessions"> | string | runtime.Types.Skip
   expiresIn?: Prisma.DateTimeWithAggregatesFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
+  userId?: Prisma.StringWithAggregatesFilter<"RefreshSessions"> | string | runtime.Types.Skip
 }
 
 export type RefreshSessionsCreateInput = {
@@ -251,10 +251,10 @@ export type RefreshSessionsCreateInput = {
 export type RefreshSessionsUncheckedCreateInput = {
   id?: string | runtime.Types.Skip
   tokenId: string
-  userId: string
   expiresIn: Date | string
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
+  userId: string
 }
 
 export type RefreshSessionsUpdateInput = {
@@ -269,19 +269,19 @@ export type RefreshSessionsUpdateInput = {
 export type RefreshSessionsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   tokenId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
-  userId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   expiresIn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  userId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 }
 
 export type RefreshSessionsCreateManyInput = {
   id?: string | runtime.Types.Skip
   tokenId: string
-  userId: string
   expiresIn: Date | string
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
+  userId: string
 }
 
 export type RefreshSessionsUpdateManyMutationInput = {
@@ -295,10 +295,10 @@ export type RefreshSessionsUpdateManyMutationInput = {
 export type RefreshSessionsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   tokenId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
-  userId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   expiresIn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  userId?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
 }
 
 export type RefreshSessionsListRelationFilter = {
@@ -314,28 +314,28 @@ export type RefreshSessionsOrderByRelationAggregateInput = {
 export type RefreshSessionsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder | runtime.Types.Skip
   tokenId?: Prisma.SortOrder | runtime.Types.Skip
-  userId?: Prisma.SortOrder | runtime.Types.Skip
   expiresIn?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
+  userId?: Prisma.SortOrder | runtime.Types.Skip
 }
 
 export type RefreshSessionsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder | runtime.Types.Skip
   tokenId?: Prisma.SortOrder | runtime.Types.Skip
-  userId?: Prisma.SortOrder | runtime.Types.Skip
   expiresIn?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
+  userId?: Prisma.SortOrder | runtime.Types.Skip
 }
 
 export type RefreshSessionsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder | runtime.Types.Skip
   tokenId?: Prisma.SortOrder | runtime.Types.Skip
-  userId?: Prisma.SortOrder | runtime.Types.Skip
   expiresIn?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
+  userId?: Prisma.SortOrder | runtime.Types.Skip
 }
 
 export type RefreshSessionsCreateNestedManyWithoutUserInput = {
@@ -428,10 +428,10 @@ export type RefreshSessionsScalarWhereInput = {
   NOT?: Prisma.RefreshSessionsScalarWhereInput | Prisma.RefreshSessionsScalarWhereInput[] | runtime.Types.Skip
   id?: Prisma.StringFilter<"RefreshSessions"> | string | runtime.Types.Skip
   tokenId?: Prisma.StringFilter<"RefreshSessions"> | string | runtime.Types.Skip
-  userId?: Prisma.StringFilter<"RefreshSessions"> | string | runtime.Types.Skip
   expiresIn?: Prisma.DateTimeFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFilter<"RefreshSessions"> | Date | string | runtime.Types.Skip
+  userId?: Prisma.StringFilter<"RefreshSessions"> | string | runtime.Types.Skip
 }
 
 export type RefreshSessionsCreateManyUserInput = {
@@ -471,43 +471,43 @@ export type RefreshSessionsUncheckedUpdateManyWithoutUserInput = {
 export type RefreshSessionsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean | runtime.Types.Skip
   tokenId?: boolean | runtime.Types.Skip
-  userId?: boolean | runtime.Types.Skip
   expiresIn?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
+  userId?: boolean | runtime.Types.Skip
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs> | runtime.Types.Skip
 }, ExtArgs["result"]["refreshSessions"]>
 
 export type RefreshSessionsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean | runtime.Types.Skip
   tokenId?: boolean | runtime.Types.Skip
-  userId?: boolean | runtime.Types.Skip
   expiresIn?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
+  userId?: boolean | runtime.Types.Skip
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs> | runtime.Types.Skip
 }, ExtArgs["result"]["refreshSessions"]>
 
 export type RefreshSessionsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean | runtime.Types.Skip
   tokenId?: boolean | runtime.Types.Skip
-  userId?: boolean | runtime.Types.Skip
   expiresIn?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
+  userId?: boolean | runtime.Types.Skip
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs> | runtime.Types.Skip
 }, ExtArgs["result"]["refreshSessions"]>
 
 export type RefreshSessionsSelectScalar = {
   id?: boolean | runtime.Types.Skip
   tokenId?: boolean | runtime.Types.Skip
-  userId?: boolean | runtime.Types.Skip
   expiresIn?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
+  userId?: boolean | runtime.Types.Skip
 }
 
-export type RefreshSessionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tokenId" | "userId" | "expiresIn" | "createdAt" | "updatedAt", ExtArgs["result"]["refreshSessions"], runtime.Types.Skip>
+export type RefreshSessionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tokenId" | "expiresIn" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["refreshSessions"], runtime.Types.Skip>
 export type RefreshSessionsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs> | runtime.Types.Skip
 }
@@ -526,10 +526,10 @@ export type $RefreshSessionsPayload<ExtArgs extends runtime.Types.Extensions.Int
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     tokenId: string
-    userId: string
     expiresIn: Date
     createdAt: Date
     updatedAt: Date
+    userId: string
   }, ExtArgs["result"]["refreshSessions"]>
   composites: {}
 }
@@ -956,10 +956,10 @@ export interface Prisma__RefreshSessionsClient<T, Null = never, ExtArgs extends 
 export interface RefreshSessionsFieldRefs {
   readonly id: Prisma.FieldRef<"RefreshSessions", 'String'>
   readonly tokenId: Prisma.FieldRef<"RefreshSessions", 'String'>
-  readonly userId: Prisma.FieldRef<"RefreshSessions", 'String'>
   readonly expiresIn: Prisma.FieldRef<"RefreshSessions", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"RefreshSessions", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"RefreshSessions", 'DateTime'>
+  readonly userId: Prisma.FieldRef<"RefreshSessions", 'String'>
 }
     
 

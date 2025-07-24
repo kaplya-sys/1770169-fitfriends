@@ -64,4 +64,118 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id              String            @id @default(uuid())
+  name            String            @db.VarChar(15)
+  email           String            @unique @db.VarChar(40)
+  password        String            @db.VarChar(60)
+  avatar          String?           @db.Char(36)
+  gender          Gender
+  birthday        DateTime?
+  description     String?           @db.VarChar(140)
+  location        Location
+  role            Role
+  background      String            @db.Char(36)
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+  questionnaireId String?           @unique @map("questionnaire_id") @db.Char(36)
+  questionnaire   Questionnaire?    @relation(fields: [questionnaireId], references: [id], onDelete: Cascade)
+  balance         Balance?          @relation
+  refreshSessions RefreshSessions[] @relation
+  feedbacks       Feedback[]        @relation
+  orders          Order[]           @relation
+  trainings       Training[]        @relation
 
+  @@map("users")
+}
+
+model RefreshSessions {
+  id        String   @id @default(uuid())
+  tokenId   String   @unique @map("token_id") @db.Char(36)
+  expiresIn DateTime @map("expires_in")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    String   @map("user_id") @db.Char(36)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh-sessions")
+}
+
+model Training {
+  id           String       @id @default(uuid())
+  title        String       @db.VarChar(15)
+  background   String       @db.Char(36)
+  level        FitnessLevel
+  type         Exercise
+  trainingTime TrainingTime @map("training_time")
+  calorie      Int          @default(0)
+  gender       Gender
+  rating       Int          @default(0)
+  description  String       @db.VarChar(140)
+  price        Int          @default(0)
+  video        String       @db.Char(36)
+  coachName    String       @db.Char(15)
+  specialOffer Boolean      @default(false) @map("special_offer")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  coachId      String       @map("coach_id") @db.Char(36)
+  coach        User         @relation(fields: [coachId], references: [id], onDelete: Cascade)
+  feedbacks    Feedback[]   @relation
+  balances     Balance[]    @relation
+  orders       Order[]      @relation
+
+  @@map("trainings")
+}
+
+model Questionnaire {
+  id           String       @id @default(uuid())
+  fitnessLevel FitnessLevel @map("fitness-level")
+  exercise     Exercise[]
+  trainingTime TrainingTime @map("training-time")
+  calorieLose  Int          @default(0) @map("calorie_lose")
+  calorieWaste Int          @default(0) @map("calorie_waste")
+  isReady      Boolean      @default(false) @map("is_ready")
+  user         User?        @relation()
+
+  @@map("questionnaire")
+}
+
+model Balance {
+  id         String   @id @default(uuid())
+  amount     Int      @default(0)
+  userId     String   @unique @map("user_id") @db.Char(36)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingId String   @map("training_id") @db.Char(36)
+  training   Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+
+  @@map("balance")
+}
+
+model Order {
+  id         String        @id @default(uuid())
+  exercise   Exercise
+  price      Int           @default(0)
+  count      Int
+  amount     Int
+  payment    PaymentMethod
+  createdAt  DateTime      @default(now()) @map("created_at")
+  userId     String        @map("user_id") @db.Char(36)
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingId String        @map("training_id") @db.Char(36)
+  training   Training      @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+
+  @@map("orders")
+}
+
+model Feedback {
+  id         String   @id @default(uuid())
+  assessment Int
+  content    String   @db.Char(1024)
+  createdAt  DateTime @default(now()) @map("created_at")
+  authorId   String   @map("author_id") @db.Char(36)
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  trainingId String   @map("training_id") @db.Char(36)
+  training   Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+
+  @@map("feedbacks")
+}

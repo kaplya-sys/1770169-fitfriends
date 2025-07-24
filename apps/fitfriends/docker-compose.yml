@@ -1,0 +1,34 @@
+services:
+  mongo-files:
+    image: mongo:7.0
+    container_name: files_database
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
+    volumes:
+      - files_data:/data/db
+    networks:
+      - 599c27540b41-network
+  postgres-guitars:
+    image: postgres:16.4
+    container_name: guitars_database
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - guitars_data:/var/lib/postgresql/data
+    networks:
+      - 599c27540b41-network
+networks:
+  599c27540b41-network:
+    name: 599c27540b41-network
+    driver: bridge
+volumes:
+  files_data:
+  guitars_data:
+  backend_app_data:

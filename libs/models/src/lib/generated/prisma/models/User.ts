@@ -8,8 +8,8 @@
  * 🟢 You can import this file directly.
  */
 import * as runtime from "@prisma/client/runtime/library"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model User
@@ -28,9 +28,16 @@ export type UserMinAggregateOutputType = {
   name: string | null
   email: string | null
   password: string | null
+  avatar: string | null
+  gender: $Enums.Gender | null
+  birthday: Date | null
+  description: string | null
+  location: $Enums.Location | null
   role: $Enums.Role | null
+  background: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  questionnaireId: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -38,9 +45,16 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   email: string | null
   password: string | null
+  avatar: string | null
+  gender: $Enums.Gender | null
+  birthday: Date | null
+  description: string | null
+  location: $Enums.Location | null
   role: $Enums.Role | null
+  background: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  questionnaireId: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -48,9 +62,16 @@ export type UserCountAggregateOutputType = {
   name: number
   email: number
   password: number
+  avatar: number
+  gender: number
+  birthday: number
+  description: number
+  location: number
   role: number
+  background: number
   createdAt: number
   updatedAt: number
+  questionnaireId: number
   _all: number
 }
 
@@ -60,9 +81,16 @@ export type UserMinAggregateInputType = {
   name?: true | runtime.Types.Skip
   email?: true | runtime.Types.Skip
   password?: true | runtime.Types.Skip
+  avatar?: true | runtime.Types.Skip
+  gender?: true | runtime.Types.Skip
+  birthday?: true | runtime.Types.Skip
+  description?: true | runtime.Types.Skip
+  location?: true | runtime.Types.Skip
   role?: true | runtime.Types.Skip
+  background?: true | runtime.Types.Skip
   createdAt?: true | runtime.Types.Skip
   updatedAt?: true | runtime.Types.Skip
+  questionnaireId?: true | runtime.Types.Skip
 }
 
 export type UserMaxAggregateInputType = {
@@ -70,9 +98,16 @@ export type UserMaxAggregateInputType = {
   name?: true | runtime.Types.Skip
   email?: true | runtime.Types.Skip
   password?: true | runtime.Types.Skip
+  avatar?: true | runtime.Types.Skip
+  gender?: true | runtime.Types.Skip
+  birthday?: true | runtime.Types.Skip
+  description?: true | runtime.Types.Skip
+  location?: true | runtime.Types.Skip
   role?: true | runtime.Types.Skip
+  background?: true | runtime.Types.Skip
   createdAt?: true | runtime.Types.Skip
   updatedAt?: true | runtime.Types.Skip
+  questionnaireId?: true | runtime.Types.Skip
 }
 
 export type UserCountAggregateInputType = {
@@ -80,9 +115,16 @@ export type UserCountAggregateInputType = {
   name?: true | runtime.Types.Skip
   email?: true | runtime.Types.Skip
   password?: true | runtime.Types.Skip
+  avatar?: true | runtime.Types.Skip
+  gender?: true | runtime.Types.Skip
+  birthday?: true | runtime.Types.Skip
+  description?: true | runtime.Types.Skip
+  location?: true | runtime.Types.Skip
   role?: true | runtime.Types.Skip
+  background?: true | runtime.Types.Skip
   createdAt?: true | runtime.Types.Skip
   updatedAt?: true | runtime.Types.Skip
+  questionnaireId?: true | runtime.Types.Skip
   _all?: true | runtime.Types.Skip
 }
 
@@ -163,9 +205,16 @@ export type UserGroupByOutputType = {
   name: string
   email: string
   password: string
+  avatar: string | null
+  gender: $Enums.Gender
+  birthday: Date | null
+  description: string | null
+  location: $Enums.Location
   role: $Enums.Role
+  background: string
   createdAt: Date
   updatedAt: Date
+  questionnaireId: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -194,10 +243,22 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string | runtime.Types.Skip
   email?: Prisma.StringFilter<"User"> | string | runtime.Types.Skip
   password?: Prisma.StringFilter<"User"> | string | runtime.Types.Skip
+  avatar?: Prisma.StringNullableFilter<"User"> | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFilter<"User"> | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null | runtime.Types.Skip
+  description?: Prisma.StringNullableFilter<"User"> | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFilter<"User"> | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFilter<"User"> | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string | runtime.Types.Skip
+  questionnaireId?: Prisma.StringNullableFilter<"User"> | string | null | runtime.Types.Skip
+  questionnaire?: Prisma.XOR<Prisma.QuestionnaireNullableScalarRelationFilter, Prisma.QuestionnaireWhereInput> | null | runtime.Types.Skip
+  balance?: Prisma.XOR<Prisma.BalanceNullableScalarRelationFilter, Prisma.BalanceWhereInput> | null | runtime.Types.Skip
   refreshSessions?: Prisma.RefreshSessionsListRelationFilter | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackListRelationFilter | runtime.Types.Skip
+  orders?: Prisma.OrderListRelationFilter | runtime.Types.Skip
+  trainings?: Prisma.TrainingListRelationFilter | runtime.Types.Skip
 }
 
 export type UserOrderByWithRelationInput = {
@@ -205,34 +266,65 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrder | runtime.Types.Skip
   email?: Prisma.SortOrder | runtime.Types.Skip
   password?: Prisma.SortOrder | runtime.Types.Skip
+  avatar?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  gender?: Prisma.SortOrder | runtime.Types.Skip
+  birthday?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  description?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  location?: Prisma.SortOrder | runtime.Types.Skip
   role?: Prisma.SortOrder | runtime.Types.Skip
+  background?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
+  questionnaireId?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireOrderByWithRelationInput | runtime.Types.Skip
+  balance?: Prisma.BalanceOrderByWithRelationInput | runtime.Types.Skip
   refreshSessions?: Prisma.RefreshSessionsOrderByRelationAggregateInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackOrderByRelationAggregateInput | runtime.Types.Skip
+  orders?: Prisma.OrderOrderByRelationAggregateInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingOrderByRelationAggregateInput | runtime.Types.Skip
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string | runtime.Types.Skip
   email?: string | runtime.Types.Skip
+  questionnaireId?: string | runtime.Types.Skip
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[] | runtime.Types.Skip
   OR?: Prisma.UserWhereInput[] | runtime.Types.Skip
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[] | runtime.Types.Skip
   name?: Prisma.StringFilter<"User"> | string | runtime.Types.Skip
   password?: Prisma.StringFilter<"User"> | string | runtime.Types.Skip
+  avatar?: Prisma.StringNullableFilter<"User"> | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFilter<"User"> | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null | runtime.Types.Skip
+  description?: Prisma.StringNullableFilter<"User"> | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFilter<"User"> | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFilter<"User"> | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.XOR<Prisma.QuestionnaireNullableScalarRelationFilter, Prisma.QuestionnaireWhereInput> | null | runtime.Types.Skip
+  balance?: Prisma.XOR<Prisma.BalanceNullableScalarRelationFilter, Prisma.BalanceWhereInput> | null | runtime.Types.Skip
   refreshSessions?: Prisma.RefreshSessionsListRelationFilter | runtime.Types.Skip
-}, "id" | "email">
+  feedbacks?: Prisma.FeedbackListRelationFilter | runtime.Types.Skip
+  orders?: Prisma.OrderListRelationFilter | runtime.Types.Skip
+  trainings?: Prisma.TrainingListRelationFilter | runtime.Types.Skip
+}, "id" | "email" | "questionnaireId">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder | runtime.Types.Skip
   name?: Prisma.SortOrder | runtime.Types.Skip
   email?: Prisma.SortOrder | runtime.Types.Skip
   password?: Prisma.SortOrder | runtime.Types.Skip
+  avatar?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  gender?: Prisma.SortOrder | runtime.Types.Skip
+  birthday?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  description?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  location?: Prisma.SortOrder | runtime.Types.Skip
   role?: Prisma.SortOrder | runtime.Types.Skip
+  background?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
+  questionnaireId?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
   _count?: Prisma.UserCountOrderByAggregateInput | runtime.Types.Skip
   _max?: Prisma.UserMaxOrderByAggregateInput | runtime.Types.Skip
   _min?: Prisma.UserMinOrderByAggregateInput | runtime.Types.Skip
@@ -246,9 +338,16 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"User"> | string | runtime.Types.Skip
   email?: Prisma.StringWithAggregatesFilter<"User"> | string | runtime.Types.Skip
   password?: Prisma.StringWithAggregatesFilter<"User"> | string | runtime.Types.Skip
+  avatar?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderWithAggregatesFilter<"User"> | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null | runtime.Types.Skip
+  description?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationWithAggregatesFilter<"User"> | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringWithAggregatesFilter<"User"> | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string | runtime.Types.Skip
+  questionnaireId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null | runtime.Types.Skip
 }
 
 export type UserCreateInput = {
@@ -256,10 +355,21 @@ export type UserCreateInput = {
   name: string
   email: string
   password: string
-  role?: $Enums.Role | runtime.Types.Skip
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  balance?: Prisma.BalanceCreateNestedOneWithoutUserInput | runtime.Types.Skip
   refreshSessions?: Prisma.RefreshSessionsCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingCreateNestedManyWithoutCoachInput | runtime.Types.Skip
 }
 
 export type UserUncheckedCreateInput = {
@@ -267,10 +377,21 @@ export type UserUncheckedCreateInput = {
   name: string
   email: string
   password: string
-  role?: $Enums.Role | runtime.Types.Skip
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
+  questionnaireId?: string | null | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedCreateNestedOneWithoutUserInput | runtime.Types.Skip
   refreshSessions?: Prisma.RefreshSessionsUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedCreateNestedManyWithoutCoachInput | runtime.Types.Skip
 }
 
 export type UserUpdateInput = {
@@ -278,10 +399,21 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  balance?: Prisma.BalanceUpdateOneWithoutUserNestedInput | runtime.Types.Skip
   refreshSessions?: Prisma.RefreshSessionsUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
 }
 
 export type UserUncheckedUpdateInput = {
@@ -289,10 +421,21 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedUpdateOneWithoutUserNestedInput | runtime.Types.Skip
   refreshSessions?: Prisma.RefreshSessionsUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
 }
 
 export type UserCreateManyInput = {
@@ -300,9 +443,16 @@ export type UserCreateManyInput = {
   name: string
   email: string
   password: string
-  role?: $Enums.Role | runtime.Types.Skip
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
+  questionnaireId?: string | null | runtime.Types.Skip
 }
 
 export type UserUpdateManyMutationInput = {
@@ -310,7 +460,13 @@ export type UserUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
 }
@@ -320,9 +476,16 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -330,9 +493,16 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder | runtime.Types.Skip
   email?: Prisma.SortOrder | runtime.Types.Skip
   password?: Prisma.SortOrder | runtime.Types.Skip
+  avatar?: Prisma.SortOrder | runtime.Types.Skip
+  gender?: Prisma.SortOrder | runtime.Types.Skip
+  birthday?: Prisma.SortOrder | runtime.Types.Skip
+  description?: Prisma.SortOrder | runtime.Types.Skip
+  location?: Prisma.SortOrder | runtime.Types.Skip
   role?: Prisma.SortOrder | runtime.Types.Skip
+  background?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
+  questionnaireId?: Prisma.SortOrder | runtime.Types.Skip
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -340,9 +510,16 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder | runtime.Types.Skip
   email?: Prisma.SortOrder | runtime.Types.Skip
   password?: Prisma.SortOrder | runtime.Types.Skip
+  avatar?: Prisma.SortOrder | runtime.Types.Skip
+  gender?: Prisma.SortOrder | runtime.Types.Skip
+  birthday?: Prisma.SortOrder | runtime.Types.Skip
+  description?: Prisma.SortOrder | runtime.Types.Skip
+  location?: Prisma.SortOrder | runtime.Types.Skip
   role?: Prisma.SortOrder | runtime.Types.Skip
+  background?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
+  questionnaireId?: Prisma.SortOrder | runtime.Types.Skip
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -350,9 +527,16 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder | runtime.Types.Skip
   email?: Prisma.SortOrder | runtime.Types.Skip
   password?: Prisma.SortOrder | runtime.Types.Skip
+  avatar?: Prisma.SortOrder | runtime.Types.Skip
+  gender?: Prisma.SortOrder | runtime.Types.Skip
+  birthday?: Prisma.SortOrder | runtime.Types.Skip
+  description?: Prisma.SortOrder | runtime.Types.Skip
+  location?: Prisma.SortOrder | runtime.Types.Skip
   role?: Prisma.SortOrder | runtime.Types.Skip
+  background?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
+  questionnaireId?: Prisma.SortOrder | runtime.Types.Skip
 }
 
 export type UserScalarRelationFilter = {
@@ -360,8 +544,37 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput | runtime.Types.Skip
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null | runtime.Types.Skip
+  isNot?: Prisma.UserWhereInput | null | runtime.Types.Skip
+}
+
+export type StringFieldUpdateOperationsInput = {
+  set?: string | runtime.Types.Skip
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null | runtime.Types.Skip
+}
+
+export type EnumGenderFieldUpdateOperationsInput = {
+  set?: $Enums.Gender | runtime.Types.Skip
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null | runtime.Types.Skip
+}
+
+export type EnumLocationFieldUpdateOperationsInput = {
+  set?: $Enums.Location | runtime.Types.Skip
+}
+
 export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role | runtime.Types.Skip
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | runtime.Types.Skip
 }
 
 export type UserCreateNestedOneWithoutRefreshSessionsInput = {
@@ -378,14 +591,113 @@ export type UserUpdateOneRequiredWithoutRefreshSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefreshSessionsInput, Prisma.UserUpdateWithoutRefreshSessionsInput>, Prisma.UserUncheckedUpdateWithoutRefreshSessionsInput> | runtime.Types.Skip
 }
 
+export type UserCreateNestedOneWithoutTrainingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTrainingsInput, Prisma.UserUncheckedCreateWithoutTrainingsInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTrainingsInput | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+}
+
+export type UserUpdateOneRequiredWithoutTrainingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTrainingsInput, Prisma.UserUncheckedCreateWithoutTrainingsInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTrainingsInput | runtime.Types.Skip
+  upsert?: Prisma.UserUpsertWithoutTrainingsInput | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTrainingsInput, Prisma.UserUpdateWithoutTrainingsInput>, Prisma.UserUncheckedUpdateWithoutTrainingsInput> | runtime.Types.Skip
+}
+
+export type UserCreateNestedOneWithoutQuestionnaireInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutQuestionnaireInput, Prisma.UserUncheckedCreateWithoutQuestionnaireInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutQuestionnaireInput | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+}
+
+export type UserUncheckedCreateNestedOneWithoutQuestionnaireInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutQuestionnaireInput, Prisma.UserUncheckedCreateWithoutQuestionnaireInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutQuestionnaireInput | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+}
+
+export type UserUpdateOneWithoutQuestionnaireNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutQuestionnaireInput, Prisma.UserUncheckedCreateWithoutQuestionnaireInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutQuestionnaireInput | runtime.Types.Skip
+  upsert?: Prisma.UserUpsertWithoutQuestionnaireInput | runtime.Types.Skip
+  disconnect?: Prisma.UserWhereInput | boolean | runtime.Types.Skip
+  delete?: Prisma.UserWhereInput | boolean | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutQuestionnaireInput, Prisma.UserUpdateWithoutQuestionnaireInput>, Prisma.UserUncheckedUpdateWithoutQuestionnaireInput> | runtime.Types.Skip
+}
+
+export type UserUncheckedUpdateOneWithoutQuestionnaireNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutQuestionnaireInput, Prisma.UserUncheckedCreateWithoutQuestionnaireInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutQuestionnaireInput | runtime.Types.Skip
+  upsert?: Prisma.UserUpsertWithoutQuestionnaireInput | runtime.Types.Skip
+  disconnect?: Prisma.UserWhereInput | boolean | runtime.Types.Skip
+  delete?: Prisma.UserWhereInput | boolean | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutQuestionnaireInput, Prisma.UserUpdateWithoutQuestionnaireInput>, Prisma.UserUncheckedUpdateWithoutQuestionnaireInput> | runtime.Types.Skip
+}
+
+export type UserCreateNestedOneWithoutBalanceInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBalanceInput, Prisma.UserUncheckedCreateWithoutBalanceInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBalanceInput | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+}
+
+export type UserUpdateOneRequiredWithoutBalanceNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBalanceInput, Prisma.UserUncheckedCreateWithoutBalanceInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBalanceInput | runtime.Types.Skip
+  upsert?: Prisma.UserUpsertWithoutBalanceInput | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBalanceInput, Prisma.UserUpdateWithoutBalanceInput>, Prisma.UserUncheckedUpdateWithoutBalanceInput> | runtime.Types.Skip
+}
+
+export type UserCreateNestedOneWithoutOrdersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrdersInput | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+}
+
+export type UserUpdateOneRequiredWithoutOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrdersInput | runtime.Types.Skip
+  upsert?: Prisma.UserUpsertWithoutOrdersInput | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrdersInput, Prisma.UserUpdateWithoutOrdersInput>, Prisma.UserUncheckedUpdateWithoutOrdersInput> | runtime.Types.Skip
+}
+
+export type UserCreateNestedOneWithoutFeedbacksInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeedbacksInput, Prisma.UserUncheckedCreateWithoutFeedbacksInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeedbacksInput | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+}
+
+export type UserUpdateOneRequiredWithoutFeedbacksNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeedbacksInput, Prisma.UserUncheckedCreateWithoutFeedbacksInput> | runtime.Types.Skip
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeedbacksInput | runtime.Types.Skip
+  upsert?: Prisma.UserUpsertWithoutFeedbacksInput | runtime.Types.Skip
+  connect?: Prisma.UserWhereUniqueInput | runtime.Types.Skip
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFeedbacksInput, Prisma.UserUpdateWithoutFeedbacksInput>, Prisma.UserUncheckedUpdateWithoutFeedbacksInput> | runtime.Types.Skip
+}
+
 export type UserCreateWithoutRefreshSessionsInput = {
   id?: string | runtime.Types.Skip
   name: string
   email: string
   password: string
-  role?: $Enums.Role | runtime.Types.Skip
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  balance?: Prisma.BalanceCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingCreateNestedManyWithoutCoachInput | runtime.Types.Skip
 }
 
 export type UserUncheckedCreateWithoutRefreshSessionsInput = {
@@ -393,9 +705,20 @@ export type UserUncheckedCreateWithoutRefreshSessionsInput = {
   name: string
   email: string
   password: string
-  role?: $Enums.Role | runtime.Types.Skip
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
+  questionnaireId?: string | null | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedCreateNestedManyWithoutCoachInput | runtime.Types.Skip
 }
 
 export type UserCreateOrConnectWithoutRefreshSessionsInput = {
@@ -419,9 +742,20 @@ export type UserUpdateWithoutRefreshSessionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  balance?: Prisma.BalanceUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
 }
 
 export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
@@ -429,9 +763,520 @@ export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
+}
+
+export type UserCreateWithoutTrainingsInput = {
+  id?: string | runtime.Types.Skip
+  name: string
+  email: string
+  password: string
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
+  createdAt?: Date | string | runtime.Types.Skip
+  updatedAt?: Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  balance?: Prisma.BalanceCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput | runtime.Types.Skip
+}
+
+export type UserUncheckedCreateWithoutTrainingsInput = {
+  id?: string | runtime.Types.Skip
+  name: string
+  email: string
+  password: string
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
+  createdAt?: Date | string | runtime.Types.Skip
+  updatedAt?: Date | string | runtime.Types.Skip
+  questionnaireId?: string | null | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+}
+
+export type UserCreateOrConnectWithoutTrainingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTrainingsInput, Prisma.UserUncheckedCreateWithoutTrainingsInput>
+}
+
+export type UserUpsertWithoutTrainingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTrainingsInput, Prisma.UserUncheckedUpdateWithoutTrainingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTrainingsInput, Prisma.UserUncheckedCreateWithoutTrainingsInput>
+  where?: Prisma.UserWhereInput | runtime.Types.Skip
+}
+
+export type UserUpdateToOneWithWhereWithoutTrainingsInput = {
+  where?: Prisma.UserWhereInput | runtime.Types.Skip
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTrainingsInput, Prisma.UserUncheckedUpdateWithoutTrainingsInput>
+}
+
+export type UserUpdateWithoutTrainingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  balance?: Prisma.BalanceUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+}
+
+export type UserUncheckedUpdateWithoutTrainingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+}
+
+export type UserCreateWithoutQuestionnaireInput = {
+  id?: string | runtime.Types.Skip
+  name: string
+  email: string
+  password: string
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
+  createdAt?: Date | string | runtime.Types.Skip
+  updatedAt?: Date | string | runtime.Types.Skip
+  balance?: Prisma.BalanceCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingCreateNestedManyWithoutCoachInput | runtime.Types.Skip
+}
+
+export type UserUncheckedCreateWithoutQuestionnaireInput = {
+  id?: string | runtime.Types.Skip
+  name: string
+  email: string
+  password: string
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
+  createdAt?: Date | string | runtime.Types.Skip
+  updatedAt?: Date | string | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedCreateNestedManyWithoutCoachInput | runtime.Types.Skip
+}
+
+export type UserCreateOrConnectWithoutQuestionnaireInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutQuestionnaireInput, Prisma.UserUncheckedCreateWithoutQuestionnaireInput>
+}
+
+export type UserUpsertWithoutQuestionnaireInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutQuestionnaireInput, Prisma.UserUncheckedUpdateWithoutQuestionnaireInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutQuestionnaireInput, Prisma.UserUncheckedCreateWithoutQuestionnaireInput>
+  where?: Prisma.UserWhereInput | runtime.Types.Skip
+}
+
+export type UserUpdateToOneWithWhereWithoutQuestionnaireInput = {
+  where?: Prisma.UserWhereInput | runtime.Types.Skip
+  data: Prisma.XOR<Prisma.UserUpdateWithoutQuestionnaireInput, Prisma.UserUncheckedUpdateWithoutQuestionnaireInput>
+}
+
+export type UserUpdateWithoutQuestionnaireInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  balance?: Prisma.BalanceUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
+}
+
+export type UserUncheckedUpdateWithoutQuestionnaireInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
+}
+
+export type UserCreateWithoutBalanceInput = {
+  id?: string | runtime.Types.Skip
+  name: string
+  email: string
+  password: string
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
+  createdAt?: Date | string | runtime.Types.Skip
+  updatedAt?: Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingCreateNestedManyWithoutCoachInput | runtime.Types.Skip
+}
+
+export type UserUncheckedCreateWithoutBalanceInput = {
+  id?: string | runtime.Types.Skip
+  name: string
+  email: string
+  password: string
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
+  createdAt?: Date | string | runtime.Types.Skip
+  updatedAt?: Date | string | runtime.Types.Skip
+  questionnaireId?: string | null | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedCreateNestedManyWithoutCoachInput | runtime.Types.Skip
+}
+
+export type UserCreateOrConnectWithoutBalanceInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBalanceInput, Prisma.UserUncheckedCreateWithoutBalanceInput>
+}
+
+export type UserUpsertWithoutBalanceInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBalanceInput, Prisma.UserUncheckedUpdateWithoutBalanceInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBalanceInput, Prisma.UserUncheckedCreateWithoutBalanceInput>
+  where?: Prisma.UserWhereInput | runtime.Types.Skip
+}
+
+export type UserUpdateToOneWithWhereWithoutBalanceInput = {
+  where?: Prisma.UserWhereInput | runtime.Types.Skip
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBalanceInput, Prisma.UserUncheckedUpdateWithoutBalanceInput>
+}
+
+export type UserUpdateWithoutBalanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
+}
+
+export type UserUncheckedUpdateWithoutBalanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
+}
+
+export type UserCreateWithoutOrdersInput = {
+  id?: string | runtime.Types.Skip
+  name: string
+  email: string
+  password: string
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
+  createdAt?: Date | string | runtime.Types.Skip
+  updatedAt?: Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  balance?: Prisma.BalanceCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingCreateNestedManyWithoutCoachInput | runtime.Types.Skip
+}
+
+export type UserUncheckedCreateWithoutOrdersInput = {
+  id?: string | runtime.Types.Skip
+  name: string
+  email: string
+  password: string
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
+  createdAt?: Date | string | runtime.Types.Skip
+  updatedAt?: Date | string | runtime.Types.Skip
+  questionnaireId?: string | null | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedCreateNestedManyWithoutAuthorInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedCreateNestedManyWithoutCoachInput | runtime.Types.Skip
+}
+
+export type UserCreateOrConnectWithoutOrdersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput>
+}
+
+export type UserUpsertWithoutOrdersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOrdersInput, Prisma.UserUncheckedUpdateWithoutOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput>
+  where?: Prisma.UserWhereInput | runtime.Types.Skip
+}
+
+export type UserUpdateToOneWithWhereWithoutOrdersInput = {
+  where?: Prisma.UserWhereInput | runtime.Types.Skip
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOrdersInput, Prisma.UserUncheckedUpdateWithoutOrdersInput>
+}
+
+export type UserUpdateWithoutOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  balance?: Prisma.BalanceUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
+}
+
+export type UserUncheckedUpdateWithoutOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  feedbacks?: Prisma.FeedbackUncheckedUpdateManyWithoutAuthorNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
+}
+
+export type UserCreateWithoutFeedbacksInput = {
+  id?: string | runtime.Types.Skip
+  name: string
+  email: string
+  password: string
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
+  createdAt?: Date | string | runtime.Types.Skip
+  updatedAt?: Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  balance?: Prisma.BalanceCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingCreateNestedManyWithoutCoachInput | runtime.Types.Skip
+}
+
+export type UserUncheckedCreateWithoutFeedbacksInput = {
+  id?: string | runtime.Types.Skip
+  name: string
+  email: string
+  password: string
+  avatar?: string | null | runtime.Types.Skip
+  gender: $Enums.Gender
+  birthday?: Date | string | null | runtime.Types.Skip
+  description?: string | null | runtime.Types.Skip
+  location: $Enums.Location
+  role: $Enums.Role
+  background: string
+  createdAt?: Date | string | runtime.Types.Skip
+  updatedAt?: Date | string | runtime.Types.Skip
+  questionnaireId?: string | null | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedCreateNestedOneWithoutUserInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedCreateNestedManyWithoutCoachInput | runtime.Types.Skip
+}
+
+export type UserCreateOrConnectWithoutFeedbacksInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeedbacksInput, Prisma.UserUncheckedCreateWithoutFeedbacksInput>
+}
+
+export type UserUpsertWithoutFeedbacksInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFeedbacksInput, Prisma.UserUncheckedUpdateWithoutFeedbacksInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeedbacksInput, Prisma.UserUncheckedCreateWithoutFeedbacksInput>
+  where?: Prisma.UserWhereInput | runtime.Types.Skip
+}
+
+export type UserUpdateToOneWithWhereWithoutFeedbacksInput = {
+  where?: Prisma.UserWhereInput | runtime.Types.Skip
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFeedbacksInput, Prisma.UserUncheckedUpdateWithoutFeedbacksInput>
+}
+
+export type UserUpdateWithoutFeedbacksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  balance?: Prisma.BalanceUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
+}
+
+export type UserUncheckedUpdateWithoutFeedbacksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  name?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  email?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  password?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender | runtime.Types.Skip
+  birthday?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null | runtime.Types.Skip
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
+  background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
+  questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  balance?: Prisma.BalanceUncheckedUpdateOneWithoutUserNestedInput | runtime.Types.Skip
+  refreshSessions?: Prisma.RefreshSessionsUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput | runtime.Types.Skip
+  trainings?: Prisma.TrainingUncheckedUpdateManyWithoutCoachNestedInput | runtime.Types.Skip
 }
 
 
@@ -441,10 +1286,16 @@ export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
 
 export type UserCountOutputType = {
   refreshSessions: number
+  feedbacks: number
+  orders: number
+  trainings: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshSessions?: boolean | UserCountOutputTypeCountRefreshSessionsArgs
+  feedbacks?: boolean | UserCountOutputTypeCountFeedbacksArgs
+  orders?: boolean | UserCountOutputTypeCountOrdersArgs
+  trainings?: boolean | UserCountOutputTypeCountTrainingsArgs
 }
 
 /**
@@ -464,16 +1315,49 @@ export type UserCountOutputTypeCountRefreshSessionsArgs<ExtArgs extends runtime.
   where?: Prisma.RefreshSessionsWhereInput | runtime.Types.Skip
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FeedbackWhereInput | runtime.Types.Skip
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderWhereInput | runtime.Types.Skip
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTrainingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TrainingWhereInput | runtime.Types.Skip
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean | runtime.Types.Skip
   name?: boolean | runtime.Types.Skip
   email?: boolean | runtime.Types.Skip
   password?: boolean | runtime.Types.Skip
+  avatar?: boolean | runtime.Types.Skip
+  gender?: boolean | runtime.Types.Skip
+  birthday?: boolean | runtime.Types.Skip
+  description?: boolean | runtime.Types.Skip
+  location?: boolean | runtime.Types.Skip
   role?: boolean | runtime.Types.Skip
+  background?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
+  questionnaireId?: boolean | runtime.Types.Skip
+  questionnaire?: boolean | Prisma.User$questionnaireArgs<ExtArgs> | runtime.Types.Skip
+  balance?: boolean | Prisma.User$balanceArgs<ExtArgs> | runtime.Types.Skip
   refreshSessions?: boolean | Prisma.User$refreshSessionsArgs<ExtArgs> | runtime.Types.Skip
+  feedbacks?: boolean | Prisma.User$feedbacksArgs<ExtArgs> | runtime.Types.Skip
+  orders?: boolean | Prisma.User$ordersArgs<ExtArgs> | runtime.Types.Skip
+  trainings?: boolean | Prisma.User$trainingsArgs<ExtArgs> | runtime.Types.Skip
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs> | runtime.Types.Skip
 }, ExtArgs["result"]["user"]>
 
@@ -482,9 +1366,17 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean | runtime.Types.Skip
   email?: boolean | runtime.Types.Skip
   password?: boolean | runtime.Types.Skip
+  avatar?: boolean | runtime.Types.Skip
+  gender?: boolean | runtime.Types.Skip
+  birthday?: boolean | runtime.Types.Skip
+  description?: boolean | runtime.Types.Skip
+  location?: boolean | runtime.Types.Skip
   role?: boolean | runtime.Types.Skip
+  background?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
+  questionnaireId?: boolean | runtime.Types.Skip
+  questionnaire?: boolean | Prisma.User$questionnaireArgs<ExtArgs> | runtime.Types.Skip
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -492,9 +1384,17 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean | runtime.Types.Skip
   email?: boolean | runtime.Types.Skip
   password?: boolean | runtime.Types.Skip
+  avatar?: boolean | runtime.Types.Skip
+  gender?: boolean | runtime.Types.Skip
+  birthday?: boolean | runtime.Types.Skip
+  description?: boolean | runtime.Types.Skip
+  location?: boolean | runtime.Types.Skip
   role?: boolean | runtime.Types.Skip
+  background?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
+  questionnaireId?: boolean | runtime.Types.Skip
+  questionnaire?: boolean | Prisma.User$questionnaireArgs<ExtArgs> | runtime.Types.Skip
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -502,32 +1402,60 @@ export type UserSelectScalar = {
   name?: boolean | runtime.Types.Skip
   email?: boolean | runtime.Types.Skip
   password?: boolean | runtime.Types.Skip
+  avatar?: boolean | runtime.Types.Skip
+  gender?: boolean | runtime.Types.Skip
+  birthday?: boolean | runtime.Types.Skip
+  description?: boolean | runtime.Types.Skip
+  location?: boolean | runtime.Types.Skip
   role?: boolean | runtime.Types.Skip
+  background?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
+  questionnaireId?: boolean | runtime.Types.Skip
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"], runtime.Types.Skip>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "avatar" | "gender" | "birthday" | "description" | "location" | "role" | "background" | "createdAt" | "updatedAt" | "questionnaireId", ExtArgs["result"]["user"], runtime.Types.Skip>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  questionnaire?: boolean | Prisma.User$questionnaireArgs<ExtArgs> | runtime.Types.Skip
+  balance?: boolean | Prisma.User$balanceArgs<ExtArgs> | runtime.Types.Skip
   refreshSessions?: boolean | Prisma.User$refreshSessionsArgs<ExtArgs> | runtime.Types.Skip
+  feedbacks?: boolean | Prisma.User$feedbacksArgs<ExtArgs> | runtime.Types.Skip
+  orders?: boolean | Prisma.User$ordersArgs<ExtArgs> | runtime.Types.Skip
+  trainings?: boolean | Prisma.User$trainingsArgs<ExtArgs> | runtime.Types.Skip
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs> | runtime.Types.Skip
 }
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  questionnaire?: boolean | Prisma.User$questionnaireArgs<ExtArgs> | runtime.Types.Skip
+}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  questionnaire?: boolean | Prisma.User$questionnaireArgs<ExtArgs> | runtime.Types.Skip
+}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    questionnaire: Prisma.$QuestionnairePayload<ExtArgs> | null
+    balance: Prisma.$BalancePayload<ExtArgs> | null
     refreshSessions: Prisma.$RefreshSessionsPayload<ExtArgs>[]
+    feedbacks: Prisma.$FeedbackPayload<ExtArgs>[]
+    orders: Prisma.$OrderPayload<ExtArgs>[]
+    trainings: Prisma.$TrainingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     email: string
     password: string
+    avatar: string | null
+    gender: $Enums.Gender
+    birthday: Date | null
+    description: string | null
+    location: $Enums.Location
     role: $Enums.Role
+    background: string
     createdAt: Date
     updatedAt: Date
+    questionnaireId: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -922,7 +1850,12 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  questionnaire<T extends Prisma.User$questionnaireArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$questionnaireArgs<ExtArgs>>): Prisma.Prisma__QuestionnaireClient<runtime.Types.Result.GetResult<Prisma.$QuestionnairePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  balance<T extends Prisma.User$balanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$balanceArgs<ExtArgs>>): Prisma.Prisma__BalanceClient<runtime.Types.Result.GetResult<Prisma.$BalancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   refreshSessions<T extends Prisma.User$refreshSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshSessionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  feedbacks<T extends Prisma.User$feedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$feedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  trainings<T extends Prisma.User$trainingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$trainingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TrainingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -956,9 +1889,16 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly avatar: Prisma.FieldRef<"User", 'String'>
+  readonly gender: Prisma.FieldRef<"User", 'Gender'>
+  readonly birthday: Prisma.FieldRef<"User", 'DateTime'>
+  readonly description: Prisma.FieldRef<"User", 'String'>
+  readonly location: Prisma.FieldRef<"User", 'Location'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
+  readonly background: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly questionnaireId: Prisma.FieldRef<"User", 'String'>
 }
     
 
@@ -1208,6 +2148,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean | runtime.Types.Skip
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1278,6 +2222,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number | runtime.Types.Skip
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1347,6 +2295,44 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * User.questionnaire
+ */
+export type User$questionnaireArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Questionnaire
+   */
+  select?: Prisma.QuestionnaireSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Questionnaire
+   */
+  omit?: Prisma.QuestionnaireOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuestionnaireInclude<ExtArgs> | null
+  where?: Prisma.QuestionnaireWhereInput | runtime.Types.Skip
+}
+
+/**
+ * User.balance
+ */
+export type User$balanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Balance
+   */
+  select?: Prisma.BalanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Balance
+   */
+  omit?: Prisma.BalanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BalanceInclude<ExtArgs> | null
+  where?: Prisma.BalanceWhereInput | runtime.Types.Skip
+}
+
+/**
  * User.refreshSessions
  */
 export type User$refreshSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1368,6 +2354,78 @@ export type User$refreshSessionsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number | runtime.Types.Skip
   skip?: number | runtime.Types.Skip
   distinct?: Prisma.RefreshSessionsScalarFieldEnum | Prisma.RefreshSessionsScalarFieldEnum[] | runtime.Types.Skip
+}
+
+/**
+ * User.feedbacks
+ */
+export type User$feedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Feedback
+   */
+  select?: Prisma.FeedbackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Feedback
+   */
+  omit?: Prisma.FeedbackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FeedbackInclude<ExtArgs> | null
+  where?: Prisma.FeedbackWhereInput | runtime.Types.Skip
+  orderBy?: Prisma.FeedbackOrderByWithRelationInput | Prisma.FeedbackOrderByWithRelationInput[] | runtime.Types.Skip
+  cursor?: Prisma.FeedbackWhereUniqueInput | runtime.Types.Skip
+  take?: number | runtime.Types.Skip
+  skip?: number | runtime.Types.Skip
+  distinct?: Prisma.FeedbackScalarFieldEnum | Prisma.FeedbackScalarFieldEnum[] | runtime.Types.Skip
+}
+
+/**
+ * User.orders
+ */
+export type User$ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Order
+   */
+  select?: Prisma.OrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Order
+   */
+  omit?: Prisma.OrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput | runtime.Types.Skip
+  orderBy?: Prisma.OrderOrderByWithRelationInput | Prisma.OrderOrderByWithRelationInput[] | runtime.Types.Skip
+  cursor?: Prisma.OrderWhereUniqueInput | runtime.Types.Skip
+  take?: number | runtime.Types.Skip
+  skip?: number | runtime.Types.Skip
+  distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[] | runtime.Types.Skip
+}
+
+/**
+ * User.trainings
+ */
+export type User$trainingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Training
+   */
+  select?: Prisma.TrainingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Training
+   */
+  omit?: Prisma.TrainingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TrainingInclude<ExtArgs> | null
+  where?: Prisma.TrainingWhereInput | runtime.Types.Skip
+  orderBy?: Prisma.TrainingOrderByWithRelationInput | Prisma.TrainingOrderByWithRelationInput[] | runtime.Types.Skip
+  cursor?: Prisma.TrainingWhereUniqueInput | runtime.Types.Skip
+  take?: number | runtime.Types.Skip
+  skip?: number | runtime.Types.Skip
+  distinct?: Prisma.TrainingScalarFieldEnum | Prisma.TrainingScalarFieldEnum[] | runtime.Types.Skip
 }
 
 /**

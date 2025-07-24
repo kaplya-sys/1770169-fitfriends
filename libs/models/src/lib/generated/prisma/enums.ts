@@ -7,28 +7,70 @@
 *
 * 🟢 You can import this file directly.
 */
-export const GuitarType = {
-  acoustic: 'acoustic',
-  electro: 'electro',
-  ukulele: 'ukulele'
+export const Location = {
+  PIONERSKAYA: 'PIONERSKAYA',
+  PETROGRADSKAYA: 'PETROGRADSKAYA',
+  UDELNAYA: 'UDELNAYA',
+  ZVEZDNAYA: 'ZVEZDNAYA',
+  SPORTIVNAYA: 'SPORTIVNAYA'
 } as const
 
-export type GuitarType = (typeof GuitarType)[keyof typeof GuitarType]
+export type Location = (typeof Location)[keyof typeof Location]
 
 
-export const GuitarStrings = {
-  four: 'four',
-  six: 'six',
-  seven: 'seven',
-  twelve: 'twelve'
+export const Gender = {
+  FEMALE: 'FEMALE',
+  MALE: 'MALE',
+  WHATEVER: 'WHATEVER'
 } as const
 
-export type GuitarStrings = (typeof GuitarStrings)[keyof typeof GuitarStrings]
+export type Gender = (typeof Gender)[keyof typeof Gender]
 
 
 export const Role = {
-  user: 'user',
-  admin: 'admin'
+  USER: 'USER',
+  COACH: 'COACH'
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const FitnessLevel = {
+  BEGINNER: 'BEGINNER',
+  AMATEUR: 'AMATEUR',
+  PROFESSIONAL: 'PROFESSIONAL'
+} as const
+
+export type FitnessLevel = (typeof FitnessLevel)[keyof typeof FitnessLevel]
+
+
+export const Exercise = {
+  YOGA: 'YOGA',
+  RUNNING: 'RUNNING',
+  BOXING: 'BOXING',
+  STRETCHING: 'STRETCHING',
+  CROSSFIT: 'CROSSFIT',
+  AEROBICS: 'AEROBICS',
+  PILATES: 'PILATES'
+} as const
+
+export type Exercise = (typeof Exercise)[keyof typeof Exercise]
+
+
+export const TrainingTime = {
+  SHORT: 'SHORT',
+  MEDIUM: 'MEDIUM',
+  LONG: 'LONG',
+  EXTRA_LONG: 'EXTRA_LONG'
+} as const
+
+export type TrainingTime = (typeof TrainingTime)[keyof typeof TrainingTime]
+
+
+export const PaymentMethod = {
+  VISA: 'VISA',
+  MIR: 'MIR',
+  UMONEY: 'UMONEY'
+} as const
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]

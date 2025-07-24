@@ -1,0 +1,64 @@
+@import 'rc-slider/assets/index.css';
+
+.rc-slider {
+  height: 1px;
+  padding: 0;
+}
+
+.rc-range {
+  margin-bottom: 34px;
+}
+
+.rc-slider-handle {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  background-color: #333;
+  border-radius: 50%;
+  border: 0;
+  cursor: pointer;
+  transition: .3s ease;
+  -webkit-transition: .3s ease;
+  -o-transition: .3s ease;
+  transition: .3s ease;
+  opacity: 1;
+}
+.rc-slider-mark {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 16px;
+  color: #333;
+}
+.rc-slider-rail {
+  position: absolute;
+  width: 312px;
+  height: 1px;
+  background-color: #aeaeae;
+}
+.rc-slider-track {
+  position: absolute;
+  height: 1px;
+  background-color: #333;
+}
+.rc-slider-handle:focus {
+  outline: none;
+  box-shadow: none;
+}
+.rc-slider-handle:focus-visible {
+  border-color: initial;
+  box-shadow: none
+}
+.rc-slider-handle-click-focused:focus {
+  border-color: initial;
+  box-shadow: none;
+}
+.rc-slider-handle:hover:not(.focus-visible) {
+  background-color: #adadad;
+}
+.rc-slider-handle:active:not(.focus-visible) {
+  border-color: initial;
+  -webkit-box-shadow: 0 0 2px 2px #c5ec2a;
+  box-shadow: 0 0 2px 2px #c5ec2a;
+  cursor: pointer;
+}

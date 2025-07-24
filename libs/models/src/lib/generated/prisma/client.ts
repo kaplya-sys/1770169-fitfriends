@@ -12,11 +12,11 @@ import * as process from 'node:process'
 import * as path from 'node:path'
 
 import * as runtime from "@prisma/client/runtime/library"
-import * as $Enums from "./enums.js"
-import * as $Class from "./internal/class.js"
-import * as Prisma from "./internal/prismaNamespace.js"
+import * as $Enums from "./enums"
+import * as $Class from "./internal/class"
+import * as Prisma from "./internal/prismaNamespace"
 
-export * as $Enums from './enums.js'
+export * as $Enums from './enums'
 /**
  * ## Prisma Client
  * 
@@ -24,8 +24,8 @@ export * as $Enums from './enums.js'
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Guitars
- * const guitars = await prisma.guitars.findMany()
+ * // Fetch zero or more Users
+ * const users = await prisma.user.findMany()
  * ```
  * 
  * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
@@ -37,13 +37,8 @@ export { Prisma }
 
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node")
-path.join(process.cwd(), "src/lib/generated/prisma/query_engine-windows.dll.node")
+path.join(process.cwd(), "../src/lib/generated/prisma/query_engine-windows.dll.node")
 
-/**
- * Model Guitars
- * 
- */
-export type Guitars = Prisma.GuitarsModel
 /**
  * Model User
  * 
@@ -54,12 +49,49 @@ export type User = Prisma.UserModel
  * 
  */
 export type RefreshSessions = Prisma.RefreshSessionsModel
+/**
+ * Model Training
+ * 
+ */
+export type Training = Prisma.TrainingModel
+/**
+ * Model Questionnaire
+ * 
+ */
+export type Questionnaire = Prisma.QuestionnaireModel
+/**
+ * Model Balance
+ * 
+ */
+export type Balance = Prisma.BalanceModel
+/**
+ * Model Order
+ * 
+ */
+export type Order = Prisma.OrderModel
+/**
+ * Model Feedback
+ * 
+ */
+export type Feedback = Prisma.FeedbackModel
 
-export type GuitarType = $Enums.GuitarType
-export const GuitarType = $Enums.GuitarType
+export type Location = $Enums.Location
+export const Location = $Enums.Location
 
-export type GuitarStrings = $Enums.GuitarStrings
-export const GuitarStrings = $Enums.GuitarStrings
+export type Gender = $Enums.Gender
+export const Gender = $Enums.Gender
 
 export type Role = $Enums.Role
 export const Role = $Enums.Role
+
+export type FitnessLevel = $Enums.FitnessLevel
+export const FitnessLevel = $Enums.FitnessLevel
+
+export type Exercise = $Enums.Exercise
+export const Exercise = $Enums.Exercise
+
+export type TrainingTime = $Enums.TrainingTime
+export const TrainingTime = $Enums.TrainingTime
+
+export type PaymentMethod = $Enums.PaymentMethod
+export const PaymentMethod = $Enums.PaymentMethod
