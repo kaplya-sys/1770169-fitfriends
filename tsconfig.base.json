@@ -1,20 +1,44 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
+    //"composite": true, //#означает, что данный проект является частью составного проекта
+    "baseUrl": ".",
     "declaration": false,
-    "moduleResolution": "node",
+    //"declarationMap": true,
+    //"emitDeclarationOnly": true,
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
+    "isolatedModules": true,
     "lib": ["es2020", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "rootDir": ".",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {}
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2015",
+    "paths": {
+      "@1770169-fitfriends/config": ["libs/config/src/index.ts"],
+      "@1770169-fitfriends/core": ["libs/core/src/index.ts"],
+      "@1770169-fitfriends/dto": ["libs/shared/dto/src/index.ts"],
+      "@1770169-fitfriends/helpers": ["libs/shared/helpers/src/index.ts"],
+      "@1770169-fitfriends/models": ["libs/models/src/index.ts"],
+      "@1770169-fitfriends/query": ["libs/shared/query/src/index.ts"],
+      "@1770169-fitfriends/rdo": ["libs/shared/rdo/src/index.ts"],
+      "@1770169-fitfriends/swagger": ["libs/swagger/src/index.ts"],
+      "@1770169-fitfriends/types": ["libs/shared/types/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

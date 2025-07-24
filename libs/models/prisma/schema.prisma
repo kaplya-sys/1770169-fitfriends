@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+enum Location {
+  PIONERSKAYA
+  PETROGRADSKAYA
+  UDELNAYA
+  ZVEZDNAYA
+  SPORTIVNAYA
+}
+
+enum Gender {
+  FEMALE
+  MALE
+  WHATEVER
+}
+
+enum Role {
+  USER
+  COACH
+}
+
+enum FitnessLevel {
+  BEGINNER
+  AMATEUR
+  PROFESSIONAL
+}
+
+enum Exercise {
+  YOGA
+  RUNNING
+  BOXING
+  STRETCHING
+  CROSSFIT
+  AEROBICS
+  PILATES
+}
+
+enum TrainingTime {
+  SHORT
+  MEDIUM
+  LONG
+  EXTRA_LONG
+}
+
+enum PaymentMethod {
+  VISA
+  MIR
+  UMONEY
+}
+
+generator client {
+  provider        = "prisma-client"
+  previewFeatures = ["strictUndefinedChecks"]
+  output          = "../src/lib/generated/prisma"
+  moduleFormat    = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
