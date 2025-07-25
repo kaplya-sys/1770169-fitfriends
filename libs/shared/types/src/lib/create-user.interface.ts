@@ -6,14 +6,8 @@ export interface CreateUser {
   name: string;
   email: string;
   password: string;
-  avatar: string;
   gender: Gender;
-  birthday: Date;
-  description: string;
+  birthday?: string;
   location: Location;
   role: Role;
-  background: string;
-  createdAt: Date;
-  updatedAt: Date;
-  questionnaireId: string;
 };

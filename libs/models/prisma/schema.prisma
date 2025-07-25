@@ -76,6 +76,7 @@ model User {
   location        Location
   role            Role
   background      String            @db.Char(36)
+  isReady         Boolean           @default(false) @map("is_ready")
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
   questionnaireId String?           @unique @map("questionnaire_id") @db.Char(36)
@@ -128,14 +129,16 @@ model Training {
 }
 
 model Questionnaire {
-  id           String       @id @default(uuid())
-  fitnessLevel FitnessLevel @map("fitness-level")
-  exercise     Exercise[]
-  trainingTime TrainingTime @map("training-time")
-  calorieLose  Int          @default(0) @map("calorie_lose")
-  calorieWaste Int          @default(0) @map("calorie_waste")
-  isReady      Boolean      @default(false) @map("is_ready")
-  user         User?        @relation()
+  id             String        @id @default(uuid())
+  fitnessLevel   FitnessLevel  @map("fitness-level")
+  exercise       Exercise[]
+  trainingTime   TrainingTime? @map("training-time")
+  qualifications String[]
+  calorieLose    Int?          @default(0) @map("calorie_lose")
+  calorieWaste   Int?          @default(0) @map("calorie_waste")
+  experience     String?       @db.Char(140)
+  isPersonal     Boolean?      @default(false) @map("is_personal")
+  user           User?         @relation()
 
   @@map("questionnaire")
 }

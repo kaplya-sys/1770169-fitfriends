@@ -41,7 +41,8 @@ export type QuestionnaireMinAggregateOutputType = {
   trainingTime: $Enums.TrainingTime | null
   calorieLose: number | null
   calorieWaste: number | null
-  isReady: boolean | null
+  experience: string | null
+  isPersonal: boolean | null
 }
 
 export type QuestionnaireMaxAggregateOutputType = {
@@ -50,7 +51,8 @@ export type QuestionnaireMaxAggregateOutputType = {
   trainingTime: $Enums.TrainingTime | null
   calorieLose: number | null
   calorieWaste: number | null
-  isReady: boolean | null
+  experience: string | null
+  isPersonal: boolean | null
 }
 
 export type QuestionnaireCountAggregateOutputType = {
@@ -58,9 +60,11 @@ export type QuestionnaireCountAggregateOutputType = {
   fitnessLevel: number
   exercise: number
   trainingTime: number
+  qualifications: number
   calorieLose: number
   calorieWaste: number
-  isReady: number
+  experience: number
+  isPersonal: number
   _all: number
 }
 
@@ -81,7 +85,8 @@ export type QuestionnaireMinAggregateInputType = {
   trainingTime?: true | runtime.Types.Skip
   calorieLose?: true | runtime.Types.Skip
   calorieWaste?: true | runtime.Types.Skip
-  isReady?: true | runtime.Types.Skip
+  experience?: true | runtime.Types.Skip
+  isPersonal?: true | runtime.Types.Skip
 }
 
 export type QuestionnaireMaxAggregateInputType = {
@@ -90,7 +95,8 @@ export type QuestionnaireMaxAggregateInputType = {
   trainingTime?: true | runtime.Types.Skip
   calorieLose?: true | runtime.Types.Skip
   calorieWaste?: true | runtime.Types.Skip
-  isReady?: true | runtime.Types.Skip
+  experience?: true | runtime.Types.Skip
+  isPersonal?: true | runtime.Types.Skip
 }
 
 export type QuestionnaireCountAggregateInputType = {
@@ -98,9 +104,11 @@ export type QuestionnaireCountAggregateInputType = {
   fitnessLevel?: true | runtime.Types.Skip
   exercise?: true | runtime.Types.Skip
   trainingTime?: true | runtime.Types.Skip
+  qualifications?: true | runtime.Types.Skip
   calorieLose?: true | runtime.Types.Skip
   calorieWaste?: true | runtime.Types.Skip
-  isReady?: true | runtime.Types.Skip
+  experience?: true | runtime.Types.Skip
+  isPersonal?: true | runtime.Types.Skip
   _all?: true | runtime.Types.Skip
 }
 
@@ -194,10 +202,12 @@ export type QuestionnaireGroupByOutputType = {
   id: string
   fitnessLevel: $Enums.FitnessLevel
   exercise: $Enums.Exercise[]
-  trainingTime: $Enums.TrainingTime
-  calorieLose: number
-  calorieWaste: number
-  isReady: boolean
+  trainingTime: $Enums.TrainingTime | null
+  qualifications: string[]
+  calorieLose: number | null
+  calorieWaste: number | null
+  experience: string | null
+  isPersonal: boolean | null
   _count: QuestionnaireCountAggregateOutputType | null
   _avg: QuestionnaireAvgAggregateOutputType | null
   _sum: QuestionnaireSumAggregateOutputType | null
@@ -227,10 +237,12 @@ export type QuestionnaireWhereInput = {
   id?: Prisma.StringFilter<"Questionnaire"> | string | runtime.Types.Skip
   fitnessLevel?: Prisma.EnumFitnessLevelFilter<"Questionnaire"> | $Enums.FitnessLevel | runtime.Types.Skip
   exercise?: Prisma.EnumExerciseNullableListFilter<"Questionnaire"> | runtime.Types.Skip
-  trainingTime?: Prisma.EnumTrainingTimeFilter<"Questionnaire"> | $Enums.TrainingTime | runtime.Types.Skip
-  calorieLose?: Prisma.IntFilter<"Questionnaire"> | number | runtime.Types.Skip
-  calorieWaste?: Prisma.IntFilter<"Questionnaire"> | number | runtime.Types.Skip
-  isReady?: Prisma.BoolFilter<"Questionnaire"> | boolean | runtime.Types.Skip
+  trainingTime?: Prisma.EnumTrainingTimeNullableFilter<"Questionnaire"> | $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.StringNullableListFilter<"Questionnaire"> | runtime.Types.Skip
+  calorieLose?: Prisma.IntNullableFilter<"Questionnaire"> | number | null | runtime.Types.Skip
+  calorieWaste?: Prisma.IntNullableFilter<"Questionnaire"> | number | null | runtime.Types.Skip
+  experience?: Prisma.StringNullableFilter<"Questionnaire"> | string | null | runtime.Types.Skip
+  isPersonal?: Prisma.BoolNullableFilter<"Questionnaire"> | boolean | null | runtime.Types.Skip
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null | runtime.Types.Skip
 }
 
@@ -238,10 +250,12 @@ export type QuestionnaireOrderByWithRelationInput = {
   id?: Prisma.SortOrder | runtime.Types.Skip
   fitnessLevel?: Prisma.SortOrder | runtime.Types.Skip
   exercise?: Prisma.SortOrder | runtime.Types.Skip
-  trainingTime?: Prisma.SortOrder | runtime.Types.Skip
-  calorieLose?: Prisma.SortOrder | runtime.Types.Skip
-  calorieWaste?: Prisma.SortOrder | runtime.Types.Skip
-  isReady?: Prisma.SortOrder | runtime.Types.Skip
+  trainingTime?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  qualifications?: Prisma.SortOrder | runtime.Types.Skip
+  calorieLose?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  calorieWaste?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  experience?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  isPersonal?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
   user?: Prisma.UserOrderByWithRelationInput | runtime.Types.Skip
 }
 
@@ -252,10 +266,12 @@ export type QuestionnaireWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.QuestionnaireWhereInput | Prisma.QuestionnaireWhereInput[] | runtime.Types.Skip
   fitnessLevel?: Prisma.EnumFitnessLevelFilter<"Questionnaire"> | $Enums.FitnessLevel | runtime.Types.Skip
   exercise?: Prisma.EnumExerciseNullableListFilter<"Questionnaire"> | runtime.Types.Skip
-  trainingTime?: Prisma.EnumTrainingTimeFilter<"Questionnaire"> | $Enums.TrainingTime | runtime.Types.Skip
-  calorieLose?: Prisma.IntFilter<"Questionnaire"> | number | runtime.Types.Skip
-  calorieWaste?: Prisma.IntFilter<"Questionnaire"> | number | runtime.Types.Skip
-  isReady?: Prisma.BoolFilter<"Questionnaire"> | boolean | runtime.Types.Skip
+  trainingTime?: Prisma.EnumTrainingTimeNullableFilter<"Questionnaire"> | $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.StringNullableListFilter<"Questionnaire"> | runtime.Types.Skip
+  calorieLose?: Prisma.IntNullableFilter<"Questionnaire"> | number | null | runtime.Types.Skip
+  calorieWaste?: Prisma.IntNullableFilter<"Questionnaire"> | number | null | runtime.Types.Skip
+  experience?: Prisma.StringNullableFilter<"Questionnaire"> | string | null | runtime.Types.Skip
+  isPersonal?: Prisma.BoolNullableFilter<"Questionnaire"> | boolean | null | runtime.Types.Skip
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null | runtime.Types.Skip
 }, "id">
 
@@ -263,10 +279,12 @@ export type QuestionnaireOrderByWithAggregationInput = {
   id?: Prisma.SortOrder | runtime.Types.Skip
   fitnessLevel?: Prisma.SortOrder | runtime.Types.Skip
   exercise?: Prisma.SortOrder | runtime.Types.Skip
-  trainingTime?: Prisma.SortOrder | runtime.Types.Skip
-  calorieLose?: Prisma.SortOrder | runtime.Types.Skip
-  calorieWaste?: Prisma.SortOrder | runtime.Types.Skip
-  isReady?: Prisma.SortOrder | runtime.Types.Skip
+  trainingTime?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  qualifications?: Prisma.SortOrder | runtime.Types.Skip
+  calorieLose?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  calorieWaste?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  experience?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
+  isPersonal?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
   _count?: Prisma.QuestionnaireCountOrderByAggregateInput | runtime.Types.Skip
   _avg?: Prisma.QuestionnaireAvgOrderByAggregateInput | runtime.Types.Skip
   _max?: Prisma.QuestionnaireMaxOrderByAggregateInput | runtime.Types.Skip
@@ -281,20 +299,24 @@ export type QuestionnaireScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Questionnaire"> | string | runtime.Types.Skip
   fitnessLevel?: Prisma.EnumFitnessLevelWithAggregatesFilter<"Questionnaire"> | $Enums.FitnessLevel | runtime.Types.Skip
   exercise?: Prisma.EnumExerciseNullableListFilter<"Questionnaire"> | runtime.Types.Skip
-  trainingTime?: Prisma.EnumTrainingTimeWithAggregatesFilter<"Questionnaire"> | $Enums.TrainingTime | runtime.Types.Skip
-  calorieLose?: Prisma.IntWithAggregatesFilter<"Questionnaire"> | number | runtime.Types.Skip
-  calorieWaste?: Prisma.IntWithAggregatesFilter<"Questionnaire"> | number | runtime.Types.Skip
-  isReady?: Prisma.BoolWithAggregatesFilter<"Questionnaire"> | boolean | runtime.Types.Skip
+  trainingTime?: Prisma.EnumTrainingTimeNullableWithAggregatesFilter<"Questionnaire"> | $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.StringNullableListFilter<"Questionnaire"> | runtime.Types.Skip
+  calorieLose?: Prisma.IntNullableWithAggregatesFilter<"Questionnaire"> | number | null | runtime.Types.Skip
+  calorieWaste?: Prisma.IntNullableWithAggregatesFilter<"Questionnaire"> | number | null | runtime.Types.Skip
+  experience?: Prisma.StringNullableWithAggregatesFilter<"Questionnaire"> | string | null | runtime.Types.Skip
+  isPersonal?: Prisma.BoolNullableWithAggregatesFilter<"Questionnaire"> | boolean | null | runtime.Types.Skip
 }
 
 export type QuestionnaireCreateInput = {
   id?: string | runtime.Types.Skip
   fitnessLevel: $Enums.FitnessLevel
   exercise?: Prisma.QuestionnaireCreateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime: $Enums.TrainingTime
-  calorieLose?: number | runtime.Types.Skip
-  calorieWaste?: number | runtime.Types.Skip
-  isReady?: boolean | runtime.Types.Skip
+  trainingTime?: $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireCreatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: number | null | runtime.Types.Skip
+  calorieWaste?: number | null | runtime.Types.Skip
+  experience?: string | null | runtime.Types.Skip
+  isPersonal?: boolean | null | runtime.Types.Skip
   user?: Prisma.UserCreateNestedOneWithoutQuestionnaireInput | runtime.Types.Skip
 }
 
@@ -302,10 +324,12 @@ export type QuestionnaireUncheckedCreateInput = {
   id?: string | runtime.Types.Skip
   fitnessLevel: $Enums.FitnessLevel
   exercise?: Prisma.QuestionnaireCreateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime: $Enums.TrainingTime
-  calorieLose?: number | runtime.Types.Skip
-  calorieWaste?: number | runtime.Types.Skip
-  isReady?: boolean | runtime.Types.Skip
+  trainingTime?: $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireCreatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: number | null | runtime.Types.Skip
+  calorieWaste?: number | null | runtime.Types.Skip
+  experience?: string | null | runtime.Types.Skip
+  isPersonal?: boolean | null | runtime.Types.Skip
   user?: Prisma.UserUncheckedCreateNestedOneWithoutQuestionnaireInput | runtime.Types.Skip
 }
 
@@ -313,10 +337,12 @@ export type QuestionnaireUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   fitnessLevel?: Prisma.EnumFitnessLevelFieldUpdateOperationsInput | $Enums.FitnessLevel | runtime.Types.Skip
   exercise?: Prisma.QuestionnaireUpdateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime?: Prisma.EnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | runtime.Types.Skip
-  calorieLose?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  calorieWaste?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
+  trainingTime?: Prisma.NullableEnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireUpdatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  calorieWaste?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  isPersonal?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null | runtime.Types.Skip
   user?: Prisma.UserUpdateOneWithoutQuestionnaireNestedInput | runtime.Types.Skip
 }
 
@@ -324,10 +350,12 @@ export type QuestionnaireUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   fitnessLevel?: Prisma.EnumFitnessLevelFieldUpdateOperationsInput | $Enums.FitnessLevel | runtime.Types.Skip
   exercise?: Prisma.QuestionnaireUpdateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime?: Prisma.EnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | runtime.Types.Skip
-  calorieLose?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  calorieWaste?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
+  trainingTime?: Prisma.NullableEnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireUpdatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  calorieWaste?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  isPersonal?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null | runtime.Types.Skip
   user?: Prisma.UserUncheckedUpdateOneWithoutQuestionnaireNestedInput | runtime.Types.Skip
 }
 
@@ -335,30 +363,36 @@ export type QuestionnaireCreateManyInput = {
   id?: string | runtime.Types.Skip
   fitnessLevel: $Enums.FitnessLevel
   exercise?: Prisma.QuestionnaireCreateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime: $Enums.TrainingTime
-  calorieLose?: number | runtime.Types.Skip
-  calorieWaste?: number | runtime.Types.Skip
-  isReady?: boolean | runtime.Types.Skip
+  trainingTime?: $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireCreatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: number | null | runtime.Types.Skip
+  calorieWaste?: number | null | runtime.Types.Skip
+  experience?: string | null | runtime.Types.Skip
+  isPersonal?: boolean | null | runtime.Types.Skip
 }
 
 export type QuestionnaireUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   fitnessLevel?: Prisma.EnumFitnessLevelFieldUpdateOperationsInput | $Enums.FitnessLevel | runtime.Types.Skip
   exercise?: Prisma.QuestionnaireUpdateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime?: Prisma.EnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | runtime.Types.Skip
-  calorieLose?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  calorieWaste?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
+  trainingTime?: Prisma.NullableEnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireUpdatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  calorieWaste?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  isPersonal?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null | runtime.Types.Skip
 }
 
 export type QuestionnaireUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   fitnessLevel?: Prisma.EnumFitnessLevelFieldUpdateOperationsInput | $Enums.FitnessLevel | runtime.Types.Skip
   exercise?: Prisma.QuestionnaireUpdateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime?: Prisma.EnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | runtime.Types.Skip
-  calorieLose?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  calorieWaste?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
+  trainingTime?: Prisma.NullableEnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireUpdatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  calorieWaste?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  isPersonal?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null | runtime.Types.Skip
 }
 
 export type QuestionnaireNullableScalarRelationFilter = {
@@ -374,14 +408,24 @@ export type EnumExerciseNullableListFilter<$PrismaModel = never> = {
   isEmpty?: boolean | runtime.Types.Skip
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null | runtime.Types.Skip
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | runtime.Types.Skip
+  isEmpty?: boolean | runtime.Types.Skip
+}
+
 export type QuestionnaireCountOrderByAggregateInput = {
   id?: Prisma.SortOrder | runtime.Types.Skip
   fitnessLevel?: Prisma.SortOrder | runtime.Types.Skip
   exercise?: Prisma.SortOrder | runtime.Types.Skip
   trainingTime?: Prisma.SortOrder | runtime.Types.Skip
+  qualifications?: Prisma.SortOrder | runtime.Types.Skip
   calorieLose?: Prisma.SortOrder | runtime.Types.Skip
   calorieWaste?: Prisma.SortOrder | runtime.Types.Skip
-  isReady?: Prisma.SortOrder | runtime.Types.Skip
+  experience?: Prisma.SortOrder | runtime.Types.Skip
+  isPersonal?: Prisma.SortOrder | runtime.Types.Skip
 }
 
 export type QuestionnaireAvgOrderByAggregateInput = {
@@ -395,7 +439,8 @@ export type QuestionnaireMaxOrderByAggregateInput = {
   trainingTime?: Prisma.SortOrder | runtime.Types.Skip
   calorieLose?: Prisma.SortOrder | runtime.Types.Skip
   calorieWaste?: Prisma.SortOrder | runtime.Types.Skip
-  isReady?: Prisma.SortOrder | runtime.Types.Skip
+  experience?: Prisma.SortOrder | runtime.Types.Skip
+  isPersonal?: Prisma.SortOrder | runtime.Types.Skip
 }
 
 export type QuestionnaireMinOrderByAggregateInput = {
@@ -404,7 +449,8 @@ export type QuestionnaireMinOrderByAggregateInput = {
   trainingTime?: Prisma.SortOrder | runtime.Types.Skip
   calorieLose?: Prisma.SortOrder | runtime.Types.Skip
   calorieWaste?: Prisma.SortOrder | runtime.Types.Skip
-  isReady?: Prisma.SortOrder | runtime.Types.Skip
+  experience?: Prisma.SortOrder | runtime.Types.Skip
+  isPersonal?: Prisma.SortOrder | runtime.Types.Skip
 }
 
 export type QuestionnaireSumOrderByAggregateInput = {
@@ -432,29 +478,58 @@ export type QuestionnaireCreateexerciseInput = {
   set: $Enums.Exercise[]
 }
 
+export type QuestionnaireCreatequalificationsInput = {
+  set: string[]
+}
+
 export type QuestionnaireUpdateexerciseInput = {
   set?: $Enums.Exercise[] | runtime.Types.Skip
   push?: $Enums.Exercise | $Enums.Exercise[] | runtime.Types.Skip
+}
+
+export type NullableEnumTrainingTimeFieldUpdateOperationsInput = {
+  set?: $Enums.TrainingTime | null | runtime.Types.Skip
+}
+
+export type QuestionnaireUpdatequalificationsInput = {
+  set?: string[] | runtime.Types.Skip
+  push?: string | string[] | runtime.Types.Skip
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null | runtime.Types.Skip
+  increment?: number | runtime.Types.Skip
+  decrement?: number | runtime.Types.Skip
+  multiply?: number | runtime.Types.Skip
+  divide?: number | runtime.Types.Skip
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null | runtime.Types.Skip
 }
 
 export type QuestionnaireCreateWithoutUserInput = {
   id?: string | runtime.Types.Skip
   fitnessLevel: $Enums.FitnessLevel
   exercise?: Prisma.QuestionnaireCreateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime: $Enums.TrainingTime
-  calorieLose?: number | runtime.Types.Skip
-  calorieWaste?: number | runtime.Types.Skip
-  isReady?: boolean | runtime.Types.Skip
+  trainingTime?: $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireCreatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: number | null | runtime.Types.Skip
+  calorieWaste?: number | null | runtime.Types.Skip
+  experience?: string | null | runtime.Types.Skip
+  isPersonal?: boolean | null | runtime.Types.Skip
 }
 
 export type QuestionnaireUncheckedCreateWithoutUserInput = {
   id?: string | runtime.Types.Skip
   fitnessLevel: $Enums.FitnessLevel
   exercise?: Prisma.QuestionnaireCreateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime: $Enums.TrainingTime
-  calorieLose?: number | runtime.Types.Skip
-  calorieWaste?: number | runtime.Types.Skip
-  isReady?: boolean | runtime.Types.Skip
+  trainingTime?: $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireCreatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: number | null | runtime.Types.Skip
+  calorieWaste?: number | null | runtime.Types.Skip
+  experience?: string | null | runtime.Types.Skip
+  isPersonal?: boolean | null | runtime.Types.Skip
 }
 
 export type QuestionnaireCreateOrConnectWithoutUserInput = {
@@ -477,20 +552,24 @@ export type QuestionnaireUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   fitnessLevel?: Prisma.EnumFitnessLevelFieldUpdateOperationsInput | $Enums.FitnessLevel | runtime.Types.Skip
   exercise?: Prisma.QuestionnaireUpdateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime?: Prisma.EnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | runtime.Types.Skip
-  calorieLose?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  calorieWaste?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
+  trainingTime?: Prisma.NullableEnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireUpdatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  calorieWaste?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  isPersonal?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null | runtime.Types.Skip
 }
 
 export type QuestionnaireUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
   fitnessLevel?: Prisma.EnumFitnessLevelFieldUpdateOperationsInput | $Enums.FitnessLevel | runtime.Types.Skip
   exercise?: Prisma.QuestionnaireUpdateexerciseInput | $Enums.Exercise[] | runtime.Types.Skip
-  trainingTime?: Prisma.EnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | runtime.Types.Skip
-  calorieLose?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  calorieWaste?: Prisma.IntFieldUpdateOperationsInput | number | runtime.Types.Skip
-  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
+  trainingTime?: Prisma.NullableEnumTrainingTimeFieldUpdateOperationsInput | $Enums.TrainingTime | null | runtime.Types.Skip
+  qualifications?: Prisma.QuestionnaireUpdatequalificationsInput | string[] | runtime.Types.Skip
+  calorieLose?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  calorieWaste?: Prisma.NullableIntFieldUpdateOperationsInput | number | null | runtime.Types.Skip
+  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
+  isPersonal?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null | runtime.Types.Skip
 }
 
 
@@ -500,9 +579,11 @@ export type QuestionnaireSelect<ExtArgs extends runtime.Types.Extensions.Interna
   fitnessLevel?: boolean | runtime.Types.Skip
   exercise?: boolean | runtime.Types.Skip
   trainingTime?: boolean | runtime.Types.Skip
+  qualifications?: boolean | runtime.Types.Skip
   calorieLose?: boolean | runtime.Types.Skip
   calorieWaste?: boolean | runtime.Types.Skip
-  isReady?: boolean | runtime.Types.Skip
+  experience?: boolean | runtime.Types.Skip
+  isPersonal?: boolean | runtime.Types.Skip
   user?: boolean | Prisma.Questionnaire$userArgs<ExtArgs> | runtime.Types.Skip
 }, ExtArgs["result"]["questionnaire"]>
 
@@ -511,9 +592,11 @@ export type QuestionnaireSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   fitnessLevel?: boolean | runtime.Types.Skip
   exercise?: boolean | runtime.Types.Skip
   trainingTime?: boolean | runtime.Types.Skip
+  qualifications?: boolean | runtime.Types.Skip
   calorieLose?: boolean | runtime.Types.Skip
   calorieWaste?: boolean | runtime.Types.Skip
-  isReady?: boolean | runtime.Types.Skip
+  experience?: boolean | runtime.Types.Skip
+  isPersonal?: boolean | runtime.Types.Skip
 }, ExtArgs["result"]["questionnaire"]>
 
 export type QuestionnaireSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -521,9 +604,11 @@ export type QuestionnaireSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   fitnessLevel?: boolean | runtime.Types.Skip
   exercise?: boolean | runtime.Types.Skip
   trainingTime?: boolean | runtime.Types.Skip
+  qualifications?: boolean | runtime.Types.Skip
   calorieLose?: boolean | runtime.Types.Skip
   calorieWaste?: boolean | runtime.Types.Skip
-  isReady?: boolean | runtime.Types.Skip
+  experience?: boolean | runtime.Types.Skip
+  isPersonal?: boolean | runtime.Types.Skip
 }, ExtArgs["result"]["questionnaire"]>
 
 export type QuestionnaireSelectScalar = {
@@ -531,12 +616,14 @@ export type QuestionnaireSelectScalar = {
   fitnessLevel?: boolean | runtime.Types.Skip
   exercise?: boolean | runtime.Types.Skip
   trainingTime?: boolean | runtime.Types.Skip
+  qualifications?: boolean | runtime.Types.Skip
   calorieLose?: boolean | runtime.Types.Skip
   calorieWaste?: boolean | runtime.Types.Skip
-  isReady?: boolean | runtime.Types.Skip
+  experience?: boolean | runtime.Types.Skip
+  isPersonal?: boolean | runtime.Types.Skip
 }
 
-export type QuestionnaireOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fitnessLevel" | "exercise" | "trainingTime" | "calorieLose" | "calorieWaste" | "isReady", ExtArgs["result"]["questionnaire"], runtime.Types.Skip>
+export type QuestionnaireOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fitnessLevel" | "exercise" | "trainingTime" | "qualifications" | "calorieLose" | "calorieWaste" | "experience" | "isPersonal", ExtArgs["result"]["questionnaire"], runtime.Types.Skip>
 export type QuestionnaireInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Questionnaire$userArgs<ExtArgs> | runtime.Types.Skip
 }
@@ -552,10 +639,12 @@ export type $QuestionnairePayload<ExtArgs extends runtime.Types.Extensions.Inter
     id: string
     fitnessLevel: $Enums.FitnessLevel
     exercise: $Enums.Exercise[]
-    trainingTime: $Enums.TrainingTime
-    calorieLose: number
-    calorieWaste: number
-    isReady: boolean
+    trainingTime: $Enums.TrainingTime | null
+    qualifications: string[]
+    calorieLose: number | null
+    calorieWaste: number | null
+    experience: string | null
+    isPersonal: boolean | null
   }, ExtArgs["result"]["questionnaire"]>
   composites: {}
 }
@@ -984,9 +1073,11 @@ export interface QuestionnaireFieldRefs {
   readonly fitnessLevel: Prisma.FieldRef<"Questionnaire", 'FitnessLevel'>
   readonly exercise: Prisma.FieldRef<"Questionnaire", 'Exercise[]'>
   readonly trainingTime: Prisma.FieldRef<"Questionnaire", 'TrainingTime'>
+  readonly qualifications: Prisma.FieldRef<"Questionnaire", 'String[]'>
   readonly calorieLose: Prisma.FieldRef<"Questionnaire", 'Int'>
   readonly calorieWaste: Prisma.FieldRef<"Questionnaire", 'Int'>
-  readonly isReady: Prisma.FieldRef<"Questionnaire", 'Boolean'>
+  readonly experience: Prisma.FieldRef<"Questionnaire", 'String'>
+  readonly isPersonal: Prisma.FieldRef<"Questionnaire", 'Boolean'>
 }
     
 

@@ -19,6 +19,5 @@ export interface Training {
   coachName: string;
   specialOffer: boolean;
   createdAt: Date;
-  updatedAt: Date;
   coachId: string;
 };

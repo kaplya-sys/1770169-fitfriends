@@ -6,7 +6,7 @@ import {
   Length
 } from 'class-validator';
 
-import {AuthUser} from '@1770169-guitar/types';
+import {AuthUser} from '@1770169-fitfriends/types';
 
 import {EMAIL_PROPERTY, PASSWORD_PROPERTY} from './dto.const';
 

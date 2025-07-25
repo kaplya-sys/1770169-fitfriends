@@ -994,6 +994,7 @@ export const UserScalarFieldEnum = {
   location: 'location',
   role: 'role',
   background: 'background',
+  isReady: 'isReady',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   questionnaireId: 'questionnaireId'
@@ -1042,9 +1043,11 @@ export const QuestionnaireScalarFieldEnum = {
   fitnessLevel: 'fitnessLevel',
   exercise: 'exercise',
   trainingTime: 'trainingTime',
+  qualifications: 'qualifications',
   calorieLose: 'calorieLose',
   calorieWaste: 'calorieWaste',
-  isReady: 'isReady'
+  experience: 'experience',
+  isPersonal: 'isPersonal'
 } as const
 
 export type QuestionnaireScalarFieldEnum = (typeof QuestionnaireScalarFieldEnum)[keyof typeof QuestionnaireScalarFieldEnum]
@@ -1188,6 +1191,13 @@ export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'FitnessLevel'
  */
 export type EnumFitnessLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FitnessLevel'>
@@ -1240,13 +1250,6 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

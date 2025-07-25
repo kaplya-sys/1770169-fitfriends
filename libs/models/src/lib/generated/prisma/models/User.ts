@@ -35,6 +35,7 @@ export type UserMinAggregateOutputType = {
   location: $Enums.Location | null
   role: $Enums.Role | null
   background: string | null
+  isReady: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   questionnaireId: string | null
@@ -52,6 +53,7 @@ export type UserMaxAggregateOutputType = {
   location: $Enums.Location | null
   role: $Enums.Role | null
   background: string | null
+  isReady: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   questionnaireId: string | null
@@ -69,6 +71,7 @@ export type UserCountAggregateOutputType = {
   location: number
   role: number
   background: number
+  isReady: number
   createdAt: number
   updatedAt: number
   questionnaireId: number
@@ -88,6 +91,7 @@ export type UserMinAggregateInputType = {
   location?: true | runtime.Types.Skip
   role?: true | runtime.Types.Skip
   background?: true | runtime.Types.Skip
+  isReady?: true | runtime.Types.Skip
   createdAt?: true | runtime.Types.Skip
   updatedAt?: true | runtime.Types.Skip
   questionnaireId?: true | runtime.Types.Skip
@@ -105,6 +109,7 @@ export type UserMaxAggregateInputType = {
   location?: true | runtime.Types.Skip
   role?: true | runtime.Types.Skip
   background?: true | runtime.Types.Skip
+  isReady?: true | runtime.Types.Skip
   createdAt?: true | runtime.Types.Skip
   updatedAt?: true | runtime.Types.Skip
   questionnaireId?: true | runtime.Types.Skip
@@ -122,6 +127,7 @@ export type UserCountAggregateInputType = {
   location?: true | runtime.Types.Skip
   role?: true | runtime.Types.Skip
   background?: true | runtime.Types.Skip
+  isReady?: true | runtime.Types.Skip
   createdAt?: true | runtime.Types.Skip
   updatedAt?: true | runtime.Types.Skip
   questionnaireId?: true | runtime.Types.Skip
@@ -212,6 +218,7 @@ export type UserGroupByOutputType = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady: boolean
   createdAt: Date
   updatedAt: Date
   questionnaireId: string | null
@@ -250,6 +257,7 @@ export type UserWhereInput = {
   location?: Prisma.EnumLocationFilter<"User"> | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFilter<"User"> | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFilter<"User"> | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string | runtime.Types.Skip
   questionnaireId?: Prisma.StringNullableFilter<"User"> | string | null | runtime.Types.Skip
@@ -273,6 +281,7 @@ export type UserOrderByWithRelationInput = {
   location?: Prisma.SortOrder | runtime.Types.Skip
   role?: Prisma.SortOrder | runtime.Types.Skip
   background?: Prisma.SortOrder | runtime.Types.Skip
+  isReady?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
   questionnaireId?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
@@ -300,6 +309,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   location?: Prisma.EnumLocationFilter<"User"> | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFilter<"User"> | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFilter<"User"> | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string | runtime.Types.Skip
   questionnaire?: Prisma.XOR<Prisma.QuestionnaireNullableScalarRelationFilter, Prisma.QuestionnaireWhereInput> | null | runtime.Types.Skip
@@ -322,6 +332,7 @@ export type UserOrderByWithAggregationInput = {
   location?: Prisma.SortOrder | runtime.Types.Skip
   role?: Prisma.SortOrder | runtime.Types.Skip
   background?: Prisma.SortOrder | runtime.Types.Skip
+  isReady?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
   questionnaireId?: Prisma.SortOrderInput | Prisma.SortOrder | runtime.Types.Skip
@@ -345,6 +356,7 @@ export type UserScalarWhereWithAggregatesInput = {
   location?: Prisma.EnumLocationWithAggregatesFilter<"User"> | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringWithAggregatesFilter<"User"> | string | runtime.Types.Skip
+  isReady?: Prisma.BoolWithAggregatesFilter<"User"> | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string | runtime.Types.Skip
   questionnaireId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null | runtime.Types.Skip
@@ -362,6 +374,7 @@ export type UserCreateInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
@@ -384,6 +397,7 @@ export type UserUncheckedCreateInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaireId?: string | null | runtime.Types.Skip
@@ -406,6 +420,7 @@ export type UserUpdateInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
@@ -428,6 +443,7 @@ export type UserUncheckedUpdateInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
@@ -450,6 +466,7 @@ export type UserCreateManyInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaireId?: string | null | runtime.Types.Skip
@@ -467,6 +484,7 @@ export type UserUpdateManyMutationInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
 }
@@ -483,6 +501,7 @@ export type UserUncheckedUpdateManyInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
@@ -500,6 +519,7 @@ export type UserCountOrderByAggregateInput = {
   location?: Prisma.SortOrder | runtime.Types.Skip
   role?: Prisma.SortOrder | runtime.Types.Skip
   background?: Prisma.SortOrder | runtime.Types.Skip
+  isReady?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
   questionnaireId?: Prisma.SortOrder | runtime.Types.Skip
@@ -517,6 +537,7 @@ export type UserMaxOrderByAggregateInput = {
   location?: Prisma.SortOrder | runtime.Types.Skip
   role?: Prisma.SortOrder | runtime.Types.Skip
   background?: Prisma.SortOrder | runtime.Types.Skip
+  isReady?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
   questionnaireId?: Prisma.SortOrder | runtime.Types.Skip
@@ -534,6 +555,7 @@ export type UserMinOrderByAggregateInput = {
   location?: Prisma.SortOrder | runtime.Types.Skip
   role?: Prisma.SortOrder | runtime.Types.Skip
   background?: Prisma.SortOrder | runtime.Types.Skip
+  isReady?: Prisma.SortOrder | runtime.Types.Skip
   createdAt?: Prisma.SortOrder | runtime.Types.Skip
   updatedAt?: Prisma.SortOrder | runtime.Types.Skip
   questionnaireId?: Prisma.SortOrder | runtime.Types.Skip
@@ -571,6 +593,10 @@ export type EnumLocationFieldUpdateOperationsInput = {
 
 export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role | runtime.Types.Skip
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean | runtime.Types.Skip
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -691,6 +717,7 @@ export type UserCreateWithoutRefreshSessionsInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
@@ -712,6 +739,7 @@ export type UserUncheckedCreateWithoutRefreshSessionsInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaireId?: string | null | runtime.Types.Skip
@@ -749,6 +777,7 @@ export type UserUpdateWithoutRefreshSessionsInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
@@ -770,6 +799,7 @@ export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
@@ -791,6 +821,7 @@ export type UserCreateWithoutTrainingsInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
@@ -812,6 +843,7 @@ export type UserUncheckedCreateWithoutTrainingsInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaireId?: string | null | runtime.Types.Skip
@@ -849,6 +881,7 @@ export type UserUpdateWithoutTrainingsInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
@@ -870,6 +903,7 @@ export type UserUncheckedUpdateWithoutTrainingsInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
@@ -891,6 +925,7 @@ export type UserCreateWithoutQuestionnaireInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   balance?: Prisma.BalanceCreateNestedOneWithoutUserInput | runtime.Types.Skip
@@ -912,6 +947,7 @@ export type UserUncheckedCreateWithoutQuestionnaireInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   balance?: Prisma.BalanceUncheckedCreateNestedOneWithoutUserInput | runtime.Types.Skip
@@ -949,6 +985,7 @@ export type UserUpdateWithoutQuestionnaireInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   balance?: Prisma.BalanceUpdateOneWithoutUserNestedInput | runtime.Types.Skip
@@ -970,6 +1007,7 @@ export type UserUncheckedUpdateWithoutQuestionnaireInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   balance?: Prisma.BalanceUncheckedUpdateOneWithoutUserNestedInput | runtime.Types.Skip
@@ -991,6 +1029,7 @@ export type UserCreateWithoutBalanceInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
@@ -1012,6 +1051,7 @@ export type UserUncheckedCreateWithoutBalanceInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaireId?: string | null | runtime.Types.Skip
@@ -1049,6 +1089,7 @@ export type UserUpdateWithoutBalanceInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
@@ -1070,6 +1111,7 @@ export type UserUncheckedUpdateWithoutBalanceInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
@@ -1091,6 +1133,7 @@ export type UserCreateWithoutOrdersInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
@@ -1112,6 +1155,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaireId?: string | null | runtime.Types.Skip
@@ -1149,6 +1193,7 @@ export type UserUpdateWithoutOrdersInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
@@ -1170,6 +1215,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
@@ -1191,6 +1237,7 @@ export type UserCreateWithoutFeedbacksInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireCreateNestedOneWithoutUserInput | runtime.Types.Skip
@@ -1212,6 +1259,7 @@ export type UserUncheckedCreateWithoutFeedbacksInput = {
   location: $Enums.Location
   role: $Enums.Role
   background: string
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: Date | string | runtime.Types.Skip
   updatedAt?: Date | string | runtime.Types.Skip
   questionnaireId?: string | null | runtime.Types.Skip
@@ -1249,6 +1297,7 @@ export type UserUpdateWithoutFeedbacksInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaire?: Prisma.QuestionnaireUpdateOneWithoutUserNestedInput | runtime.Types.Skip
@@ -1270,6 +1319,7 @@ export type UserUncheckedUpdateWithoutFeedbacksInput = {
   location?: Prisma.EnumLocationFieldUpdateOperationsInput | $Enums.Location | runtime.Types.Skip
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role | runtime.Types.Skip
   background?: Prisma.StringFieldUpdateOperationsInput | string | runtime.Types.Skip
+  isReady?: Prisma.BoolFieldUpdateOperationsInput | boolean | runtime.Types.Skip
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string | runtime.Types.Skip
   questionnaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null | runtime.Types.Skip
@@ -1349,6 +1399,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   location?: boolean | runtime.Types.Skip
   role?: boolean | runtime.Types.Skip
   background?: boolean | runtime.Types.Skip
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
   questionnaireId?: boolean | runtime.Types.Skip
@@ -1373,6 +1424,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   location?: boolean | runtime.Types.Skip
   role?: boolean | runtime.Types.Skip
   background?: boolean | runtime.Types.Skip
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
   questionnaireId?: boolean | runtime.Types.Skip
@@ -1391,6 +1443,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   location?: boolean | runtime.Types.Skip
   role?: boolean | runtime.Types.Skip
   background?: boolean | runtime.Types.Skip
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
   questionnaireId?: boolean | runtime.Types.Skip
@@ -1409,12 +1462,13 @@ export type UserSelectScalar = {
   location?: boolean | runtime.Types.Skip
   role?: boolean | runtime.Types.Skip
   background?: boolean | runtime.Types.Skip
+  isReady?: boolean | runtime.Types.Skip
   createdAt?: boolean | runtime.Types.Skip
   updatedAt?: boolean | runtime.Types.Skip
   questionnaireId?: boolean | runtime.Types.Skip
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "avatar" | "gender" | "birthday" | "description" | "location" | "role" | "background" | "createdAt" | "updatedAt" | "questionnaireId", ExtArgs["result"]["user"], runtime.Types.Skip>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "avatar" | "gender" | "birthday" | "description" | "location" | "role" | "background" | "isReady" | "createdAt" | "updatedAt" | "questionnaireId", ExtArgs["result"]["user"], runtime.Types.Skip>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   questionnaire?: boolean | Prisma.User$questionnaireArgs<ExtArgs> | runtime.Types.Skip
   balance?: boolean | Prisma.User$balanceArgs<ExtArgs> | runtime.Types.Skip
@@ -1453,6 +1507,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     location: $Enums.Location
     role: $Enums.Role
     background: string
+    isReady: boolean
     createdAt: Date
     updatedAt: Date
     questionnaireId: string | null
@@ -1896,6 +1951,7 @@ export interface UserFieldRefs {
   readonly location: Prisma.FieldRef<"User", 'Location'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly background: Prisma.FieldRef<"User", 'String'>
+  readonly isReady: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly questionnaireId: Prisma.FieldRef<"User", 'String'>

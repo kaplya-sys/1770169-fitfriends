@@ -724,10 +724,6 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number | runtime.Types.Skip
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean | runtime.Types.Skip
-}
-
 export type TrainingCreateNestedOneWithoutBalancesInput = {
   create?: Prisma.XOR<Prisma.TrainingCreateWithoutBalancesInput, Prisma.TrainingUncheckedCreateWithoutBalancesInput> | runtime.Types.Skip
   connectOrCreate?: Prisma.TrainingCreateOrConnectWithoutBalancesInput | runtime.Types.Skip

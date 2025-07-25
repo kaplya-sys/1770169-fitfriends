@@ -14,6 +14,7 @@ export interface User {
   location: Location;
   role: Role;
   background: string;
+  isReady: boolean;
   createdAt: Date;
   updatedAt: Date;
   questionnaireId: string;
