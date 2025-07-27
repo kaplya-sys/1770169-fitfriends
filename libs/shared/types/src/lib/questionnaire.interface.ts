@@ -1,9 +1,7 @@
-import {Exercise} from './exercise.enum';
-import {FitnessLevel} from './fitness-level.enum';
-import {TrainingTime} from './training-time.enum';
+import {Exercise, FitnessLevel, TrainingTime} from '@1770169-fitfriends/models';
 
 export interface Questionnaire {
-  id: string;
+  id?: string;
   fitnessLevel: FitnessLevel;
   trainingTime: TrainingTime;
   exercise: Exercise[];

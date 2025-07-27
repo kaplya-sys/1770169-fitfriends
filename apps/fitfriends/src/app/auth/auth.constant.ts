@@ -6,6 +6,7 @@ export const TOKEN_CREATION_ERROR = 'Ошибка при создании ток
 export const TOKEN_GENERATE_ERROR = '[Ошибка генерации токена]: %error%'
 export const ROUTE_PREFIX = 'users';
 export const TAG = 'Users';
+export const MAX_UPLOAD_FILES = 1;
 
 export const USER_CREATED_RESPONSE = 'Созданный объект пользователя, токен доступа и токен обновления.';
 export const USER_LOGIN_RESPONSE = 'Объект пользователя, токен доступа и токен обновления.';

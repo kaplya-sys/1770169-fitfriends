@@ -5,51 +5,51 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 enum Location {
-  PIONERSKAYA
-  PETROGRADSKAYA
-  UDELNAYA
-  ZVEZDNAYA
-  SPORTIVNAYA
+  pionerskaya
+  petrogradskaya
+  udelnaya
+  zvezdnaya
+  sportivnaya
 }
 
 enum Gender {
-  FEMALE
-  MALE
-  WHATEVER
+  female
+  male
+  whatever
 }
 
 enum Role {
-  USER
-  COACH
+  user
+  coach
 }
 
 enum FitnessLevel {
-  BEGINNER
-  AMATEUR
-  PROFESSIONAL
+  beginner
+  amateur
+  professional
 }
 
 enum Exercise {
-  YOGA
-  RUNNING
-  BOXING
-  STRETCHING
-  CROSSFIT
-  AEROBICS
-  PILATES
+  yoga
+  running
+  boxing
+  stretching
+  crossfit
+  aerobics
+  pilates
 }
 
 enum TrainingTime {
-  SHORT
-  MEDIUM
-  LONG
-  EXTRA_LONG
+  short
+  medium
+  long
+  extra_long
 }
 
 enum PaymentMethod {
-  VISA
-  MIR
-  UMONEY
+  visa
+  mir
+  umoney
 }
 
 generator client {

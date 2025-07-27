@@ -2,8 +2,7 @@ module.exports = {
   extends: [
     '../../.eslintrc.cjs',
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'htmlacademy/node'
+    'plugin:@typescript-eslint/recommended'
   ],
   ignorePatterns: ['!**/*', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',

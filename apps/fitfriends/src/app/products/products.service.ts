@@ -29,9 +29,11 @@ export class ProductsService {
     let newFile: FilesEntity;
 
     for (const [key, value] of Object.entries(dto)) {
-      if (value !== undefined && existsProduct[key] !== value) {
+      if (existsProduct) {
+        if (value !== undefined && existsProduct[key] !== value) {
         existsProduct[key] = value;
         hasChanges = true;
+      }
       }
     }
 

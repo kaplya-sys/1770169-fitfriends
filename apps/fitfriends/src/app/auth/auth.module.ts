@@ -2,7 +2,7 @@ import {Module} from '@nestjs/common';
 import {JwtModule} from '@nestjs/jwt';
 import {ConfigService} from '@nestjs/config';
 
-import {getJwtOptions} from '@1770169-guitar/config';
+import {getJwtOptions} from '@1770169-fitfriends/config';
 
 import {AuthController} from './auth.controller';
 import {AuthService} from './auth.service';
@@ -11,10 +11,13 @@ import {JWTAccessStrategy} from './strategies/jwt-access.strategy';
 import {LocalStrategy} from './strategies/local.strategy';
 import {JWTRefreshStrategy} from './strategies/jwt-refresh.strategy';
 import {RefreshTokenModule} from '../refresh-token/refresh-token.module';
+import {FilesModule} from '../files/files.module';
+
 
 @Module({
   imports: [
     UserModule,
+    FilesModule,
     RefreshTokenModule,
     JwtModule.registerAsync({
       inject: [ConfigService],

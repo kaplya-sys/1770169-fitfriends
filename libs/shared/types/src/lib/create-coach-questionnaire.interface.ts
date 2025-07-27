@@ -1,5 +1,4 @@
-import {Exercise} from './exercise.enum';
-import {FitnessLevel} from './fitness-level.enum';
+import {Exercise, FitnessLevel} from '@1770169-fitfriends/models';
 
 export interface CreateCoachQuestionnaire {
   fitnessLevel: FitnessLevel;

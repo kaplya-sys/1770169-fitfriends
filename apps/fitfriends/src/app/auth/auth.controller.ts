@@ -7,13 +7,22 @@ import {
   Param,
   Post,
   Req,
-  UseGuards
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors
 } from '@nestjs/common';
+import {FileFieldsInterceptor} from '@nestjs/platform-express';
+import {ApiParam, ApiResponse, ApiTags} from '@nestjs/swagger';
 
-import {CreateUserDTO} from '@1770169-guitar/dto';
-import {fillDto} from '@1770169-guitar/helpers';
-import {AuthenticatedUserRDO, UserRDO} from '@1770169-guitar/rdo';
-import {RequestWithTokenPayload, RequestWithUser, Route} from '@1770169-guitar/types';
+import {CreateUserDTO} from '@1770169-fitfriends/dto';
+import {fillDto} from '@1770169-fitfriends/helpers';
+import {AuthenticatedUserRDO, UserRDO} from '@1770169-fitfriends/rdo';
+import {
+  FieldName,
+  RequestWithTokenPayload,
+  RequestWithUser,
+  Route
+} from '@1770169-fitfriends/types';
 
 import {AuthService} from './auth.service';
 import {JWTAuthGuard} from './guards/jwt-auth.guard';
@@ -21,6 +30,7 @@ import {JWTRefreshGuard} from './guards/jwt-refresh.guard';
 import {LocalAuthGuard} from './guards/local-auth.guard';
 import {
   CHECK_TOKEN_RESPONSE,
+  MAX_UPLOAD_FILES,
   PRODUCT_ID_PARAM,
   REFRESH_TOKEN_RESPONSE,
   ROUTE_PREFIX,
@@ -29,11 +39,6 @@ import {
   USER_FOUND_RESPONSE,
   USER_LOGIN_RESPONSE
 } from './auth.constant';
-import {ApiParam, ApiResponse, ApiTags} from '@nestjs/swagger';
-
-import {Role} from '@1770169-guitar/models';
-
-
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
@@ -45,10 +50,16 @@ export class AuthController {
     description: USER_CREATED_RESPONSE,
     type: AuthenticatedUserRDO
   })
+  @UseInterceptors(FileFieldsInterceptor([
+    {name: FieldName.Avatar, maxCount: MAX_UPLOAD_FILES}
+  ]))
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.Register)
-  public async create(@Body() dto: CreateUserDTO) {
-    const newUser = await this.authService.registerUser({...dto, role: Role.admin});
+  public async create(
+    @UploadedFiles() files: Express.Multer.File[],
+    @Body() dto: CreateUserDTO
+  ) {
+    const newUser = await this.authService.registerUser(dto, files);
     const token = await this.authService.createToken(newUser);
 
     return fillDto(AuthenticatedUserRDO, {...newUser, ...token});

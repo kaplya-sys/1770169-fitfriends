@@ -7,13 +7,10 @@ import {
   IsString,
   Length
 } from 'class-validator';
+import {Transform} from 'class-transformer';
 
-import {
-  CreateUser,
-  Gender,
-  Location,
-  Role
-} from '@1770169-fitfriends/types';
+import {CreateUser} from '@1770169-fitfriends/types';
+import {Gender, Location, Role} from '@1770169-fitfriends/models';
 
 import {
   BIRTHDAY_PROPERTY,
@@ -93,6 +90,7 @@ export class CreateUserDTO implements CreateUser {
     type: BIRTHDAY_PROPERTY.TYPE
   })
   @IsISO8601({strict: true})
+  @Transform(({value}) => new Date(value))
   @IsOptional()
-  birthday?: string;
+  birthday?: Date;
 }

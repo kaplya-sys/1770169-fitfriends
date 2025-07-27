@@ -8,13 +8,10 @@ import {
   Max,
   Min
 } from 'class-validator';
+import {Transform} from 'class-transformer';
 
-import {
-  CreateUserQuestionnaire,
-  Exercise,
-  FitnessLevel,
-  TrainingTime
-} from '@1770169-fitfriends/types';
+import {Exercise, FitnessLevel, TrainingTime} from '@1770169-fitfriends/models';
+import {CreateUserQuestionnaire} from '@1770169-fitfriends/types';
 
 import {
   CALORIE_LOSE_PROPERTY,
@@ -23,7 +20,6 @@ import {
   FITNESS_LEVEL_PROPERTY,
   TRAINING_TIME_PROPERTY
 } from './dto.const';
-import { Transform } from 'class-transformer';
 
 export class CreateUserQuestionnaireDTO implements CreateUserQuestionnaire {
   @ApiProperty({

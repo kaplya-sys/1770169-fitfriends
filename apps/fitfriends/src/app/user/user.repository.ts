@@ -1,8 +1,8 @@
 import {Injectable} from '@nestjs/common';
 
-import {BasePostgresRepository} from '@1770169-guitar/core';
-import {Prisma, PrismaClientService} from '@1770169-guitar/models';
-import {ExtendUser} from '@1770169-guitar/types';
+import {BasePostgresRepository} from '@1770169-fitfriends/core';
+import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
+import {ExtendUser} from '@1770169-fitfriends/types';
 
 import {UserEntity} from './user.entity';
 
@@ -14,13 +14,16 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
     super(prismaClient, UserEntity.fromObject);
   }
 
-  public async save(entity: UserEntity): Promise<UserEntity> {
+  public override async save(entity: UserEntity): Promise<UserEntity> {
     const newRecord = await this.prismaClient.user.create({
       data: {
         name: entity.name,
         email: entity.email,
         password: entity.password,
-        role: entity.role ?? Prisma.skip,
+        gender: entity.gender,
+        birthday: entity.birthday ?? Prisma.skip,
+        location: entity.location,
+        role: entity.role
       }
     });
     entity.id = newRecord.id;
@@ -28,7 +31,18 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
     return entity;
   }
 
-  public async findById(id: UserEntity['id']): Promise<UserEntity | null> {
+  public override async update(id: UserEntity['id'], entity: UserEntity): Promise<UserEntity> {
+    const record = await this.prismaClient.user.update({
+      where: {
+        id
+      },
+      data: entity.toObject()
+    })
+
+    return this.createEntityFromDocument(record);
+  }
+
+  public override async findById(id: UserEntity['id']): Promise<UserEntity | null> {
     const record = await this.prismaClient.user.findFirst({
       where: {
         id

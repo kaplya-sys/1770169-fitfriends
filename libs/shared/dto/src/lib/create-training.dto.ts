@@ -9,13 +9,8 @@ import {
 } from 'class-validator';
 import {Transform} from 'class-transformer';
 
-import {
-  CreateTraining,
-  Exercise,
-  FitnessLevel,
-  Gender,
-  TrainingTime
-} from '@1770169-fitfriends/types';
+import {Exercise, FitnessLevel, Gender, TrainingTime} from '@1770169-fitfriends/models';
+import {CreateTraining} from '@1770169-fitfriends/types';
 
 import {
   CALORIE_PROPERTY,
@@ -66,12 +61,10 @@ export class CreateTrainingDTO implements CreateTraining {
     description: PRICE_PROPERTY.DESCRIPTION,
     example: PRICE_PROPERTY.EXAMPLE,
     minimum: PRICE_PROPERTY.MIN,
-    maximum: PRICE_PROPERTY.MAX,
     type: PRICE_PROPERTY.TYPE
   })
   @IsInt()
   @Min(PRICE_PROPERTY.MIN)
-  @Max(PRICE_PROPERTY.MAX)
   @Transform(({value}) => parseInt(value, 10))
   @IsNotEmpty()
   public price!: number;

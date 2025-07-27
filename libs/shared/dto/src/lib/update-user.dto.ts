@@ -3,19 +3,13 @@ import {
   ArrayMaxSize,
   IsArray,
   IsBoolean,
-  IsNotEmpty,
   IsOptional,
   IsString,
   Length
 } from 'class-validator';
 
-import {
-  Exercise,
-  FitnessLevel,
-  Gender,
-  Location,
-  UpdateUser
-} from '@1770169-fitfriends/types';
+import {Exercise, FitnessLevel, Gender, Location} from '@1770169-fitfriends/models';
+import {UpdateUser} from '@1770169-fitfriends/types';
 
 import {
   DESCRIPTION_PROPERTY,
@@ -46,7 +40,7 @@ export class UpdateUserDTO implements UpdateUser {
     enum: GENDER_PROPERTY.ENUM
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   gender?: Gender;
 
   @ApiProperty({
@@ -55,7 +49,7 @@ export class UpdateUserDTO implements UpdateUser {
     enum: LOCATION_PROPERTY.ENUM
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   location?: Location;
 
   @ApiProperty({
@@ -67,6 +61,7 @@ export class UpdateUserDTO implements UpdateUser {
   })
   @IsArray()
   @ArrayMaxSize(EXERCISE_PROPERTY.MAX_ITEMS)
+  @IsOptional()
   exercise?: Exercise[];
 
   @ApiProperty({
@@ -78,6 +73,7 @@ export class UpdateUserDTO implements UpdateUser {
   })
   @IsString()
   @Length(DESCRIPTION_PROPERTY.MIN, DESCRIPTION_PROPERTY.MAX)
+  @IsOptional()
   description?: string;
 
   @ApiProperty({
@@ -86,7 +82,7 @@ export class UpdateUserDTO implements UpdateUser {
     type: READY_PROPERTY.TYPE
   })
   @IsBoolean()
-  @IsNotEmpty()
+  @IsOptional()
   isReady?: boolean;
 
   @ApiProperty({
@@ -95,5 +91,6 @@ export class UpdateUserDTO implements UpdateUser {
     enum: FITNESS_LEVEL_PROPERTY.ENUM
   })
   @IsString()
+  @IsOptional()
   fitnessLevel?: FitnessLevel
 }

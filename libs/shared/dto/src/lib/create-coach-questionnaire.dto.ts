@@ -8,11 +8,8 @@ import {
   Length
 } from 'class-validator';
 
-import {
-  CreateCoachQuestionnaire,
-  Exercise,
-  FitnessLevel
-} from '@1770169-fitfriends/types';
+import {Exercise, FitnessLevel} from '@1770169-fitfriends/models';
+import {CreateCoachQuestionnaire} from '@1770169-fitfriends/types';
 
 import {
   EXERCISE_PROPERTY,

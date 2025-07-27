@@ -1,5 +1,4 @@
-import {Exercise} from './exercise.enum';
-import {PaymentMethod} from './payment-method.enum';
+import {Exercise, PaymentMethod} from '@1770169-fitfriends/models';
 
 export interface Order {
   id: string;

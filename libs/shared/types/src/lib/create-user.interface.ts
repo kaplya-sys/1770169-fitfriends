@@ -1,13 +1,11 @@
-import {Gender} from './gender.enum';
-import {Location} from './location.enum';
-import {Role} from './role.enum';
+import {Gender, Location, Role} from '@1770169-fitfriends/models';
 
 export interface CreateUser {
   name: string;
   email: string;
   password: string;
   gender: Gender;
-  birthday?: string;
+  birthday?: Date;
   location: Location;
   role: Role;
 };

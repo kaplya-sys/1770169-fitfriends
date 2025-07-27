@@ -1,8 +1,7 @@
-import crypto from 'node:crypto'
+import crypto from 'node:crypto';
 
 import {ConfigType} from '@nestjs/config';
 import {
-  ConflictException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -12,9 +11,10 @@ import {
 } from '@nestjs/common';
 import {JwtService} from '@nestjs/jwt';
 
-import {AuthUserDTO, CreateUserDTO} from '@1770169-guitar/dto';
-import {JwtConfig} from '@1770169-guitar/config';
-import {createJWTPayload, createMessage} from '@1770169-guitar/helpers';
+import {JwtConfig} from '@1770169-fitfriends/config';
+import {AuthUserDTO, CreateUserDTO, UpdateUserDTO} from '@1770169-fitfriends/dto';
+import {createJWTPayload, createMessage} from '@1770169-fitfriends/helpers';
+import {Token, User} from '@1770169-fitfriends/types';
 
 import {UserEntity} from '../user/user.entity';
 import {UserRepository} from '../user/user.repository';
@@ -27,33 +27,54 @@ import {
   WRONG_PASSWORD_MESSAGE
 } from './auth.constant';
 import {RefreshTokenService} from '../refresh-token/refresh-token.service';
-import {Token, User} from '@1770169-guitar/types';
+import {FilesService} from '../files/files.service';
 
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
-
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly refreshTokenService: RefreshTokenService,
+    private readonly filesService: FilesService,
     @Inject(JwtConfig.KEY)private readonly jwtOptions: ConfigType<typeof JwtConfig>
   ) {}
-
-  public async registerUser(dto: CreateUserDTO): Promise<UserEntity> {
+  public async registerUser(dto: CreateUserDTO, files: Express.Multer.File[]): Promise<UserEntity> {
     const existUser = await this.userRepository.findByEmail(dto.email);
 
     if(existUser) {
-      throw new ConflictException(createMessage(USER_EXISTS_MESSAGE, [dto.email]));
+      throw new NotFoundException(createMessage(USER_EXISTS_MESSAGE, [dto.email]));
     }
-    const userEntity = await new UserEntity(dto).setPassword(dto.password);
 
+    const file = await this.filesService.saveFile(files);
+
+    const userEntity = await new UserEntity({...dto, avatar: file.id as string, background: ''}).setPassword(dto.password);
     return this.userRepository.save(userEntity);
+  }
+  public async updateUser(id: string, dto: UpdateUserDTO): Promise<UserEntity> {
+    const existUser = await this.userRepository.findById(id);
+
+    if (!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
+    }
+    let hasUpdates = false;
+
+    for (const [key, value] of Object.entries(dto)) {
+      if (value !== undefined && existUser[key as keyof UserEntity] !== value) {
+        existUser[key as keyof UserEntity] = value;
+        hasUpdates = true;
+      }
+    }
+
+    if (!hasUpdates) {
+      return existUser;
+    }
+
+    return this.userRepository.update(id, existUser);
   }
 
   public async verifyUser(dto: AuthUserDTO): Promise<UserEntity> {
     const existUser = await this.userRepository.findByEmail(dto.email);
-
     if(!existUser) {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_EMAIL_MESSAGE, [dto.email]));
     }
@@ -100,7 +121,7 @@ export class AuthService {
         expiresIn: this.jwtOptions.refreshTokenExpiresIn
       });
 
-      await this.refreshTokenService.createRefreshSession(refreshTokenPayload)
+      await this.refreshTokenService.createRefreshSession(refreshTokenPayload);
 
       return {accessToken, refreshToken};
     } catch (err) {
