@@ -16,14 +16,14 @@ import {
 import {ApiParam, ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {FileFieldsInterceptor} from '@nestjs/platform-express';
 
-import {FilesTypeValidationPipe, ParseFormDataJsonPipe} from '@1770169-guitar/core';
-import {CreateProductDTO, UpdateProductDTO} from '@1770169-guitar/dto';
-import {fillDto} from '@1770169-guitar/helpers';
-import {ProductRDO, ProductsWithPaginationRDO} from '@1770169-guitar/rdo';
-import {ProductsQuery} from '@1770169-guitar/query';
-import {FieldName, Route, RequestFiles} from '@1770169-guitar/types';
+import {FilesTypeValidationPipe, ParseFormDataJsonPipe} from '@1770169-fitfriends/core';
+import {} from '@1770169-fitfriends/dto';
+import {fillDto} from '@1770169-fitfriends/helpers';
+import {} from '@1770169-fitfriends/rdo';
+import {} from '@1770169-fitfriends/query';
+import {FieldName, Route, RequestFiles} from '@1770169-fitfriends/types';
 
-import {ProductsService} from './products.service';
+import {ProductsService} from './training.service';
 import {
   MAX_UPLOAD_FILES,
   PRODUCT_CREATED_RESPONSE,
@@ -38,12 +38,12 @@ import {
   PRODUCTS_FOUND_RESPONSE,
   ROUTE_PREFIX,
   TAG
-} from './products.constant';
+} from './training.constant';
 import {JWTAuthGuard} from '../auth/guards/jwt-auth.guard';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
-export class ProductsController {
+export class TrainingController {
   constructor(
     private readonly productsService: ProductsService
   ) {}

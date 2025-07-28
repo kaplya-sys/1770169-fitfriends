@@ -1,7 +1,7 @@
 import {Exercise, FitnessLevel, Gender, TrainingTime} from '@1770169-fitfriends/models';
 
 export interface Training {
-  id: string;
+  id?: string;
   title: string;
   background: string;
   level: FitnessLevel;

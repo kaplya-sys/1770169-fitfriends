@@ -1,20 +1,20 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
 
-import {Prisma, PrismaClientService} from '@1770169-guitar/models';
-import {BasePostgresRepository} from '@1770169-guitar/core';
-import {createMessage} from '@1770169-guitar/helpers';
-import {ProductsQuery} from '@1770169-guitar/query';
-import {Pagination, Guitar} from '@1770169-guitar/types';
+import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
+import {BasePostgresRepository} from '@1770169-fitfriends/core';
+import {createMessage} from '@1770169-fitfriends/helpers';
+import {ProductsQuery} from '@1770169-fitfriends/query';
+import {Pagination, Training} from '@1770169-fitfriends/types';
 
-import {ProductsEntity} from './products.entity';
-import {ELEMENTS_ON_PAGE, NOT_FOUND_BY_ID_MESSAGE} from './products.constant';
+import {TrainingEntity} from './training.entity';
+import {ELEMENTS_ON_PAGE, NOT_FOUND_BY_ID_MESSAGE} from './training.constant';
 
 @Injectable()
-export class ProductsRepository extends BasePostgresRepository<ProductsEntity, Guitar> {
+export class TrainingRepository extends BasePostgresRepository<TrainingEntity, Training> {
   constructor(
     protected override readonly prismaClient: PrismaClientService
   ) {
-    super(prismaClient, ProductsEntity.fromObject)
+    super(prismaClient, TrainingEntity.fromObject)
   }
 
   private async getProductsCount(where: Prisma.GuitarsWhereInput): Promise<number> {
@@ -25,7 +25,7 @@ export class ProductsRepository extends BasePostgresRepository<ProductsEntity, G
     return Math.ceil(totalCount / limit);
   }
 
-  public override async save(entity: ProductsEntity): Promise<ProductsEntity> {
+  public override async save(entity: TrainingEntity): Promise<TrainingEntity> {
     const record = await this.prismaClient.guitars.create({
       data: {
         title: entity.title,

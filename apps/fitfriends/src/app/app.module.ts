@@ -7,7 +7,7 @@ import {getMongooseOptions} from '@1770169-guitar/helpers';
 import {AuthModule} from './auth/auth.module';
 import {UserModule} from './user/user.module';
 import {FilesModule} from './files/files.module';
-import {ProductsModule} from './products/products.module';
+import {ProductsModule} from './training/training.module';
 
 @Module({
   imports: [

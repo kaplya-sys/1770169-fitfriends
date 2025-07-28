@@ -1,7 +1,7 @@
 import {genSaltSync, hashSync, compareSync} from 'bcrypt';
-import {ExtendUser, Questionnaire} from '@1770169-fitfriends/types';
-import {Exercise, FitnessLevel, Location, Gender, Role, TrainingTime} from '@1770169-fitfriends/models';
 
+import {ExtendUser} from '@1770169-fitfriends/types';
+import {Location, Gender, Role} from '@1770169-fitfriends/models';
 import {Entity} from '@1770169-fitfriends/core';
 
 import {SALT_ROUNDS} from './user.constant';
@@ -20,11 +20,6 @@ export class UserEntity implements ExtendUser, Entity<string> {
   public background!: string;
   public isReady?: boolean;
   public createdAt?: Date;
-  //public fitnessLevel?: FitnessLevel;
-  //public trainingTime?: TrainingTime;
-  //public exercise?: Exercise[];
-  //public calorieLose?: number;
-  //public calorieWaste?: number;
   public questionnaireId?: string
 
   constructor(user: ExtendUser) {
@@ -50,11 +45,6 @@ export class UserEntity implements ExtendUser, Entity<string> {
       background: this.background,
       isReady: this.isReady,
       createdAt: this.createdAt,
-      //fitnessLevel: this.fitnessLevel,
-      //trainingTime: this.trainingTime,
-      //exercise: this.exercise,
-      //calorieLose: this.calorieLose,
-      //calorieWaste: this.calorieWaste
       questionnaireId: this.questionnaireId
     }
   }
@@ -73,11 +63,6 @@ export class UserEntity implements ExtendUser, Entity<string> {
     this.background = user.background;
     this.isReady = user.isReady;
     this.createdAt = user.createdAt;
-    //this.fitnessLevel = user.fitnessLevel,
-    //this.trainingTime = user.trainingTime,
-    //this.exercise = user.exercise,
-    //this.calorieLose = user.calorieLose,
-    //this.calorieWaste = user.calorieWaste
     this.questionnaireId = user.questionnaireId;
   }
 

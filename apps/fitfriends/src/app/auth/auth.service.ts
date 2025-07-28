@@ -12,9 +12,15 @@ import {
 import {JwtService} from '@nestjs/jwt';
 
 import {JwtConfig} from '@1770169-fitfriends/config';
-import {AuthUserDTO, CreateUserDTO, UpdateUserDTO} from '@1770169-fitfriends/dto';
+import {
+  AuthUserDTO,
+  CreateCoachQuestionnaireDTO,
+  CreateUserDTO,
+  CreateUserQuestionnaireDTO,
+  UpdateUserDTO
+} from '@1770169-fitfriends/dto';
 import {createJWTPayload, createMessage} from '@1770169-fitfriends/helpers';
-import {Token, User} from '@1770169-fitfriends/types';
+import {RequestFiles, Token, User} from '@1770169-fitfriends/types';
 
 import {UserEntity} from '../user/user.entity';
 import {UserRepository} from '../user/user.repository';
@@ -28,18 +34,22 @@ import {
 } from './auth.constant';
 import {RefreshTokenService} from '../refresh-token/refresh-token.service';
 import {FilesService} from '../files/files.service';
+import {QuestionnaireRepository} from '../questionnaire/questionnaire.repository';
+import {QuestionnaireEntity} from '../questionnaire/questionnaire.entity';
 
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly questionnaireRepository: QuestionnaireRepository,
     private readonly jwtService: JwtService,
     private readonly refreshTokenService: RefreshTokenService,
     private readonly filesService: FilesService,
     @Inject(JwtConfig.KEY)private readonly jwtOptions: ConfigType<typeof JwtConfig>
   ) {}
-  public async registerUser(dto: CreateUserDTO, files: Express.Multer.File[]): Promise<UserEntity> {
+
+  public async registerUser(dto: CreateUserDTO, files: RequestFiles): Promise<UserEntity> {
     const existUser = await this.userRepository.findByEmail(dto.email);
 
     if(existUser) {
@@ -51,7 +61,36 @@ export class AuthService {
     const userEntity = await new UserEntity({...dto, avatar: file.id as string, background: ''}).setPassword(dto.password);
     return this.userRepository.save(userEntity);
   }
-  public async updateUser(id: string, dto: UpdateUserDTO): Promise<UserEntity> {
+
+  public async addUserQuestionnaire(id: string, dto: CreateUserQuestionnaireDTO): Promise<UserEntity | null> {
+    const existUser = await this.userRepository.findById(id);
+
+    if (!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
+    }
+
+    const questionnaireEntity = new QuestionnaireEntity(dto);
+    const newQuestionnaire = await this.questionnaireRepository.save(questionnaireEntity);
+    existUser.questionnaireId = newQuestionnaire.id;
+
+    return this.userRepository.update(id, existUser);
+  }
+
+  public async addCoachQuestionnaire(id: string, dto: CreateCoachQuestionnaireDTO): Promise<UserEntity | null> {
+    const existUser = await this.userRepository.findById(id);
+
+    if (!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
+    }
+
+    const questionnaireEntity = new QuestionnaireEntity(dto);
+    const newQuestionnaire = await this.questionnaireRepository.save(questionnaireEntity);
+    existUser.questionnaireId = newQuestionnaire.id;
+
+    return this.userRepository.update(id, existUser);
+  }
+
+  public async updateUser(id: string, dto: UpdateUserDTO): Promise<UserEntity | null> {
     const existUser = await this.userRepository.findById(id);
 
     if (!existUser) {
@@ -60,8 +99,8 @@ export class AuthService {
     let hasUpdates = false;
 
     for (const [key, value] of Object.entries(dto)) {
-      if (value !== undefined && existUser[key as keyof UserEntity] !== value) {
-        existUser[key as keyof UserEntity] = value;
+      if (value !== undefined && key in UserEntity && existUser[key as keyof UserEntity] !== value) {
+        existUser[key as keyof UserEntity] = value as never; //change
         hasUpdates = true;
       }
     }

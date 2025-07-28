@@ -32,8 +32,13 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
       },
       data: objectEntity,
     })
-    const entries = Object.entries(record).filter(([, value]) => value !== null);
-    return this.createEntityFromDocument(Object.fromEntries(entries) as ExtendUser);
+    const document = {
+      ...record,
+      birthday: record.birthday ?? undefined,
+      description: record.description ?? undefined,
+      questionnaireId: record.questionnaireId ?? undefined
+    }
+    return this.createEntityFromDocument(document);
   }
 
   public override async findById(id: UserEntity['id']): Promise<UserEntity | null> {
@@ -46,7 +51,17 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
       }
     });
 
-    return this.createEntityFromDocument(record);
+    if (!record) {
+      return null;
+    }
+    const document = {
+      ...record,
+      birthday: record.birthday ?? undefined,
+      description: record.description ?? undefined,
+      questionnaireId: record.questionnaireId ?? undefined
+    };
+
+    return this.createEntityFromDocument(document);
   }
 
   public async findByEmail(email: string): Promise<UserEntity | null> {
@@ -59,7 +74,17 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
       }
     })
 
-    return this.createEntityFromDocument(record);
+    if (!record) {
+      return null;
+    }
+    const document = {
+      ...record,
+      birthday: record.birthday ?? undefined,
+      description: record.description ?? undefined,
+      questionnaireId: record.questionnaireId ?? undefined
+    };
+
+    return this.createEntityFromDocument(document);
   }
 }
 

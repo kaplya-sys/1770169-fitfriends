@@ -1,24 +1,24 @@
 import {Injectable} from '@nestjs/common';
 
-import {CreateProductDTO, UpdateProductDTO} from '@1770169-guitar/dto';
-import {ProductsQuery} from '@1770169-guitar/query';
-import {RequestFiles} from '@1770169-guitar/types';
+import {} from '@1770169-fitfriends/dto';
+import {} from '@1770169-fitfriends/query';
+import {RequestFiles} from '@1770169-fitfriends/types';
 
-import {ProductsRepository} from './products.repository';
-import {ProductsEntity} from './products.entity';
+import {TrainingRepository} from './training.repository';
+import {TrainingEntity} from './training.entity';
 import {FilesService} from '../files/files.service';
 import {FilesEntity} from '../files/files.entity';
 
 @Injectable()
-export class ProductsService {
+export class TrainingService {
   constructor (
-    private readonly productsRepository: ProductsRepository,
+    private readonly trainingRepository: TrainingRepository,
     private readonly fileService: FilesService
   ) {}
 
   public async createProduct(dto: CreateProductDTO, file: RequestFiles) {
     const newFile = await this.fileService.saveFile(file);
-    const newProduct = new ProductsEntity({...dto, image: newFile.id});
+    const newProduct = new TrainingEntity({...dto, image: newFile.id});
 
     return this.productsRepository.save(newProduct);
   }

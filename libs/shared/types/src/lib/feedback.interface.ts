@@ -1,5 +1,5 @@
 export interface Feedback {
-  id: string;
+  id?: string;
   assessment: number;
   content: string;
   createdAt: Date;

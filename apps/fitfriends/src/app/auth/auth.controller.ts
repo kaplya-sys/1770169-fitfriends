@@ -14,11 +14,12 @@ import {
 import {FileFieldsInterceptor} from '@nestjs/platform-express';
 import {ApiParam, ApiResponse, ApiTags} from '@nestjs/swagger';
 
-import {CreateUserDTO} from '@1770169-fitfriends/dto';
+import {CreateCoachQuestionnaireDTO, CreateUserDTO, CreateUserQuestionnaireDTO} from '@1770169-fitfriends/dto';
 import {fillDto} from '@1770169-fitfriends/helpers';
 import {AuthenticatedUserRDO, UserRDO} from '@1770169-fitfriends/rdo';
 import {
   FieldName,
+  RequestFiles,
   RequestWithTokenPayload,
   RequestWithUser,
   Route
@@ -43,7 +44,9 @@ import {
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService
+  ) {}
 
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -56,7 +59,7 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.Register)
   public async create(
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles() files: RequestFiles,
     @Body() dto: CreateUserDTO
   ) {
     const newUser = await this.authService.registerUser(dto, files);
@@ -64,7 +67,37 @@ export class AuthController {
 
     return fillDto(AuthenticatedUserRDO, {...newUser, ...token});
   }
+//
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: USER_CREATED_RESPONSE,
+    type: AuthenticatedUserRDO
+  })
+  @HttpCode(HttpStatus.CREATED)
+  @Post(Route.Register)
+  public async createUserQuestionnaire(
+    @Body() dto: CreateUserQuestionnaireDTO
+  ) {
+    const user = await this.authService.addUserQuestionnaire(dto);
 
+    return fillDto(RDO, user);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: USER_CREATED_RESPONSE,
+    type: AuthenticatedUserRDO
+  })
+  @HttpCode(HttpStatus.CREATED)
+  @Post(Route.Register)
+  public async createCoachQuestionnaire(
+    @Body() dto: CreateCoachQuestionnaireDTO
+  ) {
+    const user = await this.authService.addCoachQuestionnaire(dto);
+
+    return fillDto(RDO, user);
+  }
+//
   @ApiResponse({
     status: HttpStatus.OK,
     description: USER_LOGIN_RESPONSE,

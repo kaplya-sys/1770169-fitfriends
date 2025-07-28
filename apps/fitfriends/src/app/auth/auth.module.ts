@@ -12,12 +12,14 @@ import {LocalStrategy} from './strategies/local.strategy';
 import {JWTRefreshStrategy} from './strategies/jwt-refresh.strategy';
 import {RefreshTokenModule} from '../refresh-token/refresh-token.module';
 import {FilesModule} from '../files/files.module';
+import {QuestionnaireModule} from '../questionnaire/questionnaire.module';
 
 
 @Module({
   imports: [
     UserModule,
     FilesModule,
+    QuestionnaireModule,
     RefreshTokenModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
