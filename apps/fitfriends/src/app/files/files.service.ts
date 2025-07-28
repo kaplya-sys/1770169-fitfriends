@@ -9,9 +9,9 @@ import {ConfigType} from '@nestjs/config';
 import {ensureDir} from 'fs-extra';
 import {extension} from 'mime-types';
 
-import {FilesConfig} from '@1770169-guitar/config';
-import {convertFileBuffer, createMessage, normalizePath} from '@1770169-guitar/helpers';
-import {StoredFile, FieldName, RequestFiles} from '@1770169-guitar/types';
+import {FilesConfig} from '@1770169-fitfriends/config';
+import {convertFileBuffer, createMessage, normalizePath} from '@1770169-fitfriends/helpers';
+import {StoredFile, FieldName, RequestFiles} from '@1770169-fitfriends/types';
 
 import {FilesEntity} from './files.entity';
 import {

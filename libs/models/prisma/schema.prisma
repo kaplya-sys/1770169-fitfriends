@@ -69,7 +69,7 @@ model User {
   name            String            @db.VarChar(15)
   email           String            @unique @db.VarChar(40)
   password        String            @db.VarChar(60)
-  avatar          String?           @db.Char(36)
+  avatar          String            @db.Char(36)
   gender          Gender
   birthday        DateTime?
   description     String?           @db.VarChar(140)
@@ -130,9 +130,9 @@ model Training {
 
 model Questionnaire {
   id             String        @id @default(uuid())
-  fitnessLevel   FitnessLevel  @map("fitness-level")
+  fitnessLevel   FitnessLevel  @map("fitness_level")
   exercise       Exercise[]
-  trainingTime   TrainingTime? @map("training-time")
+  trainingTime   TrainingTime? @map("training_time")
   qualifications String[]
   calorieLose    Int?          @default(0) @map("calorie_lose")
   calorieWaste   Int?          @default(0) @map("calorie_waste")

@@ -1,10 +1,8 @@
 import {Gender, Location, Role} from '@1770169-fitfriends/models';
-
 export interface User {
   id?: string;
   name: string;
   email: string;
-  password: string;
   avatar: string;
   gender: Gender;
   birthday?: Date;
@@ -14,4 +12,5 @@ export interface User {
   background: string;
   isReady?: boolean;
   createdAt?: Date;
+  questionnaireId?: string;
 };

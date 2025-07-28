@@ -1,5 +1,5 @@
-import {Entity} from '@1770169-guitar/core';
-import {FileInfo, FileUpload} from '@1770169-guitar/types';
+import {Entity} from '@1770169-fitfriends/core';
+import {FileInfo, FileUpload} from '@1770169-fitfriends/types';
 
 
 export class FilesEntity implements FileUpload, Entity<string> {

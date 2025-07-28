@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 
 import {BasePostgresRepository} from '@1770169-fitfriends/core';
-import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
+import {PrismaClientService} from '@1770169-fitfriends/models';
 import {ExtendUser} from '@1770169-fitfriends/types';
 
 import {UserEntity} from './user.entity';
@@ -15,37 +15,34 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
   }
 
   public override async save(entity: UserEntity): Promise<UserEntity> {
+    const objectEntity = entity.toObject();
     const newRecord = await this.prismaClient.user.create({
-      data: {
-        name: entity.name,
-        email: entity.email,
-        password: entity.password,
-        gender: entity.gender,
-        birthday: entity.birthday ?? Prisma.skip,
-        location: entity.location,
-        role: entity.role
-      }
+      data: objectEntity
     });
     entity.id = newRecord.id;
 
     return entity;
   }
 
-  public override async update(id: UserEntity['id'], entity: UserEntity): Promise<UserEntity> {
+  public override async update(id: UserEntity['id'], entity: UserEntity): Promise<UserEntity | null> {
+    const objectEntity = entity.toObject();
     const record = await this.prismaClient.user.update({
       where: {
         id
       },
-      data: entity.toObject()
+      data: objectEntity,
     })
-
-    return this.createEntityFromDocument(record);
+    const entries = Object.entries(record).filter(([, value]) => value !== null);
+    return this.createEntityFromDocument(Object.fromEntries(entries) as ExtendUser);
   }
 
   public override async findById(id: UserEntity['id']): Promise<UserEntity | null> {
     const record = await this.prismaClient.user.findFirst({
       where: {
         id
+      },
+      include: {
+        questionnaire: true
       }
     });
 
@@ -56,6 +53,9 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
     const record = await this.prismaClient.user.findFirst({
       where: {
         email
+      },
+      include: {
+        questionnaire: true
       }
     })
 

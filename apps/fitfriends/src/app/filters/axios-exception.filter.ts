@@ -3,7 +3,7 @@ import {Response} from 'express';
 import {ArgumentsHost, Catch, HttpStatus} from '@nestjs/common';
 import {BaseExceptionFilter} from '@nestjs/core';
 
-import {ErrorRequest} from '@1770169-guitar/types';
+import {ErrorRequest} from '@1770169-fitfriends/types';
 
 import {SERVER_ERROR_MESSAGE} from './filters.constant';
 

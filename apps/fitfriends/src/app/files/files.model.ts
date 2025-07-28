@@ -1,7 +1,7 @@
 import {Document, ObjectId} from 'mongoose';
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 
-import {FileInfo, FileUpload} from '@1770169-guitar/types';
+import {FileInfo, FileUpload} from '@1770169-fitfriends/types';
 
 import {COLLECTION_NAME} from './files.constant';
 

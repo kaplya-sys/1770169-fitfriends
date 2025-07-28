@@ -11,7 +11,7 @@ export abstract class BasePostgresRepository<
     private readonly createEntity: (document: DocumentType) => EntityType
   ) {}
 
-  protected createEntityFromDocument(document: DocumentType): EntityType | null {
+  protected createEntityFromDocument(document: DocumentType | null): EntityType | null {
     if (!document) {
       return null;
     }
@@ -25,7 +25,7 @@ export abstract class BasePostgresRepository<
   public save(entity: EntityType): Promise<EntityType> {
     throw new Error('Method not implemented.');
   }
-  public update(id: EntityType['id'], entity: EntityType): Promise<EntityType> {
+  public update(id: EntityType['id'], entity: EntityType): Promise<EntityType | null> {
     throw new Error('Method not implemented.');
   }
   public delete(id: EntityType['id']): Promise<void> {

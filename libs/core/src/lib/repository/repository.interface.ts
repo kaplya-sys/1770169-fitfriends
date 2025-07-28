@@ -6,6 +6,6 @@ export interface Repository<
   > {
   findById(id: EntityType['id']): Promise<EntityType | null>;
   save(entity: EntityType): Promise<EntityType>;
-  update(id: EntityType['id'], entity: EntityType): Promise<EntityType>;
+  update(id: EntityType['id'], entity: EntityType): Promise<EntityType | null>;
   delete(id: EntityType['id']): Promise<void>;
 }
