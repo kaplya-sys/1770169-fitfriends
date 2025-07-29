@@ -1,4 +1,6 @@
 export interface BufferVariant {
-  file: Buffer;
-	file2x: Buffer;
+  image: Buffer;
+	image2x: Buffer;
+  imageWeb: Buffer;
+  imageWeb2x: Buffer;
 };

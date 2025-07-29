@@ -12,13 +12,13 @@ import {Exercise, FitnessLevel, Gender, Location} from '@1770169-fitfriends/mode
 import {UpdateUser} from '@1770169-fitfriends/types';
 
 import {
-  DESCRIPTION_PROPERTY,
   EXERCISE_PROPERTY,
   FITNESS_LEVEL_PROPERTY,
   GENDER_PROPERTY,
   LOCATION_PROPERTY,
   NAME_PROPERTY,
-  READY_PROPERTY
+  READY_PROPERTY,
+  USER_DESCRIPTION
 } from './dto.const';
 
 export class UpdateUserDTO implements UpdateUser {
@@ -65,14 +65,14 @@ export class UpdateUserDTO implements UpdateUser {
   exercise?: Exercise[];
 
   @ApiProperty({
-    description: DESCRIPTION_PROPERTY.DESCRIPTION,
-    example: DESCRIPTION_PROPERTY.EXAMPLE,
-    minimum: DESCRIPTION_PROPERTY.MIN,
-    maximum: DESCRIPTION_PROPERTY.MAX,
-    type: DESCRIPTION_PROPERTY.TYPE
+    description: USER_DESCRIPTION.DESCRIPTION,
+    example: USER_DESCRIPTION.EXAMPLE,
+    minimum: USER_DESCRIPTION.MIN,
+    maximum: USER_DESCRIPTION.MAX,
+    type: USER_DESCRIPTION.TYPE
   })
   @IsString()
-  @Length(DESCRIPTION_PROPERTY.MIN, DESCRIPTION_PROPERTY.MAX)
+  @Length(USER_DESCRIPTION.MIN, USER_DESCRIPTION.MAX)
   @IsOptional()
   description?: string;
 

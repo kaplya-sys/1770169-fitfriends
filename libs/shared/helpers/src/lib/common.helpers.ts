@@ -63,10 +63,23 @@ export async function convertFileBuffer(file: Buffer): Promise<BufferVariant> {
         fit: 'inside'
       })
       .toBuffer();
+    const webp = await image
+      .toFormat('webp', { quality: 100 })
+      .toBuffer();
+
+    const webp2x = await image
+      .resize(newWidth, newHeight, {
+        kernel: 'mitchell',
+        fit: 'inside'
+      })
+      .toFormat('webp', { quality: 100 })
+      .toBuffer();
 
     return {
-      file,
-      file2x
+      image: file,
+      image2x: file2x,
+      imageWeb: webp,
+      imageWeb2x: webp2x
     };
   } catch (err: unknown) {
     const error = err instanceof Error ? err.message : err;

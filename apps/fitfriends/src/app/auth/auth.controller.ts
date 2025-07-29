@@ -22,7 +22,8 @@ import {
   RequestFiles,
   RequestWithTokenPayload,
   RequestWithUser,
-  Route
+  Route,
+  TokenPayload
 } from '@1770169-fitfriends/types';
 
 import {AuthService} from './auth.service';
@@ -40,6 +41,7 @@ import {
   USER_FOUND_RESPONSE,
   USER_LOGIN_RESPONSE
 } from './auth.constant';
+import {RequestTokenPayload} from '../decorators/request-token-payload.decorator';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
@@ -67,7 +69,7 @@ export class AuthController {
 
     return fillDto(AuthenticatedUserRDO, {...newUser, ...token});
   }
-//
+
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: USER_CREATED_RESPONSE,
@@ -76,11 +78,12 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.Register)
   public async createUserQuestionnaire(
-    @Body() dto: CreateUserQuestionnaireDTO
+    @Body() dto: CreateUserQuestionnaireDTO,
+    @RequestTokenPayload() tokenPayload: TokenPayload
   ) {
-    const user = await this.authService.addUserQuestionnaire(dto);
+    const user = await this.authService.addUserQuestionnaire(tokenPayload.sub, dto);
 
-    return fillDto(RDO, user);
+    return fillDto(UserRDO, user);
   }
 
   @ApiResponse({
@@ -91,13 +94,14 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.Register)
   public async createCoachQuestionnaire(
-    @Body() dto: CreateCoachQuestionnaireDTO
+    @Body() dto: CreateCoachQuestionnaireDTO,
+    @RequestTokenPayload() tokenPayload: TokenPayload
   ) {
-    const user = await this.authService.addCoachQuestionnaire(dto);
+    const user = await this.authService.addCoachQuestionnaire(tokenPayload.sub, dto);
 
-    return fillDto(RDO, user);
+    return fillDto(UserRDO, user);
   }
-//
+
   @ApiResponse({
     status: HttpStatus.OK,
     description: USER_LOGIN_RESPONSE,

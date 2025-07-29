@@ -1,6 +1,6 @@
 import {HttpException, HttpStatus} from '@nestjs/common';
 
-import {createMessage} from '@1770169-guitar/helpers';
+import {createMessage} from '@1770169-fitfriends/helpers';
 
 import {TOKEN_NOT_FOUND_ERROR} from './exceptions.constant';
 

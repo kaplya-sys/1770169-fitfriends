@@ -1,6 +1,6 @@
-import {FileInfo} from './file-info.interface';
-
 export interface Image {
-  file: FileInfo;
-  file2x: FileInfo;
+  image: string;
+  image2x: string;
+  imageWeb: string;
+  imageWeb2x: string;
 };

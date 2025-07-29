@@ -33,6 +33,13 @@ export const GENDER_PROPERTY = {
   EXAMPLE: 'female',
   ENUM: ['female', 'male', 'whatever']
 }
+export const USER_DESCRIPTION = {
+  DESCRIPTION: 'Информация о пользователе.',
+  EXAMPLE: 'Привет! Я Катерина и мне 27 лет. Обожаю спорт и все, что с ним связанно.',
+  MIN: 10,
+  MAX: 140,
+  TYPE: String
+}
 export const LOCATION_PROPERTY = {
   DESCRIPTION: 'Станция метро: "petrogradskaya", "pionerskaya", "sportivnaya", "udelnaya" или "zvezdnaya".',
   EXAMPLE: 'petrogradskaya',

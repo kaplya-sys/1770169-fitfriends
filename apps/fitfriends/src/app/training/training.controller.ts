@@ -23,7 +23,6 @@ import {} from '@1770169-fitfriends/rdo';
 import {} from '@1770169-fitfriends/query';
 import {FieldName, Route, RequestFiles} from '@1770169-fitfriends/types';
 
-import {ProductsService} from './training.service';
 import {
   MAX_UPLOAD_FILES,
   PRODUCT_CREATED_RESPONSE,
@@ -40,12 +39,13 @@ import {
   TAG
 } from './training.constant';
 import {JWTAuthGuard} from '../auth/guards/jwt-auth.guard';
+import {TrainingService} from './training.service';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
 export class TrainingController {
   constructor(
-    private readonly productsService: ProductsService
+    private readonly trainingService: TrainingService
   ) {}
 
   @ApiResponse({

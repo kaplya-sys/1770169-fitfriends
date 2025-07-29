@@ -3,12 +3,12 @@ import {ConfigType} from '@nestjs/config';
 import {PassportStrategy} from '@nestjs/passport';
 import {ExtractJwt, Strategy} from 'passport-jwt';
 
-import {JwtConfig} from '@1770169-guitar/config';
-import {RefreshTokenPayload} from '@1770169-guitar/types';
+import {JwtConfig} from '@1770169-fitfriends/config';
+import {RefreshTokenPayload} from '@1770169-fitfriends/types';
 
 import {AuthService} from '../auth.service';
 import {RefreshTokenService} from '../../refresh-token/refresh-token.service';
-import {TokenNotExistsExceptions} from '../exceptions/token-not-exists.exception';
+import {TokenNotExistsExceptions} from '../../exceptions/token-not-exists.exception';
 
 @Injectable()
 export class JWTRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {

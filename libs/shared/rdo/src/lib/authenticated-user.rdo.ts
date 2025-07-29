@@ -1,6 +1,8 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {Expose} from 'class-transformer';
 
+import {Role} from '@1770169-fitfriends/models';
+
 import {
   ACCESS_TOKEN_PROPERTY,
   EMAIL_PROPERTY,
@@ -8,7 +10,6 @@ import {
   REFRESH_TOKEN_PROPERTY,
   ROLE_PROPERTY
 } from './rdo.constant';
-import {Role} from '@1770169-guitar/types';
 
 export class AuthenticatedUserRDO {
   @ApiProperty({

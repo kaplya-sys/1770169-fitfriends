@@ -1,10 +1,10 @@
 import {PassportStrategy} from '@nestjs/passport';
 import {ConfigType} from '@nestjs/config';
 import {Inject, Injectable} from '@nestjs/common';
-
 import {ExtractJwt, Strategy} from 'passport-jwt';
-import {JwtConfig} from '@1770169-guitar/config';
-import {TokenPayload} from '@1770169-guitar/types';
+
+import {JwtConfig} from '@1770169-fitfriends/config';
+import {TokenPayload} from '@1770169-fitfriends/types';
 
 
 

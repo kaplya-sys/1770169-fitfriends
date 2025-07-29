@@ -8,6 +8,8 @@ export interface FileUpload extends Timestamps {
   catalog: string;
   size: number;
   mimetype: string;
-  file: FileInfo,
-  file2x?: FileInfo,
+  image: FileInfo;
+  image2x?: FileInfo;
+  imageWeb?: FileInfo;
+  imageWeb2x?: FileInfo;
 };

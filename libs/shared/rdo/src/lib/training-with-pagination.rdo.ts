@@ -1,15 +1,18 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {Expose, Type} from 'class-transformer';
 
-import {Pagination} from '@1770169-guitar/types';
+import {
+  CURRENT_PAGE_PROPERTY,
+  ITEMS_PER_PAGE_PROPERTY,
+  TOTAL_ITEMS_PROPERTY,
+  TOTAL_PAGES_PROPERTY
+} from './rdo.constant';
+import {TrainingRDO} from './training.rdo';
 
-import {ProductRDO} from './product.rdo';
-import {CURRENT_PAGE_PROPERTY, ITEMS_PER_PAGE_PROPERTY, TOTAL_ITEMS_PROPERTY, TOTAL_PAGES_PROPERTY} from './rdo.constant';
-
-export class ProductsWithPaginationRDO implements Pagination<ProductRDO> {
-  @Type(() => ProductRDO)
+export class TrainingWithPaginationRDO {
+  @Type(() => TrainingRDO)
   @Expose()
-  public entities!: ProductRDO[];
+  public entities!: TrainingRDO[];
 
   @ApiProperty({
     description: TOTAL_PAGES_PROPERTY.DESCRIPTION,

@@ -39,26 +39,40 @@ export class FilesService {
       const uploadDirectory = join(this.filesOptions.uploadDirectory || DEFAULT_UPLOAD_DIRECTORY, subDirectory);
       const fileExtension = extension(mimetype);
       const filename = randomUUID();
-      const file = `${filename}.${fileExtension}`;
-      const file2x = `${filename}@2x.${fileExtension}`;
-      const filePath = normalizePath(join(uploadDirectory, file));
-      const file2xPath = normalizePath(join(uploadDirectory, file2x));
+      const image = `${filename}.${fileExtension}`;
+      const image2x = `${filename}@2x.${fileExtension}`;
+      const imageWeb = `${filename}.web`;
+      const imageWeb2x = `${filename}@2x.web`;
+      const imagePath = normalizePath(join(uploadDirectory, image));
+      const image2xPath = normalizePath(join(uploadDirectory, image2x));
+      const imageWebPath = normalizePath(join(uploadDirectory, imageWeb));
+      const imageWeb2xPath = normalizePath(join(uploadDirectory, imageWeb2x));
       const bufferVariant = await convertFileBuffer(buffer);
 
       await ensureDir(uploadDirectory);
-      await writeFile(filePath, new Uint8Array(bufferVariant.file));
-      await writeFile(file2xPath, new Uint8Array(bufferVariant.file2x))
+      await writeFile(imagePath, new Uint8Array(bufferVariant.image));
+      await writeFile(image2xPath, new Uint8Array(bufferVariant.image2x))
+      await writeFile(imageWebPath, new Uint8Array(bufferVariant.imageWeb));
+      await writeFile(imageWeb2xPath, new Uint8Array(bufferVariant.imageWeb2x))
 
       return {
         catalog,
         subDirectory: normalizePath(subDirectory),
-        file: {
-          hashName: file,
-          path: filePath
+        image: {
+          hashName: image,
+          path: imagePath
         },
-        file2x: {
-          hashName: file2x,
-          path: file2xPath
+        image2x: {
+          hashName: image2x,
+          path: image2xPath
+        },
+        imageWeb: {
+          hashName: imageWeb,
+          path: imageWebPath
+        },
+        imageWeb2x: {
+          hashName: imageWeb2x,
+          path: imageWeb2xPath
         }
       };
     } catch (err: unknown) {
@@ -76,13 +90,21 @@ export class FilesService {
         subDirectory: recordedFile.subDirectory,
         originalName: value[0].originalname,
         size: value[0].size,
-        file: {
-          hashName: recordedFile.file.hashName,
-          path: recordedFile.file.path
+        image: {
+          hashName: recordedFile.image.hashName,
+          path: recordedFile.image.path
         },
-        file2x: {
-          hashName: recordedFile.file2x.hashName,
-          path: recordedFile.file2x.path
+        image2x: {
+          hashName: recordedFile.image2x.hashName,
+          path: recordedFile.image2x.path
+        },
+        imageWeb: {
+          hashName: recordedFile.imageWeb.hashName,
+          path: recordedFile.imageWeb.path
+        },
+        imageWeb2x: {
+          hashName: recordedFile.imageWeb2x.hashName,
+          path: recordedFile.imageWeb2x.path
         },
         mimetype: value[0].mimetype,
       });
