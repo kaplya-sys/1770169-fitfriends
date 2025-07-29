@@ -4,6 +4,6 @@ export interface CreateUserQuestionnaire {
   fitnessLevel: FitnessLevel;
   trainingTime: TrainingTime;
   exercise: Exercise[];
-  calorieLose: number;
-  calorieWaste: number;
+  caloriesLose: number;
+  caloriesWaste: number;
 };

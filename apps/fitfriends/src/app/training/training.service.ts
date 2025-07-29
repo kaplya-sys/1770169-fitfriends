@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 
-import {} from '@1770169-fitfriends/dto';
-import {} from '@1770169-fitfriends/query';
+import {CreateTrainingDTO, UpdateTrainingDTO} from '@1770169-fitfriends/dto';
+import { TrainingsQuery } from '@1770169-fitfriends/query';
 import {RequestFiles} from '@1770169-fitfriends/types';
 
 import {TrainingRepository} from './training.repository';
@@ -16,15 +16,15 @@ export class TrainingService {
     private readonly fileService: FilesService
   ) {}
 
-  public async createProduct(dto: CreateProductDTO, file: RequestFiles) {
+  public async createTraining(dto: CreateTrainingDTO, file: RequestFiles) {
     const newFile = await this.fileService.saveFile(file);
-    const newProduct = new TrainingEntity({...dto, image: newFile.id});
+    const newProduct = new TrainingEntity({...dto, video: newFile.id});
 
-    return this.productsRepository.save(newProduct);
+    return this.trainingRepository.save(newProduct);
   }
 
-  public async updateProduct(id: string, dto: UpdateProductDTO, file?: RequestFiles) {
-    const existsProduct = await this.productsRepository.findById(id);
+  public async updateTraining(id: string, dto: UpdateTrainingDTO, file?: RequestFiles) {
+    const existsProduct = await this.trainingRepository.findById(id);
     let hasChanges = false;
     let newFile: FilesEntity;
 
@@ -47,34 +47,23 @@ export class TrainingService {
       return existsProduct;
     }
 
-    return this.productsRepository.update(id, existsProduct);
+    return this.trainingRepository.update(id, existsProduct);
   }
 
-  public async getProductById(id: string) {
-    const result = await this.productsRepository.findById(id);
-
-    if (result) {
-      const image = await this.fileService.getFile(result.image as string);
-      result.image = {
-      image: image.file,
-      image2x: image.file2x
-    }
-    }
+  public async getTrainingById(id: string) {
+    const result = await this.trainingRepository.findById(id)
 
     return result;
   }
 
-  public async getProducts(query?: ProductsQuery) {
-    const result = await this.productsRepository.find(query);
+  public async getTrainings(query?: TrainingsQuery) {
+    const result = await this.trainingRepository.find(query);
     const products = await Promise.all(
       result.entities.map(async (product) => {
         const image = await this.fileService.getFile(product.image as string);
 
         return Object.assign(product, {
-          image: {
-            image: image.file,
-            image2x: image.file2x,
-          }
+          video: image.image
         })
       })
     )
@@ -82,7 +71,7 @@ export class TrainingService {
     return Object.assign(result, {entities: products});
   }
 
-  public async deleteProductById(id: string) {
-    return this.productsRepository.delete(id);
+  public async deleteTrainingById(id: string) {
+    return this.trainingRepository.delete(id);
   }
 }

@@ -7,8 +7,8 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
   public fitnessLevel!: FitnessLevel;
   public trainingTime?: TrainingTime;
   public exercise!: Exercise[];
-  public calorieLose?: number;
-  public calorieWaste?: number;
+  public caloriesLose?: number;
+  public caloriesWaste?: number;
   public qualifications?: string[];
   public experience?: string;
   public isPersonal?: boolean;
@@ -26,8 +26,8 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
     this.fitnessLevel = questionnaire.fitnessLevel,
     this.trainingTime = questionnaire.trainingTime,
     this.exercise = questionnaire.exercise,
-    this.calorieLose = questionnaire.calorieLose,
-    this.calorieWaste = questionnaire.calorieWaste,
+    this.caloriesLose = questionnaire.caloriesLose,
+    this.caloriesWaste = questionnaire.caloriesWaste,
     this.qualifications = questionnaire.qualifications,
     this.experience = questionnaire.experience,
     this.isPersonal = questionnaire.isPersonal
@@ -39,8 +39,8 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
       fitnessLevel: this.fitnessLevel,
       trainingTime: this.trainingTime,
       exercise: this.exercise,
-      calorieLose: this.calorieLose,
-      calorieWaste: this.calorieWaste,
+      caloriesLose: this.caloriesLose,
+      caloriesWaste: this.caloriesWaste,
       qualifications: this.qualifications,
       experience: this.experience,
       isPersonal: this.isPersonal

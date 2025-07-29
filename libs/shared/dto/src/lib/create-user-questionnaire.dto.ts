@@ -14,8 +14,8 @@ import {Exercise, FitnessLevel, TrainingTime} from '@1770169-fitfriends/models';
 import {CreateUserQuestionnaire} from '@1770169-fitfriends/types';
 
 import {
-  CALORIE_LOSE_PROPERTY,
-  CALORIE_WASTE_PROPERTY,
+  CALORIES_LOSE_PROPERTY,
+  CALORIES_WASTE_PROPERTY,
   EXERCISE_PROPERTY,
   FITNESS_LEVEL_PROPERTY,
   TRAINING_TIME_PROPERTY
@@ -53,30 +53,30 @@ export class CreateUserQuestionnaireDTO implements CreateUserQuestionnaire {
   exercise!: Exercise[];
 
   @ApiProperty({
-    description: CALORIE_LOSE_PROPERTY.DESCRIPTION,
-    example: CALORIE_LOSE_PROPERTY.EXAMPLE,
-    minimum: CALORIE_LOSE_PROPERTY.MIN,
-    maximum: CALORIE_LOSE_PROPERTY.MAX,
-    type: CALORIE_LOSE_PROPERTY.TYPE
+    description: CALORIES_LOSE_PROPERTY.DESCRIPTION,
+    example: CALORIES_LOSE_PROPERTY.EXAMPLE,
+    minimum: CALORIES_LOSE_PROPERTY.MIN,
+    maximum: CALORIES_LOSE_PROPERTY.MAX,
+    type: CALORIES_LOSE_PROPERTY.TYPE
   })
   @IsInt()
-  @Min(CALORIE_LOSE_PROPERTY.MIN)
-  @Max(CALORIE_LOSE_PROPERTY.MAX)
+  @Min(CALORIES_LOSE_PROPERTY.MIN)
+  @Max(CALORIES_LOSE_PROPERTY.MAX)
   @Transform(({value}) => parseInt(value, 10))
   @IsNotEmpty()
-  calorieLose!: number;
+  caloriesLose!: number;
 
   @ApiProperty({
-    description: CALORIE_WASTE_PROPERTY.DESCRIPTION,
-    example: CALORIE_WASTE_PROPERTY.EXAMPLE,
-    minimum: CALORIE_WASTE_PROPERTY.MIN,
-    maximum: CALORIE_WASTE_PROPERTY.MAX,
-    type: CALORIE_WASTE_PROPERTY.TYPE
+    description: CALORIES_WASTE_PROPERTY.DESCRIPTION,
+    example: CALORIES_WASTE_PROPERTY.EXAMPLE,
+    minimum: CALORIES_WASTE_PROPERTY.MIN,
+    maximum: CALORIES_WASTE_PROPERTY.MAX,
+    type: CALORIES_WASTE_PROPERTY.TYPE
   })
   @IsInt()
-  @Min(CALORIE_WASTE_PROPERTY.MIN)
-  @Max(CALORIE_WASTE_PROPERTY.MAX)
+  @Min(CALORIES_WASTE_PROPERTY.MIN)
+  @Max(CALORIES_WASTE_PROPERTY.MAX)
   @Transform(({value}) => parseInt(value, 10))
   @IsNotEmpty()
-  calorieWaste!: number;
+  caloriesWaste!: number;
 }

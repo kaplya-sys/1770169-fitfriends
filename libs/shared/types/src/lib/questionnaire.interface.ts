@@ -5,8 +5,8 @@ export interface Questionnaire {
   fitnessLevel: FitnessLevel;
   trainingTime?: TrainingTime;
   exercise: Exercise[];
-  calorieLose?: number;
-  calorieWaste?: number;
+  caloriesLose?: number;
+  caloriesWaste?: number;
   qualifications?: string[];
   experience?: string;
   isPersonal?: boolean;

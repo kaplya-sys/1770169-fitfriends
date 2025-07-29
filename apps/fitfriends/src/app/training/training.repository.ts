@@ -3,7 +3,7 @@ import {Injectable, NotFoundException} from '@nestjs/common';
 import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
 import {BasePostgresRepository} from '@1770169-fitfriends/core';
 import {createMessage} from '@1770169-fitfriends/helpers';
-import {ProductsQuery} from '@1770169-fitfriends/query';
+import {TrainingsQuery} from '@1770169-fitfriends/query';
 import {Pagination, Training} from '@1770169-fitfriends/types';
 
 import {TrainingEntity} from './training.entity';
@@ -17,8 +17,8 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
     super(prismaClient, TrainingEntity.fromObject)
   }
 
-  private async getProductsCount(where: Prisma.GuitarsWhereInput): Promise<number> {
-    return this.prismaClient.guitars.count({where});
+  private async getTrainingCount(where: Prisma.TrainingWhereInput): Promise<number> {
+    return this.prismaClient.training.count({where});
   }
 
   private calculateNumberPages(totalCount: number, limit: number): number {
@@ -26,57 +26,51 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
   }
 
   public override async save(entity: TrainingEntity): Promise<TrainingEntity> {
-    const record = await this.prismaClient.guitars.create({
-      data: {
-        title: entity.title,
-        type: entity.type,
-        stringCount: entity.stringCount,
-        article: entity.article,
-        description: entity.description,
-        price: entity.price,
-        date: entity.date,
-        image: entity.image as string
-      }
+    const objectEntity = entity.toObject();
+    const record = await this.prismaClient.training.create({
+      data: objectEntity
     });
+    entity.id = record.id
 
-    return this.createEntityFromDocument(record);
+    return entity;
   }
 
-  public override async update(id: ProductsEntity['id'], entity: ProductsEntity): Promise<ProductsEntity> {
-    const record = await this.prismaClient.guitars.update({
+  public override async update(id: TrainingEntity['id'], entity: TrainingEntity): Promise<TrainingEntity | null> {
+    const objectEntity = entity.toObject();
+    const record = await this.prismaClient.training.update({
       where: {
         id
       },
-      data: {
-        ...entity.toObject(),
-        image: entity.toObject()?.image as string
-      }
+      data: objectEntity
     });
 
     return this.createEntityFromDocument(record);
   }
 
-  public async find(query?: ProductsQuery): Promise<Pagination<ProductsEntity>> {
+  public async find(query?: TrainingsQuery): Promise<Pagination<TrainingEntity>> {
     const skip = query?.page && ELEMENTS_ON_PAGE ?
       (query.page - 1) * ELEMENTS_ON_PAGE :
       Prisma.skip;
     const take = ELEMENTS_ON_PAGE;
-    const where: Prisma.GuitarsWhereInput = {
-      type: query?.types?.length ? {
-        in: query?.types
-      } : Prisma.skip,
-      stringCount: query?.strings?.length ? {
-        in: query?.strings
-      } : Prisma.skip,
+    const where: Prisma.TrainingWhereInput = {
+      calories: {
+        gte: query?.caloriesMin ?? Prisma.skip,
+        lte: query?.caloriesMax ?? Prisma.skip
+      },
+      price: {
+        gte: query?.priceMin ?? Prisma.skip,
+        lte: query?.priceMax ?? Prisma.skip
+      },
+      rating: query?.rating ?? Prisma.skip
     };
-    const orderBy: Prisma.GuitarsOrderByWithRelationInput[] = [
-      {price: query?.price ? query?.price : Prisma.skip},
-      {date: query?.date ? query?.date : Prisma.skip}
+    const orderBy: Prisma.TrainingOrderByWithRelationInput[] = [
+      {price: query?.orderByPrice ?? Prisma.skip},
+      {createdAt: query?.orderByDate ?? Prisma.skip}
     ];
 
     const [records, trainingCount] = await Promise.all([
-      this.prismaClient.guitars.findMany({where, orderBy, take, skip}),
-      this.getProductsCount(where),
+      this.prismaClient.training.findMany({where, orderBy, take, skip}),
+      this.getTrainingCount(where),
     ]);
 
     return {
@@ -88,8 +82,8 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
     }
   }
 
-  public override async findById(id: ProductsEntity['id']): Promise<ProductsEntity | null> {
-    const record = await this.prismaClient.guitars.findFirst({
+  public override async findById(id: TrainingEntity['id']): Promise<TrainingEntity | null> {
+    const record = await this.prismaClient.training.findFirst({
       where: {
         id
       }
@@ -102,9 +96,9 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
     return this.createEntityFromDocument(record);
   }
 
-  public override async delete(id: ProductsEntity['id']): Promise<void> {
+  public override async delete(id: TrainingEntity['id']): Promise<void> {
     try {
-      await this.prismaClient.guitars.delete({
+      await this.prismaClient.training.delete({
         where: {
           id
         }

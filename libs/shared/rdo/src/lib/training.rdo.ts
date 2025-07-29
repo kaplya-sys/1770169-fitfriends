@@ -10,7 +10,7 @@ import {
 
 import {
   BACKGROUND_PROPERTY,
-  CALORIE_PROPERTY,
+  CALORIES_PROPERTY,
   COACH_NAME_PROPERTY,
   FITNESS_LEVEL_PROPERTY,
   GENDER_PROPERTY,
@@ -85,11 +85,11 @@ export class TrainingRDO {
   public trainingTime!: TrainingTime;
 
   @ApiProperty({
-    description: CALORIE_PROPERTY.DESCRIPTION,
-    example: CALORIE_PROPERTY.EXAMPLE
+    description: CALORIES_PROPERTY.DESCRIPTION,
+    example: CALORIES_PROPERTY.EXAMPLE
   })
   @Expose()
-  public calorie!: number;
+  public calories!: number;
 
   @ApiProperty({
     description: GENDER_PROPERTY.DESCRIPTION,

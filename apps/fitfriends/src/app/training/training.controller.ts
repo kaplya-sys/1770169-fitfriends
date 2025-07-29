@@ -17,10 +17,10 @@ import {ApiParam, ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {FileFieldsInterceptor} from '@nestjs/platform-express';
 
 import {FilesTypeValidationPipe, ParseFormDataJsonPipe} from '@1770169-fitfriends/core';
-import {} from '@1770169-fitfriends/dto';
+import { CreateTrainingDTO, UpdateTrainingDTO } from '@1770169-fitfriends/dto';
 import {fillDto} from '@1770169-fitfriends/helpers';
-import {} from '@1770169-fitfriends/rdo';
-import {} from '@1770169-fitfriends/query';
+import {TrainingRDO, TrainingsWithPaginationRDO} from '@1770169-fitfriends/rdo';
+import {TrainingsQuery} from '@1770169-fitfriends/query';
 import {FieldName, Route, RequestFiles} from '@1770169-fitfriends/types';
 
 import {
@@ -51,7 +51,7 @@ export class TrainingController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: PRODUCT_CREATED_RESPONSE,
-    type: ProductRDO
+    type: TrainingRDO
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.CREATED)
@@ -61,11 +61,11 @@ export class TrainingController {
   ]))
   public async create(
     @UploadedFiles(FilesTypeValidationPipe) file: RequestFiles,
-    @Body(ParseFormDataJsonPipe) dto: CreateProductDTO
+    @Body(ParseFormDataJsonPipe) dto: CreateTrainingDTO
   ) {
-    const newProduct = await this.productsService.createProduct(dto, file);
+    const newTraining = await this.trainingService.createTraining(dto, file);
 
-    return fillDto(ProductRDO, newProduct.toObject());
+    return fillDto(TrainingRDO, newTraining.toObject());
   }
 
   @ApiQuery({
@@ -105,19 +105,19 @@ export class TrainingController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: PRODUCT_UPDATED_RESPONSE,
-    type: ProductsWithPaginationRDO
+    type: TrainingsWithPaginationRDO
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Products)
-  public async index(@Query() query: ProductsQuery) {
-    const products = await this.productsService.getProducts(query);
+  public async index(@Query() query: TrainingsQuery) {
+    const trainings = await this.trainingService.getTrainings(query);
 
     return fillDto(
-      ProductsWithPaginationRDO,
+      TrainingsWithPaginationRDO,
       {
-        ...products,
-        entities: products.entities.map((product) => product.toObject())
+        ...trainings,
+        entities: trainings.entities.map((training) => training.toObject())
       },
       {exposeDefaultValues: false}
     );
@@ -132,15 +132,15 @@ export class TrainingController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: PRODUCTS_FOUND_RESPONSE,
-    type: ProductRDO
+    type: TrainingRDO
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Product)
   public async show(@Param('id') id: string) {
-    const product = await this.productsService.getProductById(id);
+    const training = await this.trainingService.getTrainingById(id);
 
-    return fillDto(ProductRDO, product.toObject(), {exposeDefaultValues: false});
+    return fillDto(TrainingRDO, training.toObject(), {exposeDefaultValues: false});
   }
 
   @ApiParam({
@@ -152,7 +152,7 @@ export class TrainingController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: PRODUCT_FOUND_RESPONSE,
-    type: ProductRDO
+    type: TrainingRDO
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
@@ -163,11 +163,11 @@ export class TrainingController {
   public async update(
     @UploadedFiles(FilesTypeValidationPipe) file: RequestFiles,
     @Param('id') id: string,
-    @Body(ParseFormDataJsonPipe) dto: UpdateProductDTO
+    @Body(ParseFormDataJsonPipe) dto: UpdateTrainingDTO
   ) {
-    const product = await this.productsService.updateProduct(id, dto, file);
+    const product = await this.trainingService.updateTraining(id, dto, file);
 
-    return fillDto(ProductRDO, product.toObject(), {exposeDefaultValues: false});
+    return fillDto(TrainingRDO, product.toObject(), {exposeDefaultValues: false});
   }
 
   @ApiParam({
@@ -184,6 +184,6 @@ export class TrainingController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(Route.DeleteProduct)
   public async delete(@Param('id') id: string) {
-    this.productsService.deleteProductById(id);
+    this.trainingService.deleteTrainingById(id);
   }
 }

@@ -36,8 +36,8 @@ export class QuestionnaireRepository extends BasePostgresRepository<Questionnair
     const document = {
       ...record,
       trainingTime: record.trainingTime ?? undefined,
-      calorieLose: record.calorieLose ?? undefined,
-      calorieWaste: record.calorieWaste ?? undefined,
+      caloriesLose: record.caloriesLose ?? undefined,
+      caloriesWaste: record.caloriesWaste ?? undefined,
       experience: record.experience ?? undefined,
       isPersonal: record.isPersonal ?? undefined,
     };

@@ -14,4 +14,4 @@ import {FilesService} from '../files/files.service';
   controllers: [TrainingController],
   providers: [TrainingService, TrainingRepository, FilesService],
 })
-export class PTrainingModule {}
+export class TrainingModule {}

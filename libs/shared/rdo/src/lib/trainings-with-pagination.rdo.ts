@@ -9,7 +9,7 @@ import {
 } from './rdo.constant';
 import {TrainingRDO} from './training.rdo';
 
-export class TrainingWithPaginationRDO {
+export class TrainingsWithPaginationRDO {
   @Type(() => TrainingRDO)
   @Expose()
   public entities!: TrainingRDO[];

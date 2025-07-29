@@ -1,1 +1,1 @@
-export * from './lib/products.query';
+export * from './lib/trainings.query';

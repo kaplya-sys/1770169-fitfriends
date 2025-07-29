@@ -5,7 +5,7 @@ export interface CreateTraining {
   level: FitnessLevel;
   type: Exercise;
   trainingTime: TrainingTime;
-  calorie: number;
+  calories: number;
   gender: Gender;
   description: string;
   price: number;

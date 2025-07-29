@@ -1,5 +1,5 @@
 export const NOT_FOUND_BY_ID_MESSAGE ='Гитара с идентификатором: %id% не найдена.';
-export const ELEMENTS_ON_PAGE = 7;
+export const ELEMENTS_ON_PAGE = 50;
 export const MAX_UPLOAD_FILES = 1;
 export const ROUTE_PREFIX = 'products';
 export const TAG = 'Products';

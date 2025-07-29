@@ -62,21 +62,21 @@ export const EXERCISE_PROPERTY = {
   TYPE: String,
   MAX_ITEMS: 3
 }
-export const CALORIE_PROPERTY = {
+export const CALORIES_PROPERTY = {
   DESCRIPTION: 'Количество калорий.',
   EXAMPLE: 3000,
   MIN: 1000,
   MAX: 5000,
   TYPE: Number
 }
-export const CALORIE_LOSE_PROPERTY = {
+export const CALORIES_LOSE_PROPERTY = {
   DESCRIPTION: 'Количество калорий для сброса.',
   EXAMPLE: 4000,
   MIN: 1000,
   MAX: 5000,
   TYPE: Number
 }
-export const CALORIE_WASTE_PROPERTY = {
+export const CALORIES_WASTE_PROPERTY = {
   DESCRIPTION: 'Количество калорий для траты в день.',
   EXAMPLE: 1100,
   MIN: 1000,

@@ -9,7 +9,7 @@ export class TrainingEntity implements Training, Entity<string> {
   public level!: FitnessLevel;
   public type!: Exercise;
   public trainingTime!: TrainingTime;
-  public calorie!: number;
+  public calories!: number;
   public gender!: Gender;
   public rating!: number;
   public description!: string;
@@ -37,7 +37,7 @@ export class TrainingEntity implements Training, Entity<string> {
       level: this.level,
       type: this.type,
       trainingTime: this.trainingTime,
-      calorie: this.calorie,
+      calories: this.calories,
       gender: this.gender,
       rating: this.rating,
       price: this.price,
@@ -57,7 +57,7 @@ export class TrainingEntity implements Training, Entity<string> {
       this.level = training.level;
       this.type = training.type;
       this.trainingTime = training.trainingTime;
-      this.calorie = training.calorie;
+      this.calories = training.calories;
       this.gender = training.gender;
       this.rating = training.rating;
       this.price = training.price;

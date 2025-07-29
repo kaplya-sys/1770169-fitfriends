@@ -14,8 +14,8 @@ import {
   AVATAR_PROPERTY,
   BACKGROUND_PROPERTY,
   BIRTHDAY_PROPERTY,
-  CALORIE_LOSE_PROPERTY,
-  CALORIE_WASTE_PROPERTY,
+  CALORIES_LOSE_PROPERTY,
+  CALORIES_WASTE_PROPERTY,
   DATE_PROPERTY,
   DESCRIPTION_PROPERTY,
   EMAIL_PROPERTY,
@@ -119,18 +119,18 @@ export class UserRDO {
   fitnessLevel!: FitnessLevel;
 
   @ApiProperty({
-    description: CALORIE_LOSE_PROPERTY.DESCRIPTION,
-    example: CALORIE_LOSE_PROPERTY.EXAMPLE
+    description: CALORIES_LOSE_PROPERTY.DESCRIPTION,
+    example: CALORIES_LOSE_PROPERTY.EXAMPLE
   })
   @Expose()
-  calorieLose!: number;
+  caloriesLose!: number;
 
   @ApiProperty({
-    description: CALORIE_WASTE_PROPERTY.DESCRIPTION,
-    example: CALORIE_WASTE_PROPERTY.EXAMPLE
+    description: CALORIES_WASTE_PROPERTY.DESCRIPTION,
+    example: CALORIES_WASTE_PROPERTY.EXAMPLE
   })
   @Expose()
-  calorieWaste!: number;
+  caloriesWaste!: number;
 
   @ApiProperty({
     description: QUALIFICATIONS_PROPERTY.DESCRIPTION

@@ -7,7 +7,7 @@ export interface Training {
   level: FitnessLevel;
   type: Exercise;
   trainingTime: TrainingTime;
-  calorie: number;
+  calories: number;
   gender: Gender;
   rating: number;
   description: string;

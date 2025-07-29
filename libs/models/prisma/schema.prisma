@@ -109,7 +109,7 @@ model Training {
   level        FitnessLevel
   type         Exercise
   trainingTime TrainingTime @map("training_time")
-  calorie      Int          @default(0)
+  calories      Int         @default(0)
   gender       Gender
   rating       Int          @default(0)
   description  String       @db.VarChar(140)
@@ -134,8 +134,8 @@ model Questionnaire {
   exercise       Exercise[]
   trainingTime   TrainingTime? @map("training_time")
   qualifications String[]
-  calorieLose    Int?          @default(0) @map("calorie_lose")
-  calorieWaste   Int?          @default(0) @map("calorie_waste")
+  caloriesLose    Int?          @default(0) @map("calories_lose")
+  caloriesWaste   Int?          @default(0) @map("calories_waste")
   experience     String?       @db.Char(140)
   isPersonal     Boolean?      @default(false) @map("is_personal")
   user           User?         @relation()

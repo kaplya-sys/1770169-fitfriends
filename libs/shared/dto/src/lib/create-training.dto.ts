@@ -13,7 +13,7 @@ import {Exercise, FitnessLevel, Gender, TrainingTime} from '@1770169-fitfriends/
 import {CreateTraining} from '@1770169-fitfriends/types';
 
 import {
-  CALORIE_PROPERTY,
+  CALORIES_PROPERTY,
   DESCRIPTION_PROPERTY,
   EXERCISE_PROPERTY,
   FITNESS_LEVEL_PROPERTY,
@@ -76,7 +76,7 @@ export class CreateTrainingDTO implements CreateTraining {
   })
   @IsString()
   @IsNotEmpty()
-  level!: FitnessLevel;
+  public level!: FitnessLevel;
 
   @ApiProperty({
     description: TRAINING_TIME_PROPERTY.DESCRIPTION,
@@ -85,21 +85,21 @@ export class CreateTrainingDTO implements CreateTraining {
   })
   @IsString()
   @IsNotEmpty()
-  trainingTime!: TrainingTime;
+  public trainingTime!: TrainingTime;
 
   @ApiProperty({
-    description: CALORIE_PROPERTY.DESCRIPTION,
-    example: CALORIE_PROPERTY.EXAMPLE,
-    minimum: CALORIE_PROPERTY.MIN,
-    maximum: CALORIE_PROPERTY.MAX,
-    type: CALORIE_PROPERTY.TYPE
+    description: CALORIES_PROPERTY.DESCRIPTION,
+    example: CALORIES_PROPERTY.EXAMPLE,
+    minimum: CALORIES_PROPERTY.MIN,
+    maximum: CALORIES_PROPERTY.MAX,
+    type: CALORIES_PROPERTY.TYPE
   })
   @IsInt()
-  @Min(CALORIE_PROPERTY.MIN)
-  @Max(CALORIE_PROPERTY.MAX)
+  @Min(CALORIES_PROPERTY.MIN)
+  @Max(CALORIES_PROPERTY.MAX)
   @Transform(({value}) => parseInt(value, 10))
   @IsNotEmpty()
-  calorie!: number;
+  public calories!: number;
 
   @ApiProperty({
     description: GENDER_PROPERTY.DESCRIPTION,
@@ -108,5 +108,5 @@ export class CreateTrainingDTO implements CreateTraining {
   })
   @IsString()
   @IsNotEmpty()
-  gender!: Gender;
+  public gender!: Gender;
 }
