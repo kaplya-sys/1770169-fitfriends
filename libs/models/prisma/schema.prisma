@@ -69,13 +69,13 @@ model User {
   name            String            @db.VarChar(15)
   email           String            @unique @db.VarChar(40)
   password        String            @db.VarChar(60)
-  avatar          String            @db.Char(36)
+  avatarId        String            @db.Char(36)
   gender          Gender
   birthday        DateTime?
   description     String?           @db.VarChar(140)
   location        Location
   role            Role
-  backgrounds     String[]
+  backgroundIds   String[]
   isReady         Boolean           @default(false) @map("is_ready")
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
@@ -105,7 +105,7 @@ model RefreshSessions {
 model Training {
   id           String       @id @default(uuid())
   title        String       @db.VarChar(15)
-  background   String       @db.Char(36)
+  backgroundId String       @db.Char(36)
   level        FitnessLevel
   type         Exercise
   trainingTime TrainingTime @map("training_time")
@@ -114,7 +114,7 @@ model Training {
   rating       Int          @default(0)
   description  String       @db.VarChar(140)
   price        Int          @default(0)
-  video        String       @db.Char(36)
+  videoId      String       @db.Char(36)
   coachName    String       @db.Char(15)
   specialOffer Boolean      @default(false) @map("special_offer")
   createdAt    DateTime     @default(now()) @map("created_at")

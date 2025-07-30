@@ -56,17 +56,16 @@ export class TrainingController {
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.CREATED)
-  @Post(Route.AddProduct)
+  @Post(Route.Create)
   @UseInterceptors(FileFieldsInterceptor([
-    {name: FieldName.File, maxCount: MAX_UPLOAD_FILES}
+    {name: FieldName.Video, maxCount: MAX_UPLOAD_FILES}
   ]))
   public async create(
     @UploadedFiles(FilesTypeValidationPipe) file: RequestFiles,
     @Body(ParseFormDataJsonPipe) dto: CreateTrainingDTO,
     @RequestTokenPayload() tokenPayload: TokenPayload
   ) {
-    const {sub, name} = tokenPayload;
-    const newTraining = await this.trainingService.createTraining(sub, name, dto, file);
+    const newTraining = await this.trainingService.createTraining(tokenPayload, dto, file);
 
     return fillDto(TrainingRDO, newTraining.toObject());
   }
@@ -112,7 +111,7 @@ export class TrainingController {
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get(Route.Products)
+  @Get(Route.Trainings)
   public async index(@Query() query: TrainingsQuery) {
     const trainings = await this.trainingService.getTrainings(query);
 
@@ -139,7 +138,7 @@ export class TrainingController {
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get(Route.Product)
+  @Get(Route.Training)
   public async show(@Param('id') id: string) {
     const training = await this.trainingService.getTrainingById(id);
 
@@ -159,18 +158,14 @@ export class TrainingController {
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Patch(Route.EditProduct)
-  @UseInterceptors(FileFieldsInterceptor([
-    {name: FieldName.File, maxCount: MAX_UPLOAD_FILES}
-  ]))
+  @Patch(Route.EditTraining)
   public async update(
-    @UploadedFiles(FilesTypeValidationPipe) file: RequestFiles,
     @Param('id') id: string,
-    @Body(ParseFormDataJsonPipe) dto: UpdateTrainingDTO
+    @Body() dto: UpdateTrainingDTO
   ) {
-    const product = await this.trainingService.updateTraining(id, dto, file);
+    const training = await this.trainingService.updateTraining(id, dto);
 
-    return fillDto(TrainingRDO, product.toObject(), {exposeDefaultValues: false});
+    return fillDto(TrainingRDO, training.toObject(), {exposeDefaultValues: false});
   }
 
   @ApiParam({
@@ -185,7 +180,7 @@ export class TrainingController {
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(Route.DeleteProduct)
+  @Delete(Route.DeleteTraining)
   public async delete(@Param('id') id: string) {
     this.trainingService.deleteTrainingById(id);
   }

@@ -1,6 +1,7 @@
 export const USER_EXISTS_MESSAGE = 'Пользователь с таким адресом электронной почты: %email% уже зарегистрирован в системе.';
 export const NOT_FOUND_BY_EMAIL_MESSAGE = 'Пользователь с таким адресом электронной почты: %email% не был найден в системе.';
 export const NOT_FOUND_BY_ID_MESSAGE = 'Пользователь с таким идентификатором: %id% не был найден в системе.';
+export const SERVER_ERROR_MESSAGE = 'Не удалось обновить пользователя из-за ошибки сервера.';
 export const WRONG_PASSWORD_MESSAGE = 'Был введен неверный пароль.';
 export const TOKEN_CREATION_ERROR = 'Ошибка при создании токена.'
 export const TOKEN_GENERATE_ERROR = '[Ошибка генерации токена]: %error%'

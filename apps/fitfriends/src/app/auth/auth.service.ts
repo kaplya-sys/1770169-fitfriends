@@ -27,6 +27,7 @@ import {UserRepository} from '../user/user.repository';
 import {
   NOT_FOUND_BY_EMAIL_MESSAGE,
   NOT_FOUND_BY_ID_MESSAGE,
+  SERVER_ERROR_MESSAGE,
   TOKEN_CREATION_ERROR,
   TOKEN_GENERATE_ERROR,
   USER_EXISTS_MESSAGE,
@@ -58,11 +59,11 @@ export class AuthService {
 
     const file = await this.filesService.saveFile(files);
 
-    const userEntity = await new UserEntity({...dto, avatar: file.id as string, background: ''}).setPassword(dto.password);
+    const userEntity = await new UserEntity({...dto, avatarId: file.id as string, backgroundIds: []}).setPassword(dto.password);
     return this.userRepository.save(userEntity);
   }
 
-  public async addUserQuestionnaire(id: string, dto: CreateUserQuestionnaireDTO): Promise<UserEntity | null> {
+  public async addUserQuestionnaire(id: string, dto: CreateUserQuestionnaireDTO): Promise<UserEntity> {
     const existUser = await this.userRepository.findById(id);
 
     if (!existUser) {
@@ -72,11 +73,16 @@ export class AuthService {
     const questionnaireEntity = new QuestionnaireEntity(dto);
     const newQuestionnaire = await this.questionnaireRepository.save(questionnaireEntity);
     existUser.questionnaireId = newQuestionnaire.id;
+    const updatedUser = await this.userRepository.update(id, existUser);
 
-    return this.userRepository.update(id, existUser);
+    if (!updatedUser) {
+      throw new InternalServerErrorException(SERVER_ERROR_MESSAGE);
+    }
+
+    return updatedUser;
   }
 
-  public async addCoachQuestionnaire(id: string, dto: CreateCoachQuestionnaireDTO): Promise<UserEntity | null> {
+  public async addCoachQuestionnaire(id: string, dto: CreateCoachQuestionnaireDTO): Promise<UserEntity> {
     const existUser = await this.userRepository.findById(id);
 
     if (!existUser) {
@@ -86,11 +92,16 @@ export class AuthService {
     const questionnaireEntity = new QuestionnaireEntity(dto);
     const newQuestionnaire = await this.questionnaireRepository.save(questionnaireEntity);
     existUser.questionnaireId = newQuestionnaire.id;
+    const updatedUser = await this.userRepository.update(id, existUser);
 
-    return this.userRepository.update(id, existUser);
+    if (!updatedUser) {
+      throw new InternalServerErrorException(SERVER_ERROR_MESSAGE);
+    }
+
+    return updatedUser;
   }
 
-  public async updateUser(id: string, dto: UpdateUserDTO): Promise<UserEntity | null> {
+  public async updateUser(id: string, dto: UpdateUserDTO): Promise<UserEntity> {
     const existUser = await this.userRepository.findById(id);
 
     if (!existUser) {
@@ -108,12 +119,18 @@ export class AuthService {
     if (!hasUpdates) {
       return existUser;
     }
+    const updatedUser = await this.userRepository.update(id, existUser);
 
-    return this.userRepository.update(id, existUser);
+    if (!updatedUser) {
+      throw new InternalServerErrorException(SERVER_ERROR_MESSAGE);
+    }
+
+    return updatedUser;
   }
 
   public async verifyUser(dto: AuthUserDTO): Promise<UserEntity> {
     const existUser = await this.userRepository.findByEmail(dto.email);
+
     if(!existUser) {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_EMAIL_MESSAGE, [dto.email]));
     }

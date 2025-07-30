@@ -3,13 +3,13 @@ export interface User {
   id?: string;
   name: string;
   email: string;
-  avatar: string;
+  avatarId: string;
   gender: Gender;
   birthday?: Date;
   description?: string;
   location: Location;
   role: Role;
-  backgrounds: string[];
+  backgroundIds: string[];
   isReady?: boolean;
   createdAt?: Date;
   questionnaireId?: string;

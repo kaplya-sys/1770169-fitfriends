@@ -91,10 +91,6 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
       }
     });
 
-    if(!record) {
-      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
-    }
-
     return this.createEntityFromDocument(record);
   }
 

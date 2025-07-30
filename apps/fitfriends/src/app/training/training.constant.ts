@@ -1,4 +1,5 @@
 export const NOT_FOUND_BY_ID_MESSAGE ='Тренировка с идентификатором: %id% не найдена.';
+export const SERVER_ERROR_MESSAGE = 'Не удалось обновить тренировку из-за ошибки сервера.';
 export const ELEMENTS_ON_PAGE = 50;
 export const MAX_UPLOAD_FILES = 1;
 export const DEFAULT_PAGE_COUNT = 1;

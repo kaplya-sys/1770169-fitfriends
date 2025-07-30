@@ -5,7 +5,7 @@ import {Training} from '@1770169-fitfriends/types';
 export class TrainingEntity implements Training, Entity<string> {
   public id?: string;
   public title!: string;
-  public background!: string;
+  public backgroundId!: string;
   public level!: FitnessLevel;
   public type!: Exercise;
   public trainingTime!: TrainingTime;
@@ -14,7 +14,7 @@ export class TrainingEntity implements Training, Entity<string> {
   public rating?: number;
   public description!: string;
   public price!: number;
-  public video!: string;
+  public videoId!: string;
   public coachName!: string;
   public specialOffer!: boolean;
   public createdAt?: Date;
@@ -33,7 +33,7 @@ export class TrainingEntity implements Training, Entity<string> {
       id: this.id,
       title: this.title,
       description: this.description,
-      background: this.background,
+      backgroundId: this.backgroundId,
       level: this.level,
       type: this.type,
       trainingTime: this.trainingTime,
@@ -41,7 +41,7 @@ export class TrainingEntity implements Training, Entity<string> {
       gender: this.gender,
       rating: this.rating,
       price: this.price,
-      video: this.video,
+      videoId: this.videoId,
       coachName: this.coachName,
       specialOffer: this.specialOffer,
       createdAt: this.createdAt,
@@ -53,7 +53,7 @@ export class TrainingEntity implements Training, Entity<string> {
       this.id = training.id;
       this.title = training.title;
       this.description = training.description;
-      this.background = training.background;
+      this.backgroundId = training.backgroundId;
       this.level = training.level;
       this.type = training.type;
       this.trainingTime = training.trainingTime;
@@ -61,7 +61,7 @@ export class TrainingEntity implements Training, Entity<string> {
       this.gender = training.gender;
       this.rating = training.rating;
       this.price = training.price;
-      this.video = training.video;
+      this.videoId = training.videoId;
       this.coachName = training.coachName;
       this.specialOffer = training.specialOffer;
       this.createdAt = training.createdAt;

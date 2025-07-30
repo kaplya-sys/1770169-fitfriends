@@ -3,7 +3,7 @@ import {Exercise, FitnessLevel, Gender, TrainingTime} from '@1770169-fitfriends/
 export interface Training {
   id?: string;
   title: string;
-  background: string;
+  backgroundId: string;
   level: FitnessLevel;
   type: Exercise;
   trainingTime: TrainingTime;
@@ -12,7 +12,7 @@ export interface Training {
   rating?: number;
   description: string;
   price: number;
-  video: string;
+  videoId: string;
   coachName: string;
   specialOffer: boolean;
   createdAt?: Date;

@@ -1,15 +1,14 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {Injectable, InternalServerErrorException, NotFoundException} from '@nestjs/common';
 
 import {CreateTrainingDTO, UpdateTrainingDTO} from '@1770169-fitfriends/dto';
 import {TrainingsQuery} from '@1770169-fitfriends/query';
-import {FieldName, RequestFiles} from '@1770169-fitfriends/types';
+import {FieldName, Pagination, RequestFiles, TokenPayload} from '@1770169-fitfriends/types';
 
 import {TrainingRepository} from './training.repository';
 import {TrainingEntity} from './training.entity';
 import {FilesService} from '../files/files.service';
-import {FilesEntity} from '../files/files.entity';
 import {createMessage, getRandomElement} from '@1770169-fitfriends/helpers';
-import {NOT_FOUND_BY_ID_MESSAGE} from './training.constant';
+import {NOT_FOUND_BY_ID_MESSAGE, SERVER_ERROR_MESSAGE} from './training.constant';
 
 @Injectable()
 export class TrainingService {
@@ -18,16 +17,15 @@ export class TrainingService {
     private readonly fileService: FilesService
   ) {}
 
-  public async createTraining(id: string, name: string, dto: CreateTrainingDTO, file: RequestFiles) {
+  public async createTraining({sub, name}: TokenPayload, dto: CreateTrainingDTO, file: RequestFiles): Promise<TrainingEntity> {
     const newFile = await this.fileService.saveFile(file);
     const backgrounds = await this.fileService.getByFieldName();
-
     const catalog = backgrounds.filter((background) => background?.catalog === FieldName.Background);
     const newProduct = new TrainingEntity({
       ...dto,
-      video: newFile?.id as string,
-      background: getRandomElement(catalog)?.id as string,
-      coachId: id,
+      videoId: newFile?.id as string,
+      backgroundId: getRandomElement(catalog)?.id as string,
+      coachId: sub,
       coachName: name,
       specialOffer: false
     });
@@ -35,7 +33,7 @@ export class TrainingService {
     return this.trainingRepository.save(newProduct);
   }
 
-  public async updateTraining(id: string, dto: UpdateTrainingDTO, file?: RequestFiles) {
+  public async updateTraining(id: string, dto: UpdateTrainingDTO): Promise<TrainingEntity> {
     const existsProduct = await this.trainingRepository.findById(id);
 
     if(!existsProduct) {
@@ -43,7 +41,6 @@ export class TrainingService {
     }
 
     let hasChanges = false;
-    let newFile: FilesEntity;
 
     for (const [key, value] of Object.entries(dto)) {
       if (existsProduct) {
@@ -54,41 +51,51 @@ export class TrainingService {
       }
     }
 
-    if (file) {
-      newFile = await this.fileService.saveFile(file);
-      existsProduct.video = newFile.id as string;
-      hasChanges = true;
-    }
-
     if (!hasChanges) {
       return existsProduct;
     }
+    const updatedTraining = await this.trainingRepository.update(id, existsProduct);
 
-    return this.trainingRepository.update(id, existsProduct);
+    if (!updatedTraining) {
+      throw new InternalServerErrorException(SERVER_ERROR_MESSAGE);
+    }
+
+    return updatedTraining;
   }
 
-  public async getTrainingById(id: string) {
+  public async getTrainingById(id: string): Promise<TrainingEntity> {
     const result = await this.trainingRepository.findById(id);
 
-    return result;
+    if(!result) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
+    }
+    const {video} = await this.fileService.getFile(result.videoId);
+    const background = await this.fileService.getFile(result.backgroundId);
+
+    return Object.assign(result, {
+      video: video?.path,
+      background
+    });
   }
 
-  public async getTrainings(query?: TrainingsQuery) {
+  public async getTrainings(query?: TrainingsQuery): Promise<Pagination<TrainingEntity>> {
     const result = await this.trainingRepository.find(query);
-    const products = await Promise.all(
-      result.entities.map(async (product) => {
-        const image = await this.fileService.getFile(product.image as string);
+    const trainings = await Promise.all(
+      result.entities.map(async (training) => {
+        const {video} = await this.fileService.getFile(training.videoId);
+        const background = await this.fileService.getFile(training.backgroundId);
 
-        return Object.assign(product, {
-          video: image.image
+        return Object.assign(training, {
+          video: video?.path,
+          background
         });
       })
     );
 
-    return Object.assign(result, {entities: products});
+    return Object.assign(result, {entities: trainings});
   }
 
-  public async deleteTrainingById(id: string) {
-    return this.trainingRepository.delete(id);
+  public async deleteTrainingById(id: string): Promise<void> {
+    this.trainingRepository.delete(id);
   }
 }

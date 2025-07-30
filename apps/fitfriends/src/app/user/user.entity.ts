@@ -11,13 +11,13 @@ export class UserEntity implements ExtendUser, Entity<string> {
   public name!: string;
   public email!: string;
   public password!: string;
-  public avatar!: string;
+  public avatarId!: string;
   public gender!: Gender;
   public birthday?: Date;
   public description?: string;
   public location!: Location;
   public role!: Role;
-  public backgrounds!: string[];
+  public backgroundIds!: string[];
   public isReady?: boolean;
   public createdAt?: Date;
   public questionnaireId?: string;
@@ -36,13 +36,13 @@ export class UserEntity implements ExtendUser, Entity<string> {
       name: this.name,
       email: this.email,
       password: this.password,
-      avatar: this.avatar,
+      avatarId: this.avatarId,
       gender: this.gender,
       birthday: this.birthday,
       description: this.description,
       location: this.location,
       role: this.role,
-      backgrounds: this.backgrounds,
+      backgroundIds: this.backgroundIds,
       isReady: this.isReady,
       createdAt: this.createdAt,
       questionnaireId: this.questionnaireId
@@ -54,13 +54,13 @@ export class UserEntity implements ExtendUser, Entity<string> {
     this.name = user.name;
     this.email = user.email;
     this.password = user.password;
-    this.avatar = user.avatar;
+    this.avatarId = user.avatarId;
     this.gender = user.gender;
     this.birthday = user.birthday;
     this.description = user.description;
     this.location = user.location;
     this.role = user.role;
-    this.backgrounds = user.backgrounds;
+    this.backgroundIds = user.backgroundIds;
     this.isReady = user.isReady;
     this.createdAt = user.createdAt;
     this.questionnaireId = user.questionnaireId;

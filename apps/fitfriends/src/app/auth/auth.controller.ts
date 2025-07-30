@@ -14,7 +14,7 @@ import {
 import {FileFieldsInterceptor} from '@nestjs/platform-express';
 import {ApiParam, ApiResponse, ApiTags} from '@nestjs/swagger';
 
-import {CreateCoachQuestionnaireDTO, CreateUserDTO, CreateUserQuestionnaireDTO} from '@1770169-fitfriends/dto';
+import {CreateCoachQuestionnaireDTO, CreateUserDTO, CreateUserQuestionnaireDTO, UpdateUserDTO} from '@1770169-fitfriends/dto';
 import {fillDto} from '@1770169-fitfriends/helpers';
 import {AuthenticatedUserRDO, UserRDO} from '@1770169-fitfriends/rdo';
 import {
@@ -83,7 +83,7 @@ export class AuthController {
   ) {
     const user = await this.authService.addUserQuestionnaire(tokenPayload.sub, dto);
 
-    return fillDto(UserRDO, user);
+    return fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false});
   }
 
   @ApiResponse({
@@ -99,7 +99,18 @@ export class AuthController {
   ) {
     const user = await this.authService.addCoachQuestionnaire(tokenPayload.sub, dto);
 
-    return fillDto(UserRDO, user);
+    return fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false});
+  }
+
+  @HttpCode(HttpStatus.CREATED)
+  @Post(Route.EditUser)
+  public async update(
+    @Body() dto: UpdateUserDTO,
+    @Param('userId') id: string
+  ) {
+    const user = await this.authService.updateUser(id, dto);
+
+    return fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false});
   }
 
   @ApiResponse({
@@ -131,9 +142,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Get(Route.User)
   public async show(@Param('userId') id: string) {
-    const userEntity = await this.authService.getUserById(id);
+    const user = await this.authService.getUserById(id);
 
-    return fillDto(UserRDO, userEntity.toObject());
+    return fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false});
   }
 
   @ApiResponse({

@@ -1,12 +1,13 @@
 export enum Route {
-  AddProduct = 'add',
   AuthCheck = 'check-token',
-  DeleteProduct = ':id/delete',
-  EditProduct = ':id/edit',
+  Create = 'create',
+  DeleteTraining = ':id/delete',
+  EditTraining = ':id/edit',
+  EditUser = ':userId/edit',
   Login = 'sign-in',
-  Products = '/',
-  Product = ':id',
   Register = 'sign-up',
   RefreshToken = 'refresh-token',
+  Trainings = '/',
+  Training = ':id',
   User = ':userId'
 };
