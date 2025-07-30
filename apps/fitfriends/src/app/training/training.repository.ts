@@ -7,7 +7,7 @@ import {TrainingsQuery} from '@1770169-fitfriends/query';
 import {Pagination, Training} from '@1770169-fitfriends/types';
 
 import {TrainingEntity} from './training.entity';
-import {ELEMENTS_ON_PAGE, NOT_FOUND_BY_ID_MESSAGE} from './training.constant';
+import {DEFAULT_PAGE_COUNT, ELEMENTS_ON_PAGE, NOT_FOUND_BY_ID_MESSAGE} from './training.constant';
 
 @Injectable()
 export class TrainingRepository extends BasePostgresRepository<TrainingEntity, Training> {
@@ -74,8 +74,10 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
     ]);
 
     return {
-      entities: records.map((record) => this.createEntityFromDocument(record)),
-      currentPage: query?.page,
+      entities: records
+        .map((record) => this.createEntityFromDocument(record))
+        .filter((entity) => entity !== null),
+      currentPage: query?.page || DEFAULT_PAGE_COUNT,
       totalPages: this.calculateNumberPages(trainingCount, take),
       itemsPerPage: take,
       totalItems: trainingCount,

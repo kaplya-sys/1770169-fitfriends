@@ -17,10 +17,10 @@ export class UserEntity implements ExtendUser, Entity<string> {
   public description?: string;
   public location!: Location;
   public role!: Role;
-  public background!: string;
+  public backgrounds!: string[];
   public isReady?: boolean;
   public createdAt?: Date;
-  public questionnaireId?: string
+  public questionnaireId?: string;
 
   constructor(user: ExtendUser) {
     this.populate(user);
@@ -42,11 +42,11 @@ export class UserEntity implements ExtendUser, Entity<string> {
       description: this.description,
       location: this.location,
       role: this.role,
-      background: this.background,
+      backgrounds: this.backgrounds,
       isReady: this.isReady,
       createdAt: this.createdAt,
       questionnaireId: this.questionnaireId
-    }
+    };
   }
 
   public populate(user: ExtendUser) {
@@ -60,10 +60,12 @@ export class UserEntity implements ExtendUser, Entity<string> {
     this.description = user.description;
     this.location = user.location;
     this.role = user.role;
-    this.background = user.background;
+    this.backgrounds = user.backgrounds;
     this.isReady = user.isReady;
     this.createdAt = user.createdAt;
     this.questionnaireId = user.questionnaireId;
+
+    return this;
   }
 
   public async setPassword(password: string) {

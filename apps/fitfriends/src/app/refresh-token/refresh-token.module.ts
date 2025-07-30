@@ -1,6 +1,6 @@
 import {Module} from '@nestjs/common';
 
-import {PrismaClientModule} from '@1770169-guitar/models';
+import {PrismaClientModule} from '@1770169-fitfriends/models';
 
 import {RefreshTokenService} from './refresh-token.service';
 import {RefreshTokenRepository} from './refresh-token.repository';

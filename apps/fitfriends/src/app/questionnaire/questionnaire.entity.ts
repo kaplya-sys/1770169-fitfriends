@@ -14,7 +14,7 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
   public isPersonal?: boolean;
 
   constructor(questionnaire: Questionnaire) {
-    this.populate(questionnaire)
+    this.populate(questionnaire);
   }
 
   static fromObject(questionnaire: Questionnaire) {
@@ -22,15 +22,17 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
   }
 
   public populate(questionnaire: Questionnaire) {
-    this.id = questionnaire.id,
-    this.fitnessLevel = questionnaire.fitnessLevel,
-    this.trainingTime = questionnaire.trainingTime,
-    this.exercise = questionnaire.exercise,
-    this.caloriesLose = questionnaire.caloriesLose,
-    this.caloriesWaste = questionnaire.caloriesWaste,
-    this.qualifications = questionnaire.qualifications,
-    this.experience = questionnaire.experience,
-    this.isPersonal = questionnaire.isPersonal
+    this.id = questionnaire.id;
+    this.fitnessLevel = questionnaire.fitnessLevel;
+    this.trainingTime = questionnaire.trainingTime;
+    this.exercise = questionnaire.exercise;
+    this.caloriesLose = questionnaire.caloriesLose;
+    this.caloriesWaste = questionnaire.caloriesWaste;
+    this.qualifications = questionnaire.qualifications;
+    this.experience = questionnaire.experience;
+    this.isPersonal = questionnaire.isPersonal;
+
+    return this;
   }
 
   public toObject() {
@@ -44,6 +46,6 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
       qualifications: this.qualifications,
       experience: this.experience,
       isPersonal: this.isPersonal
-    }
+    };
   }
 }

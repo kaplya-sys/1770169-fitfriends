@@ -13,8 +13,6 @@ import {COLLECTION_NAME} from './files.constant';
   toObject: {virtuals: true}
 })
 export class FilesModel extends Document<ObjectId> implements FileUpload {
-
-
   @Prop({
     required: true
   })
@@ -44,12 +42,27 @@ export class FilesModel extends Document<ObjectId> implements FileUpload {
     required: true,
     type: Object
   })
-  public file!: FileInfo;
+  public image?: FileInfo;
 
   @Prop({
     type: Object
   })
-  public file2x?: FileInfo;
+  public image2x?: FileInfo;
+
+  @Prop({
+    type: Object
+  })
+  public imageWeb?: FileInfo;
+
+  @Prop({
+    type: Object
+  })
+  public imageWeb2x?: FileInfo;
+
+  @Prop({
+    type: Object
+  })
+  public video?: FileInfo;
 }
 
 export const FilesSchema = SchemaFactory.createForClass(FilesModel);

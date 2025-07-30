@@ -2,9 +2,9 @@ import dayjs from 'dayjs';
 import {ConfigType} from '@nestjs/config';
 import {Inject, Injectable} from '@nestjs/common';
 
-import {JwtConfig} from '@1770169-guitar/config';
-import {parseTime} from '@1770169-guitar/helpers';
-import {RefreshTokenPayload} from '@1770169-guitar/types';
+import {JwtConfig} from '@1770169-fitfriends/config';
+import {parseTime} from '@1770169-fitfriends/helpers';
+import {RefreshTokenPayload} from '@1770169-fitfriends/types';
 
 import {RefreshTokenRepository} from './refresh-token.repository';
 import {RefreshTokenEntity} from './refresh-token.entity';
@@ -31,7 +31,7 @@ export class RefreshTokenService {
   public async deleteRefreshSession(tokenId: string) {
     await this.deleteExpiredRefreshTokens();
 
-    return this.refreshTokenRepository.deleteByTokenId(tokenId)
+    return this.refreshTokenRepository.deleteByTokenId(tokenId);
   }
 
   public async isExists(tokenId: string) {

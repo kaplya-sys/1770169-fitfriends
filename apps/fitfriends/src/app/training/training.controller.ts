@@ -21,7 +21,7 @@ import { CreateTrainingDTO, UpdateTrainingDTO } from '@1770169-fitfriends/dto';
 import {fillDto} from '@1770169-fitfriends/helpers';
 import {TrainingRDO, TrainingsWithPaginationRDO} from '@1770169-fitfriends/rdo';
 import {TrainingsQuery} from '@1770169-fitfriends/query';
-import {FieldName, Route, RequestFiles} from '@1770169-fitfriends/types';
+import {FieldName, Route, RequestFiles, TokenPayload} from '@1770169-fitfriends/types';
 
 import {
   MAX_UPLOAD_FILES,
@@ -40,6 +40,7 @@ import {
 } from './training.constant';
 import {JWTAuthGuard} from '../auth/guards/jwt-auth.guard';
 import {TrainingService} from './training.service';
+import { RequestTokenPayload } from '../decorators/request-token-payload.decorator';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
@@ -61,9 +62,11 @@ export class TrainingController {
   ]))
   public async create(
     @UploadedFiles(FilesTypeValidationPipe) file: RequestFiles,
-    @Body(ParseFormDataJsonPipe) dto: CreateTrainingDTO
+    @Body(ParseFormDataJsonPipe) dto: CreateTrainingDTO,
+    @RequestTokenPayload() tokenPayload: TokenPayload
   ) {
-    const newTraining = await this.trainingService.createTraining(dto, file);
+    const {sub, name} = tokenPayload;
+    const newTraining = await this.trainingService.createTraining(sub, name, dto, file);
 
     return fillDto(TrainingRDO, newTraining.toObject());
   }

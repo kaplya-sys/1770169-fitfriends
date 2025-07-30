@@ -11,17 +11,17 @@ export class TrainingEntity implements Training, Entity<string> {
   public trainingTime!: TrainingTime;
   public calories!: number;
   public gender!: Gender;
-  public rating!: number;
+  public rating?: number;
   public description!: string;
   public price!: number;
   public video!: string;
   public coachName!: string;
   public specialOffer!: boolean;
-  public createdAt!: Date;
+  public createdAt?: Date;
   public coachId!: string;
 
   constructor(training: Training) {
-    this.populate(training)
+    this.populate(training);
   }
 
   static fromObject(training: Training) {
@@ -66,5 +66,7 @@ export class TrainingEntity implements Training, Entity<string> {
       this.specialOffer = training.specialOffer;
       this.createdAt = training.createdAt;
       this.coachId = training.coachId;
+
+      return this;
   }
 }

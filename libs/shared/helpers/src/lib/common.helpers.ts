@@ -89,3 +89,5 @@ export async function convertFileBuffer(file: Buffer): Promise<BufferVariant> {
 
 export const normalizePath = (value: string): string =>  sep === '\\' ? value.replace(/\\/g, '/') : value;
 
+export const getRandomElement = <T>(elements: T[]): T => elements[Math.floor(Math.random() * elements.length)];
+

@@ -9,12 +9,12 @@ export interface Training {
   trainingTime: TrainingTime;
   calories: number;
   gender: Gender;
-  rating: number;
+  rating?: number;
   description: string;
   price: number;
   video: string;
   coachName: string;
   specialOffer: boolean;
-  createdAt: Date;
+  createdAt?: Date;
   coachId: string;
 };

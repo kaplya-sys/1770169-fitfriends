@@ -1,5 +1,5 @@
-import {Entity} from '@1770169-guitar/core';
-import {JwtToken} from '@1770169-guitar/types';
+import {Entity} from '@1770169-fitfriends/core';
+import {JwtToken} from '@1770169-fitfriends/types';
 
 
 export class RefreshTokenEntity implements JwtToken, Entity<string> {
@@ -14,11 +14,13 @@ export class RefreshTokenEntity implements JwtToken, Entity<string> {
   }
 
   public populate(refreshToken: JwtToken) {
-    this.id = refreshToken.id,
-    this.tokenId = refreshToken.tokenId,
-    this.userId = refreshToken.userId,
-    this.expiresIn = refreshToken.expiresIn,
-    this.createdAt = refreshToken.createdAt
+    this.id = refreshToken.id;
+    this.tokenId = refreshToken.tokenId;
+    this.userId = refreshToken.userId;
+    this.expiresIn = refreshToken.expiresIn;
+    this.createdAt = refreshToken.createdAt;
+
+    return this;
   }
 
   public toObject() {
@@ -28,7 +30,7 @@ export class RefreshTokenEntity implements JwtToken, Entity<string> {
       userId: this.userId,
       expiresIn: this.expiresIn,
       createdAt: this.createdAt
-    }
+    };
   }
 
   static fromObject(refreshToken: JwtToken) {

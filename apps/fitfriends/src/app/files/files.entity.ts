@@ -1,7 +1,6 @@
 import {Entity} from '@1770169-fitfriends/core';
 import {FileInfo, FileUpload} from '@1770169-fitfriends/types';
 
-
 export class FilesEntity implements FileUpload, Entity<string> {
   public id?: string;
   public originalName!: string;
@@ -9,12 +8,12 @@ export class FilesEntity implements FileUpload, Entity<string> {
   public catalog!: string;
   public size!: number;
   public mimetype!: string;
-  public image!: FileInfo;
+  public image?: FileInfo;
   public image2x?: FileInfo;
   public imageWeb?: FileInfo;
   public imageWeb2x?: FileInfo;
+  public video?: FileInfo;
   public createdAt?: Date;
-  public updatedAt?: Date;
 
   constructor(file: FileUpload) {
     this.populate(file);
@@ -32,8 +31,8 @@ export class FilesEntity implements FileUpload, Entity<string> {
       image2x: this.image2x,
       imageWeb: this.imageWeb,
       imageWeb2x: this.imageWeb2x,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      video: this.video,
+      createdAt: this.createdAt
     }
   }
 
@@ -52,10 +51,9 @@ export class FilesEntity implements FileUpload, Entity<string> {
     this.image2x = file.image2x;
     this.imageWeb = file.imageWeb;
     this.imageWeb2x = file.imageWeb2x;
+    this.video = file.video;
     this.createdAt = file.createdAt;
-    this.updatedAt = file.updatedAt;
 
     return this;
   }
-
 }

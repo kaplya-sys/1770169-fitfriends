@@ -9,7 +9,7 @@ export interface User {
   description?: string;
   location: Location;
   role: Role;
-  background: string;
+  backgrounds: string[];
   isReady?: boolean;
   createdAt?: Date;
   questionnaireId?: string;

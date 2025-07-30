@@ -75,7 +75,7 @@ model User {
   description     String?           @db.VarChar(140)
   location        Location
   role            Role
-  background      String            @db.Char(36)
+  backgrounds     String[]
   isReady         Boolean           @default(false) @map("is_ready")
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
@@ -109,7 +109,7 @@ model Training {
   level        FitnessLevel
   type         Exercise
   trainingTime TrainingTime @map("training_time")
-  calories      Int         @default(0)
+  calories     Int          @default(0)
   gender       Gender
   rating       Int          @default(0)
   description  String       @db.VarChar(140)
@@ -134,8 +134,8 @@ model Questionnaire {
   exercise       Exercise[]
   trainingTime   TrainingTime? @map("training_time")
   qualifications String[]
-  caloriesLose    Int?          @default(0) @map("calories_lose")
-  caloriesWaste   Int?          @default(0) @map("calories_waste")
+  caloriesLose   Int?          @default(0) @map("calories_lose")
+  caloriesWaste  Int?          @default(0) @map("calories_waste")
   experience     String?       @db.Char(140)
   isPersonal     Boolean?      @default(false) @map("is_personal")
   user           User?         @relation()

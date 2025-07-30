@@ -24,6 +24,8 @@ export class FeedbackEntity implements Feedback, Entity<string> {
     this.createdAt = feedback.createdAt;
     this.authorId = feedback.authorId;
     this.trainingId = feedback.trainingId;
+
+    return this;
   }
 
   public toObject() {
@@ -34,6 +36,6 @@ export class FeedbackEntity implements Feedback, Entity<string> {
       createdAt: this.createdAt,
       authorId: this.authorId,
       trainingId: this.trainingId
-    }
+    };
   }
 }

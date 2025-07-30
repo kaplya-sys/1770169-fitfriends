@@ -1,9 +1,9 @@
 
 import {Injectable} from '@nestjs/common';
 
-import {BasePostgresRepository} from '@1770169-guitar/core';
-import {PrismaClientService} from '@1770169-guitar/models';
-import {JwtToken} from '@1770169-guitar/types';
+import {BasePostgresRepository} from '@1770169-fitfriends/core';
+import {PrismaClientService} from '@1770169-fitfriends/models';
+import {JwtToken} from '@1770169-fitfriends/types';
 
 import {RefreshTokenEntity} from './refresh-token.entity';
 
@@ -15,7 +15,7 @@ export class RefreshTokenRepository extends BasePostgresRepository<RefreshTokenE
     super(prismaClient, RefreshTokenEntity.fromObject);
   }
 
-  public async save(entity: RefreshTokenEntity): Promise<RefreshTokenEntity> {
+  public override async save(entity: RefreshTokenEntity): Promise<RefreshTokenEntity> {
     const newRecord = await this.prismaClient.refreshSessions.create({
       data: {
         tokenId: entity.tokenId,
@@ -34,7 +34,7 @@ export class RefreshTokenRepository extends BasePostgresRepository<RefreshTokenE
       where: {
         tokenId
       }
-    })
+    });
   }
 
   public async findByTokenId(tokenId: string) {
@@ -42,7 +42,7 @@ export class RefreshTokenRepository extends BasePostgresRepository<RefreshTokenE
       where: {
         tokenId
       }
-    })
+    });
   }
 
   public async deleteExpiredTokens() {
@@ -52,6 +52,6 @@ export class RefreshTokenRepository extends BasePostgresRepository<RefreshTokenE
           lt: new Date()
         }
       }
-    })
+    });
   }
 }

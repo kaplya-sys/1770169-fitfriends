@@ -88,7 +88,7 @@ export class UserRDO {
   })
   @Type(() => ImageRDO)
   @Expose()
-  background!: ImageRDO;
+  backgrounds!: ImageRDO[];
 
   @ApiProperty({
     description: READY_PROPERTY.DESCRIPTION,

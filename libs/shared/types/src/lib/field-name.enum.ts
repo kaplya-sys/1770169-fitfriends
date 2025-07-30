@@ -1,4 +1,6 @@
 export enum FieldName {
   File = 'file',
-  Avatar = 'avatar'
+  Avatar = 'avatar',
+  Video = 'video',
+  Background = 'background'
 };
