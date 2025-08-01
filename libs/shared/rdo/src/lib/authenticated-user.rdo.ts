@@ -7,6 +7,7 @@ import {
   ACCESS_TOKEN_PROPERTY,
   EMAIL_PROPERTY,
   ID_PROPERTY,
+  NAME_PROPERTY,
   REFRESH_TOKEN_PROPERTY,
   ROLE_PROPERTY
 } from './rdo.constant';
@@ -25,6 +26,13 @@ export class AuthenticatedUserRDO {
   })
   @Expose()
   public email!: string;
+
+  @ApiProperty({
+    description: NAME_PROPERTY.DESCRIPTION,
+    example: NAME_PROPERTY.EXAMPLE
+  })
+  @Expose()
+  public name!: string;
 
   @ApiProperty({
     description: ACCESS_TOKEN_PROPERTY.DESCRIPTION,

@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 
 import {BasePostgresRepository} from '@1770169-fitfriends/core';
-import {PrismaClientService} from '@1770169-fitfriends/models';
+import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
 import {ExtendUser} from '@1770169-fitfriends/types';
 
 import {UserEntity} from './user.entity';
@@ -17,7 +17,17 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
   public override async save(entity: UserEntity): Promise<UserEntity> {
     const objectEntity = entity.toObject();
     const newRecord = await this.prismaClient.user.create({
-      data: objectEntity
+      data: {
+        name: objectEntity.name,
+        email: objectEntity.email,
+        password: objectEntity.password,
+        avatarId: objectEntity.avatarId,
+        gender: objectEntity.gender,
+        birthday: objectEntity.birthday ?? Prisma.skip,
+        location: objectEntity.location,
+        role: objectEntity.role,
+        backgroundIds: objectEntity.backgroundIds,
+      }
     });
     entity.id = newRecord.id;
 

@@ -9,14 +9,19 @@ export const ROUTE_PREFIX = 'users';
 export const TAG = 'Users';
 export const MAX_UPLOAD_FILES = 1;
 
-export const USER_CREATED_RESPONSE = 'Созданный объект пользователя, токен доступа и токен обновления.';
-export const USER_LOGIN_RESPONSE = 'Объект пользователя, токен доступа и токен обновления.';
-export const USER_FOUND_RESPONSE = 'Объект пользователя.';
-export const REFRESH_TOKEN_RESPONSE = 'Токен доступа и токен обновления.';
+export const CREATED_RESPONSE = 'Объект успешно создан.';
+export const UPDATED_RESPONSE = 'Объект успешно обновлен.';
+export const FOUND_RESPONSE = 'Объект успешно найден.';
+export const AUTHORIZED_RESPONSE = 'Успешная авторизация пользователя.';
 export const CHECK_TOKEN_RESPONSE = 'Объект пользователя.';
 
-export const PRODUCT_ID_PARAM = {
+export const NOT_FOUND_RESPONSE = 'Объект не найден.';
+export const CONFLICT_RESPONSE = 'Объект уже существует.';
+export const BAD_REQUEST_RESPONSE = 'Некорректные данные.';
+export const UNAUTHORIZED = 'Ошибка авторизации пользователя.'
+
+export const ID_PARAM = {
   NAME: 'userId',
-  DESCRIPTION: 'Идентификатор товара',
+  DESCRIPTION: 'UUID идентификатор пользователя.',
   EXAMPLE: '123e4567-e89b-12d3-a456-426614174000',
 }

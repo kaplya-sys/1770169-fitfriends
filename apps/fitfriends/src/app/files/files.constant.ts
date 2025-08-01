@@ -6,9 +6,9 @@ export const COLLECTION_NAME = 'files'
 export const DEFAULT_UPLOAD_DIRECTORY = './uploads';
 
 export const BACKGROUND: Record<string, string[]> = {
-  user: ['user-card-photo1.jpg', 'user-card-photo2.jpg'],
-  coach: ['user-coach-photo1.jpg', 'user-coach-photo2.jpg'],
-  training: [
+  USER: ['user-card-photo1.jpg', 'user-card-photo2.jpg'],
+  COACH: ['user-coach-photo1.jpg', 'user-coach-photo2.jpg'],
+  TRAINING: [
     'training-01.jpg',
     'training-02.jpg',
     'training-03.jpg',

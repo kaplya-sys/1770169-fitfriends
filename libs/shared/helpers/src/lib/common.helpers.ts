@@ -5,12 +5,13 @@ import sharp from 'sharp';
 
 import {
   CONVERT_FILE_ERROR,
+  ImageSize,
   REGEX,
   TIME_REGEX,
   VALUE_PARSE_ERROR,
   WRONG_TIME_ERROR
 } from './helpers.constant';
-import {BufferVariant, DateTimeUnit, MongooseConfig, TimeAndUnit} from '@1770169-fitfriends/types';
+import {FileBuffer, DateTimeUnit, MongooseConfig, TimeAndUnit} from '@1770169-fitfriends/types';
 
 export function fillDto<T, P>(dto: new () => T, plainObject: P, options?: ClassTransformOptions): T;
 
@@ -50,36 +51,53 @@ export function parseTime(time: string): TimeAndUnit {
   return {value, unit}
 };
 
-export async function convertFileBuffer(file: Buffer): Promise<BufferVariant> {
+export async function convertFileBuffer(buffer: Buffer): Promise<FileBuffer> {
   try {
-    const image = sharp(file);
+    const image = sharp(buffer);
     const metadata = await image.metadata();
-    const newWidth = metadata.width * 2;
-    const newHeight = metadata.height * 2;
+    const retinaWidth = metadata.width < ImageSize.Width ? metadata.width * 2 : ImageSize.Width * 2;
+    const retinaHeight = metadata.height < ImageSize.Height ? metadata.height * 2 : ImageSize.Height * 2;
 
-    const file2x = await image
-      .resize(newWidth, newHeight, {
-        kernel: 'mitchell',
-        fit: 'inside'
+    const file = await image
+      .resize(ImageSize.Width, ImageSize.Height, {
+        kernel: sharp.kernel.lanczos3,
+        fit: sharp.fit.inside,
+        withoutEnlargement: true
       })
       .toBuffer();
+
+    const file2x = await image
+      .resize(retinaWidth, retinaHeight, {
+        kernel: sharp.kernel.lanczos3,
+        fit: sharp.fit.inside,
+        withoutEnlargement: false
+      })
+      .sharpen({sigma: 0.5})
+      .toBuffer();
     const webp = await image
-      .toFormat('webp', { quality: 100 })
+      .resize(ImageSize.Width, ImageSize.Height, {
+          kernel: sharp.kernel.lanczos3,
+          fit: sharp.fit.inside,
+          withoutEnlargement: true
+        })
+      .toFormat('webp', {quality: 90})
       .toBuffer();
 
     const webp2x = await image
-      .resize(newWidth, newHeight, {
-        kernel: 'mitchell',
-        fit: 'inside'
+      .resize(retinaWidth, retinaHeight, {
+        kernel: sharp.kernel.lanczos3,
+        fit: sharp.fit.inside,
+        withoutEnlargement: false
       })
-      .toFormat('webp', { quality: 100 })
+      .sharpen({sigma: 0.5})
+      .toFormat('webp', {quality: 90})
       .toBuffer();
 
     return {
-      image: file,
-      image2x: file2x,
-      imageWeb: webp,
-      imageWeb2x: webp2x
+      file,
+      file2x: file2x,
+      fileWebp: webp,
+      fileWebp2x: webp2x
     };
   } catch (err: unknown) {
     const error = err instanceof Error ? err.message : err;

@@ -52,12 +52,12 @@ export class FilesModel extends Document<ObjectId> implements FileUpload {
   @Prop({
     type: Object
   })
-  public imageWeb?: FileInfo;
+  public imageWebp?: FileInfo;
 
   @Prop({
     type: Object
   })
-  public imageWeb2x?: FileInfo;
+  public imageWebp2x?: FileInfo;
 
   @Prop({
     type: Object

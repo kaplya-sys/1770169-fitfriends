@@ -1,5 +1,4 @@
 import {TokenPayload, User} from '@1770169-fitfriends/types';
-import {Role} from '@1770169-fitfriends/types';
 
 import {CREATE_JWT_PAYLOAD_ERROR} from './helpers.constant';
 
@@ -11,6 +10,7 @@ export function createJWTPayload(user: User): TokenPayload {
   return {
     sub: user.id,
     email: user.email,
-    role: user?.role as Role
+    name: user.name,
+    role: user.role
   };
 }

@@ -20,7 +20,7 @@ import {
   UpdateUserDTO
 } from '@1770169-fitfriends/dto';
 import {createJWTPayload, createMessage} from '@1770169-fitfriends/helpers';
-import {RequestFiles, Token, User} from '@1770169-fitfriends/types';
+import {FieldName, RequestFiles, Token, User} from '@1770169-fitfriends/types';
 
 import {UserEntity} from '../user/user.entity';
 import {UserRepository} from '../user/user.repository';
@@ -57,9 +57,14 @@ export class AuthService {
       throw new NotFoundException(createMessage(USER_EXISTS_MESSAGE, [dto.email]));
     }
 
-    const file = await this.filesService.saveFile(files);
+    const avatar = await this.filesService.saveFile(files);
+    const backgrounds = await this.filesService.getByFieldName(FieldName.Background);
+    const backgroundIds = backgrounds
+      .filter((background) => background !== null && background.catalog === dto.role)
+      .map((background) => background?.id as string)
+      .concat(avatar.id as string);
 
-    const userEntity = await new UserEntity({...dto, avatarId: file.id as string, backgroundIds: []}).setPassword(dto.password);
+    const userEntity = await new UserEntity({...dto, avatarId: avatar.id as string, backgroundIds}).setPassword(dto.password);
     return this.userRepository.save(userEntity);
   }
 

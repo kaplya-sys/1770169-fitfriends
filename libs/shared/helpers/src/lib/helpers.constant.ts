@@ -6,3 +6,8 @@ export const WRONG_TIME_ERROR = '[parseTime] Wrong time string: %time%';
 export const VALUE_PARSE_ERROR = `[parseTime] Can't parse value count. Result is NaN.`;
 export const CONVERT_FILE_ERROR = 'Failed to convert file: %error%';
 export const CREATE_JWT_PAYLOAD_ERROR = `[createJWTPayload] Can't create JWT payload. Required User ID.`;
+
+export const ImageSize = {
+  Width: 600,
+  Height: 600,
+} as const;

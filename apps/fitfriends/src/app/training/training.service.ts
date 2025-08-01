@@ -19,7 +19,7 @@ export class TrainingService {
 
   public async createTraining({sub, name}: TokenPayload, dto: CreateTrainingDTO, file: RequestFiles): Promise<TrainingEntity> {
     const newFile = await this.fileService.saveFile(file);
-    const backgrounds = await this.fileService.getByFieldName();
+    const backgrounds = await this.fileService.getByFieldName(FieldName.Background);
     const catalog = backgrounds.filter((background) => background?.catalog === FieldName.Background);
     const newProduct = new TrainingEntity({
       ...dto,
@@ -45,7 +45,7 @@ export class TrainingService {
     for (const [key, value] of Object.entries(dto)) {
       if (existsProduct) {
         if (value !== undefined && existsProduct[key as keyof TrainingEntity] !== value) {
-        existsProduct[key as keyof TrainingEntity] = value;
+        existsProduct[key as keyof TrainingEntity] = value as never; //change
         hasChanges = true;
         }
       }

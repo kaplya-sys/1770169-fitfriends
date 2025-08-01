@@ -22,8 +22,7 @@ import {
   RequestFiles,
   RequestWithTokenPayload,
   RequestWithUser,
-  Route,
-  TokenPayload
+  Route
 } from '@1770169-fitfriends/types';
 
 import {AuthService} from './auth.service';
@@ -31,17 +30,19 @@ import {JWTAuthGuard} from './guards/jwt-auth.guard';
 import {JWTRefreshGuard} from './guards/jwt-refresh.guard';
 import {LocalAuthGuard} from './guards/local-auth.guard';
 import {
-  CHECK_TOKEN_RESPONSE,
+  AUTHORIZED_RESPONSE,
+  BAD_REQUEST_RESPONSE,
+  CONFLICT_RESPONSE,
+  CREATED_RESPONSE,
+  FOUND_RESPONSE,
+  ID_PARAM,
   MAX_UPLOAD_FILES,
-  PRODUCT_ID_PARAM,
-  REFRESH_TOKEN_RESPONSE,
+  NOT_FOUND_RESPONSE,
   ROUTE_PREFIX,
   TAG,
-  USER_CREATED_RESPONSE,
-  USER_FOUND_RESPONSE,
-  USER_LOGIN_RESPONSE
+  UNAUTHORIZED,
+  UPDATED_RESPONSE
 } from './auth.constant';
-import {RequestTokenPayload} from '../decorators/request-token-payload.decorator';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
@@ -52,8 +53,16 @@ export class AuthController {
 
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: USER_CREATED_RESPONSE,
+    description: CREATED_RESPONSE,
     type: AuthenticatedUserRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: CONFLICT_RESPONSE
   })
   @UseInterceptors(FileFieldsInterceptor([
     {name: FieldName.Avatar, maxCount: MAX_UPLOAD_FILES}
@@ -65,44 +74,105 @@ export class AuthController {
     @Body() dto: CreateUserDTO
   ) {
     const newUser = await this.authService.registerUser(dto, files);
-    const token = await this.authService.createToken(newUser);
 
-    return fillDto(AuthenticatedUserRDO, {...newUser, ...token});
+    return fillDto(AuthenticatedUserRDO, newUser.toObject(), {exposeDefaultValues: false});
   }
 
+  @ApiParam({
+    name: ID_PARAM.NAME,
+    type: String,
+    description: ID_PARAM.DESCRIPTION,
+    example: ID_PARAM.EXAMPLE
+  })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: USER_CREATED_RESPONSE,
-    type: AuthenticatedUserRDO
+    description: CREATED_RESPONSE,
+    type: UserRDO
   })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: CONFLICT_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.CREATED)
-  @Post(Route.Register)
+  @Post(Route.CreateUserQuestionnaire)
   public async createUserQuestionnaire(
     @Body() dto: CreateUserQuestionnaireDTO,
-    @RequestTokenPayload() tokenPayload: TokenPayload
+    @Param('userId') id: string
   ) {
-    const user = await this.authService.addUserQuestionnaire(tokenPayload.sub, dto);
+    const user = await this.authService.addUserQuestionnaire(id, dto);
 
     return fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false});
   }
 
+  @ApiParam({
+    name: ID_PARAM.NAME,
+    type: String,
+    description: ID_PARAM.DESCRIPTION,
+    example: ID_PARAM.EXAMPLE
+  })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: USER_CREATED_RESPONSE,
-    type: AuthenticatedUserRDO
+    description: CREATED_RESPONSE,
+    type: UserRDO
   })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: CONFLICT_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.CREATED)
-  @Post(Route.Register)
+  @Post(Route.CreateCoachQuestionnaire)
   public async createCoachQuestionnaire(
     @Body() dto: CreateCoachQuestionnaireDTO,
-    @RequestTokenPayload() tokenPayload: TokenPayload
+    @Param('userId') id: string
   ) {
-    const user = await this.authService.addCoachQuestionnaire(tokenPayload.sub, dto);
+    const user = await this.authService.addCoachQuestionnaire(id, dto);
 
     return fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false});
   }
 
-  @HttpCode(HttpStatus.CREATED)
+  @ApiParam({
+    name: ID_PARAM.NAME,
+    type: String,
+    description: ID_PARAM.DESCRIPTION,
+    example: ID_PARAM.EXAMPLE
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: UPDATED_RESPONSE,
+    type: UserRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.OK)
   @Post(Route.EditUser)
   public async update(
     @Body() dto: UpdateUserDTO,
@@ -115,8 +185,16 @@ export class AuthController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: USER_LOGIN_RESPONSE,
+    description: AUTHORIZED_RESPONSE,
     type: AuthenticatedUserRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
   })
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
@@ -128,15 +206,23 @@ export class AuthController {
   }
 
   @ApiParam({
-    name: PRODUCT_ID_PARAM.NAME,
+    name: ID_PARAM.NAME,
     type: String,
-    description: PRODUCT_ID_PARAM.DESCRIPTION,
-    example: PRODUCT_ID_PARAM.EXAMPLE
+    description: ID_PARAM.DESCRIPTION,
+    example: ID_PARAM.EXAMPLE
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: USER_FOUND_RESPONSE,
+    description: FOUND_RESPONSE,
     type: UserRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
@@ -149,7 +235,12 @@ export class AuthController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: REFRESH_TOKEN_RESPONSE
+    description: AUTHORIZED_RESPONSE,
+    type: AuthenticatedUserRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
   })
   @UseGuards(JWTRefreshGuard)
   @HttpCode(HttpStatus.OK)
@@ -159,8 +250,13 @@ export class AuthController {
   }
 
   @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: CHECK_TOKEN_RESPONSE
+    status: HttpStatus.OK,
+    description: AUTHORIZED_RESPONSE,
+    type: AuthenticatedUserRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)

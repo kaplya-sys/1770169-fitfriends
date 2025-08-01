@@ -5,8 +5,8 @@ import {Image} from '@1770169-fitfriends/types';
 import {
   IMAGE_2X_PROPERTY,
   IMAGE_PROPERTY,
-  IMAGE_WEB_2X_PROPERTY,
-  IMAGE_WEB_PROPERTY
+  IMAGE_WEBP_2X_PROPERTY,
+  IMAGE_WEBP_PROPERTY
 } from './rdo.constant';
 export class ImageRDO implements Image {
   @ApiProperty({
@@ -24,16 +24,16 @@ export class ImageRDO implements Image {
   public image2x!: string;
 
   @ApiProperty({
-    description: IMAGE_WEB_PROPERTY.DESCRIPTION,
-    example: IMAGE_WEB_PROPERTY.EXAMPLE
+    description: IMAGE_WEBP_PROPERTY.DESCRIPTION,
+    example: IMAGE_WEBP_PROPERTY.EXAMPLE
   })
   @Expose()
-  public imageWeb!: string;
+  public imageWebp!: string;
 
   @ApiProperty({
-    description: IMAGE_WEB_2X_PROPERTY.DESCRIPTION,
-    example: IMAGE_WEB_2X_PROPERTY.EXAMPLE
+    description: IMAGE_WEBP_2X_PROPERTY.DESCRIPTION,
+    example: IMAGE_WEBP_2X_PROPERTY.EXAMPLE
   })
   @Expose()
-  public imageWeb2x!: string;
+  public imageWebp2x!: string;
 }

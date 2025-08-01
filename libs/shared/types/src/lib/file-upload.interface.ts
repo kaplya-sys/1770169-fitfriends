@@ -10,7 +10,7 @@ export interface FileUpload extends Timestamps {
   mimetype: string;
   image?: FileInfo;
   image2x?: FileInfo;
-  imageWeb?: FileInfo;
-  imageWeb2x?: FileInfo;
+  imageWebp?: FileInfo;
+  imageWebp2x?: FileInfo;
   video?: FileInfo;
 };

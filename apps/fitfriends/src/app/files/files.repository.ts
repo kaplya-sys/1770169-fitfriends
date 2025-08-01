@@ -16,7 +16,7 @@ export class FilesRepository extends BaseMongoRepository<FilesEntity, FilesModel
     super(fileModel, FilesEntity.fromObject);
   }
 
-  public async getFilesByFieldName(catalog = FieldName.Background) {
+  public async getFilesByFieldName(catalog: FieldName) {
     const documents = await this.model.find({catalog}).exec();
 
     return documents.map((document) => this.createEntityFromDocument(document));

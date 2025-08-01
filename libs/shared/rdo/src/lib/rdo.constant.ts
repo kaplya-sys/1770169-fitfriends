@@ -1,5 +1,5 @@
 export const ID_PROPERTY = {
-  DESCRIPTION: 'Уникальный идентификационный id в системе.',
+  DESCRIPTION: 'Уникальный идентификационный UUID в системе.',
   EXAMPLE: '17177772-33ba-42d8-a4ca-27758d30608e'
 }
 export const EMAIL_PROPERTY = {
@@ -39,11 +39,11 @@ export const IMAGE_2X_PROPERTY = {
   DESCRIPTION: 'Полный путь к изображению с повышенной плотностью.',
   EXAMPLE: 'uploads/file/2025/January/e0986884-f994-4899-a852-716757fb4b60@2x.jpeg'
 }
-export const IMAGE_WEB_PROPERTY = {
+export const IMAGE_WEBP_PROPERTY = {
   DESCRIPTION: 'Полный путь к web изображению.',
   EXAMPLE: 'uploads/file/2025/January/e0986884-f994-4899-a852-716757fb4b60.web'
 }
-export const IMAGE_WEB_2X_PROPERTY = {
+export const IMAGE_WEBP_2X_PROPERTY = {
   DESCRIPTION: 'Полный путь к web изображению с повышенной плотностью.',
   EXAMPLE: 'uploads/file/2025/January/e0986884-f994-4899-a852-716757fb4b60@2x.web'
 }

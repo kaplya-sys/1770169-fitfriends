@@ -10,8 +10,8 @@ export class FilesEntity implements FileUpload, Entity<string> {
   public mimetype!: string;
   public image?: FileInfo;
   public image2x?: FileInfo;
-  public imageWeb?: FileInfo;
-  public imageWeb2x?: FileInfo;
+  public imageWebp?: FileInfo;
+  public imageWebp2x?: FileInfo;
   public video?: FileInfo;
   public createdAt?: Date;
 
@@ -29,8 +29,8 @@ export class FilesEntity implements FileUpload, Entity<string> {
       mimetype: this.mimetype,
       image: this.image,
       image2x: this.image2x,
-      imageWeb: this.imageWeb,
-      imageWeb2x: this.imageWeb2x,
+      imageWebp: this.imageWebp,
+      imageWebp2x: this.imageWebp2x,
       video: this.video,
       createdAt: this.createdAt
     }
@@ -49,8 +49,8 @@ export class FilesEntity implements FileUpload, Entity<string> {
     this.mimetype = file.mimetype;
     this.image = file.image;
     this.image2x = file.image2x;
-    this.imageWeb = file.imageWeb;
-    this.imageWeb2x = file.imageWeb2x;
+    this.imageWebp = file.imageWebp;
+    this.imageWebp2x = file.imageWebp2x;
     this.video = file.video;
     this.createdAt = file.createdAt;
 

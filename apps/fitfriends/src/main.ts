@@ -7,8 +7,8 @@ import {Logger, ValidationPipe} from '@nestjs/common';
 import {NestFactory} from '@nestjs/core';
 import {ConfigService} from '@nestjs/config';
 
-import {createMessage} from '@1770169-guitar/helpers';
-import {createSwagger} from '@1770169-guitar/swagger';
+import {createMessage} from '@1770169-fitfriends/helpers';
+import {createSwagger} from '@1770169-fitfriends/swagger';
 
 import {AppModule} from './app/app.module';
 import {APP_RUN_MESSAGE, DEFAULT_PORT, PREFIX} from './constant';

@@ -5,7 +5,7 @@ import {join} from 'node:path';
 import 'multer';
 import dayjs from 'dayjs';
 import {createReadStream, ensureDir} from 'fs-extra';
-import {contentType, extension, lookup} from 'mime-types';
+import {extension, lookup} from 'mime-types';
 import {Response} from 'express';
 import {Inject, Injectable, Logger, NotFoundException} from '@nestjs/common';
 import {ConfigType} from '@nestjs/config';
@@ -46,7 +46,7 @@ export class FilesService {
         const video = `${filename}.${fileExtension}`;
         const videoPath = normalizePath(join(uploadDirectory, video));
         await ensureDir(uploadDirectory);
-        await writeFile(videoPath, buffer);
+        await writeFile(videoPath, new Uint8Array(buffer));
 
         return {
           catalog,
@@ -59,19 +59,19 @@ export class FilesService {
       }
       const image = `${filename}.${fileExtension}`;
       const image2x = `${filename}@2x.${fileExtension}`;
-      const imageWeb = `${filename}.web`;
-      const imageWeb2x = `${filename}@2x.web`;
+      const imageWebp = `${filename}.webp`;
+      const imageWebp2x = `${filename}@2x.webp`;
       const imagePath = normalizePath(join(uploadDirectory, image));
       const image2xPath = normalizePath(join(uploadDirectory, image2x));
-      const imageWebPath = normalizePath(join(uploadDirectory, imageWeb));
-      const imageWeb2xPath = normalizePath(join(uploadDirectory, imageWeb2x));
-      const bufferVariant = await convertFileBuffer(buffer);
+      const imageWebpPath = normalizePath(join(uploadDirectory, imageWebp));
+      const imageWebp2xPath = normalizePath(join(uploadDirectory, imageWebp2x));
+      const fileBuffer = await convertFileBuffer(buffer);
 
       await ensureDir(uploadDirectory);
-      await writeFile(imagePath, bufferVariant.image);
-      await writeFile(image2xPath, bufferVariant.image2x)
-      await writeFile(imageWebPath, bufferVariant.imageWeb);
-      await writeFile(imageWeb2xPath, bufferVariant.imageWeb2x);
+      await writeFile(imagePath, new Uint8Array(fileBuffer.file));
+      await writeFile(image2xPath, new Uint8Array(fileBuffer.file2x));
+      await writeFile(imageWebpPath, new Uint8Array(fileBuffer.fileWebp));
+      await writeFile(imageWebp2xPath, new Uint8Array(fileBuffer.fileWebp2x));
 
       return {
         catalog,
@@ -84,13 +84,13 @@ export class FilesService {
           hashName: image2x,
           path: image2xPath
         },
-        imageWeb: {
-          hashName: imageWeb,
-          path: imageWebPath
+        imageWebp: {
+          hashName: imageWebp,
+          path: imageWebpPath
         },
-        imageWeb2x: {
-          hashName: imageWeb2x,
-          path: imageWeb2xPath
+        imageWebp2x: {
+          hashName: imageWebp2x,
+          path: imageWebp2xPath
         }
       };
     } catch (err: unknown) {
@@ -117,13 +117,13 @@ export class FilesService {
           hashName: recordedFile.image2x.hashName,
           path: recordedFile.image2x.path
         },
-        imageWeb: recordedFile.imageWeb && {
-          hashName: recordedFile.imageWeb.hashName,
-          path: recordedFile.imageWeb.path
+        imageWebp: recordedFile.imageWebp && {
+          hashName: recordedFile.imageWebp.hashName,
+          path: recordedFile.imageWebp.path
         },
-        imageWeb2x: recordedFile.imageWeb2x && {
-          hashName: recordedFile.imageWeb2x.hashName,
-          path: recordedFile.imageWeb2x.path
+        imageWebp2x: recordedFile.imageWebp2x && {
+          hashName: recordedFile.imageWebp2x.hashName,
+          path: recordedFile.imageWebp2x.path
         },
         video: recordedFile.video && {
           hashName: recordedFile.video.hashName,
@@ -144,27 +144,25 @@ export class FilesService {
     return existFile;
   }
 
-  public async getByFieldName(catalog?: FieldName): Promise<(FilesEntity | null)[]> {
+  public async getByFieldName(catalog: FieldName): Promise<(FilesEntity | null)[]> {
     return this.filesRepository.getFilesByFieldName(catalog);
   }
 
   public async createBackgrounds(): Promise<void> {
     Object.keys(BACKGROUND).forEach((key) => BACKGROUND[key].forEach(async (image) => {
-      const subDirectory = join(FieldName.Background, key);
+      const subDirectory = join(FieldName.Background, key.toLowerCase());
       const uploadDirectory = join(this.filesOptions.uploadDirectory || DEFAULT_UPLOAD_DIRECTORY, subDirectory);
       const [filename, fileExtension] = image.split('.')
-      console.log(lookup(fileExtension));
-      console.log(contentType(image));
       const image2x = `${filename}@2x.${fileExtension}`;
-      const imageWeb = `${filename}.web`;
-      const imageWeb2x = `${filename}@2x.web`;
+      const imageWebp = `${filename}.webp`;
+      const imageWebp2x = `${filename}@2x.webp`;
       const imagePath = normalizePath(join(uploadDirectory, image));
       const image2xPath = normalizePath(join(uploadDirectory, image2x));
-      const imageWebPath = normalizePath(join(uploadDirectory, imageWeb));
-      const imageWeb2xPath = normalizePath(join(uploadDirectory, imageWeb2x));
+      const imageWebpPath = normalizePath(join(uploadDirectory, imageWebp));
+      const imageWebp2xPath = normalizePath(join(uploadDirectory, imageWebp2x));
       const newEntity = new FilesEntity({
         catalog: FieldName.Background,
-        subDirectory: subDirectory,
+        subDirectory: normalizePath(subDirectory),
         originalName: image,
         size: 0,
         mimetype: lookup(fileExtension) as string,
@@ -176,13 +174,13 @@ export class FilesService {
           hashName: image,
           path:image2xPath
         },
-        imageWeb: {
+        imageWebp: {
           hashName: image,
-          path: imageWebPath
+          path: imageWebpPath
         },
-        imageWeb2x: {
+        imageWebp2x: {
           hashName: image,
-          path: imageWeb2xPath
+          path: imageWebp2xPath
         }
       });
 

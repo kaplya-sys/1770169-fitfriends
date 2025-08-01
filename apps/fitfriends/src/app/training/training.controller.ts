@@ -17,30 +17,42 @@ import {ApiParam, ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {FileFieldsInterceptor} from '@nestjs/platform-express';
 
 import {FilesTypeValidationPipe, ParseFormDataJsonPipe} from '@1770169-fitfriends/core';
-import { CreateTrainingDTO, UpdateTrainingDTO } from '@1770169-fitfriends/dto';
+import {CreateTrainingDTO, UpdateTrainingDTO} from '@1770169-fitfriends/dto';
 import {fillDto} from '@1770169-fitfriends/helpers';
 import {TrainingRDO, TrainingsWithPaginationRDO} from '@1770169-fitfriends/rdo';
 import {TrainingsQuery} from '@1770169-fitfriends/query';
-import {FieldName, Route, RequestFiles, TokenPayload} from '@1770169-fitfriends/types';
+import {
+  FieldName,
+  Route,
+  RequestFiles,
+  TokenPayload
+} from '@1770169-fitfriends/types';
 
 import {
   MAX_UPLOAD_FILES,
-  PRODUCT_CREATED_RESPONSE,
-  PRODUCT_DATE_QUERY,
-  PRODUCT_DELETED_RESPONSE,
-  PRODUCT_FOUND_RESPONSE,
-  PRODUCT_ID_PARAM,
-  PRODUCT_PRICE_QUERY,
-  PRODUCT_STRINGS_QUERY,
-  PRODUCT_TYPE_QUERY,
-  PRODUCT_UPDATED_RESPONSE,
-  PRODUCTS_FOUND_RESPONSE,
+  CREATED_RESPONSE,
+  FOUND_RESPONSE,
   ROUTE_PREFIX,
-  TAG
+  TAG,
+  NOT_FOUND_RESPONSE,
+  CONFLICT_RESPONSE,
+  TRAINING_CALORIES_MAX_QUERY,
+  TRAINING_CALORIES_MIN_QUERY,
+  TRAINING_PRICE_ORDER_QUERY,
+  TRAINING_PRICE_MIN_QUERY,
+  TRAINING_PRICE_MAX_QUERY,
+  TRAINING_DATE_ORDER_QUERY,
+  LIMIT_QUERY,
+  PAGE_QUERY,
+  ID_PARAM,
+  UPDATED_RESPONSE,
+  BAD_REQUEST_RESPONSE,
+  DELETED_RESPONSE,
+  UNAUTHORIZED
 } from './training.constant';
 import {JWTAuthGuard} from '../auth/guards/jwt-auth.guard';
 import {TrainingService} from './training.service';
-import { RequestTokenPayload } from '../decorators/request-token-payload.decorator';
+import {RequestTokenPayload} from '../decorators/request-token-payload.decorator';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
@@ -51,8 +63,20 @@ export class TrainingController {
 
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: PRODUCT_CREATED_RESPONSE,
+    description: CREATED_RESPONSE,
     type: TrainingRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: CONFLICT_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.CREATED)
@@ -71,45 +95,72 @@ export class TrainingController {
   }
 
   @ApiQuery({
-    name: PRODUCT_TYPE_QUERY.NAME,
-    type: [String],
-    description: PRODUCT_TYPE_QUERY.DESCRIPTION,
-    example: PRODUCT_TYPE_QUERY.EXAMPLE,
-    isArray: true,
-    enum: PRODUCT_TYPE_QUERY.ENUM,
-    required: false,
+    name: TRAINING_CALORIES_MAX_QUERY.NAME,
+    type: TRAINING_CALORIES_MAX_QUERY.TYPE,
+    description: TRAINING_CALORIES_MAX_QUERY.DESCRIPTION,
+    example: TRAINING_CALORIES_MAX_QUERY.EXAMPLE,
+    required: false
   })
   @ApiQuery({
-    name: PRODUCT_STRINGS_QUERY.NAME,
-    type: [String],
-    description: PRODUCT_STRINGS_QUERY.DESCRIPTION,
-    example: PRODUCT_STRINGS_QUERY.EXAMPLE,
-    isArray: true,
-    enum: PRODUCT_STRINGS_QUERY.ENUM,
-    required: false,
+    name: TRAINING_CALORIES_MIN_QUERY.NAME,
+    type: TRAINING_CALORIES_MIN_QUERY.TYPE,
+    description: TRAINING_CALORIES_MIN_QUERY.DESCRIPTION,
+    example: TRAINING_CALORIES_MIN_QUERY.EXAMPLE,
+    required: false
   })
   @ApiQuery({
-    name: PRODUCT_PRICE_QUERY.NAME,
+    name: TRAINING_PRICE_MIN_QUERY.NAME,
+    type: TRAINING_PRICE_MIN_QUERY.TYPE,
+    description: TRAINING_PRICE_MIN_QUERY.DESCRIPTION,
+    example: TRAINING_PRICE_MIN_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: TRAINING_PRICE_MAX_QUERY.NAME,
+    type: TRAINING_PRICE_MAX_QUERY.TYPE,
+    description: TRAINING_PRICE_MAX_QUERY.DESCRIPTION,
+    example: TRAINING_PRICE_MAX_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: TRAINING_PRICE_ORDER_QUERY.NAME,
     type: String,
-    description: PRODUCT_PRICE_QUERY.DESCRIPTION,
-    example: PRODUCT_PRICE_QUERY.EXAMPLE,
-    enum: PRODUCT_PRICE_QUERY.ENUM,
-    required: false,
+    description: TRAINING_PRICE_ORDER_QUERY.DESCRIPTION,
+    example: TRAINING_PRICE_ORDER_QUERY.EXAMPLE,
+    enum: TRAINING_PRICE_ORDER_QUERY.ENUM,
+    required: false
   })
   @ApiQuery({
-    name: PRODUCT_DATE_QUERY.NAME,
+    name: TRAINING_DATE_ORDER_QUERY.NAME,
     type: String,
-    description: PRODUCT_DATE_QUERY.DESCRIPTION,
-    example: PRODUCT_DATE_QUERY.EXAMPLE,
-    enum: PRODUCT_DATE_QUERY.ENUM,
-    required: false,
+    description: TRAINING_DATE_ORDER_QUERY.DESCRIPTION,
+    example: TRAINING_DATE_ORDER_QUERY.EXAMPLE,
+    enum: TRAINING_DATE_ORDER_QUERY.ENUM,
+    required: false
+  })
+  @ApiQuery({
+    name: LIMIT_QUERY.NAME,
+    type: LIMIT_QUERY.TYPE,
+    description: LIMIT_QUERY.DESCRIPTION,
+    example: LIMIT_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: PAGE_QUERY.NAME,
+    type: PAGE_QUERY.TYPE,
+    description: PAGE_QUERY.DESCRIPTION,
+    example: PAGE_QUERY.EXAMPLE,
+    required: false
   })
   @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: PRODUCT_UPDATED_RESPONSE,
+    status: HttpStatus.OK,
+    description: FOUND_RESPONSE,
     type: TrainingsWithPaginationRDO
   })
-  @UseGuards(JWTAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
   @HttpCode(HttpStatus.OK)
   @Get(Route.Trainings)
   public async index(@Query() query: TrainingsQuery) {
@@ -126,15 +177,23 @@ export class TrainingController {
   }
 
   @ApiParam({
-    name: PRODUCT_ID_PARAM.NAME,
+    name: ID_PARAM.NAME,
     type: String,
-    description: PRODUCT_ID_PARAM.DESCRIPTION,
-    example: PRODUCT_ID_PARAM.EXAMPLE
+    description: ID_PARAM.DESCRIPTION,
+    example: ID_PARAM.EXAMPLE
   })
   @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: PRODUCTS_FOUND_RESPONSE,
+    status: HttpStatus.OK,
+    description: FOUND_RESPONSE,
     type: TrainingRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
@@ -146,15 +205,27 @@ export class TrainingController {
   }
 
   @ApiParam({
-    name: PRODUCT_ID_PARAM.NAME,
+    name: ID_PARAM.NAME,
     type: String,
-    description: PRODUCT_ID_PARAM.DESCRIPTION,
-    example: PRODUCT_ID_PARAM.EXAMPLE
+    description: ID_PARAM.DESCRIPTION,
+    example: ID_PARAM.EXAMPLE
   })
   @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: PRODUCT_FOUND_RESPONSE,
+    status: HttpStatus.OK,
+    description: UPDATED_RESPONSE,
     type: TrainingRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
@@ -169,14 +240,22 @@ export class TrainingController {
   }
 
   @ApiParam({
-    name: PRODUCT_ID_PARAM.NAME,
+    name: ID_PARAM.NAME,
     type: String,
-    description: PRODUCT_ID_PARAM.DESCRIPTION,
-    example: PRODUCT_ID_PARAM.EXAMPLE
+    description: ID_PARAM.DESCRIPTION,
+    example: ID_PARAM.EXAMPLE
   })
   @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: PRODUCT_DELETED_RESPONSE
+    status: HttpStatus.NO_CONTENT,
+    description: DELETED_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
