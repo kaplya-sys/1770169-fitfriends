@@ -2,7 +2,7 @@ import {Injectable} from '@nestjs/common';
 
 import {BasePostgresRepository} from '@1770169-fitfriends/core';
 import {Questionnaire} from '@1770169-fitfriends/types';
-import {PrismaClientService} from '@1770169-fitfriends/models';
+import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
 
 import {QuestionnaireEntity} from './questionnaire.entity';
 
@@ -17,7 +17,16 @@ export class QuestionnaireRepository extends BasePostgresRepository<Questionnair
   public override async save(entity: QuestionnaireEntity): Promise<QuestionnaireEntity> {
     const objectEntity = entity.toObject();
     const newRecord = await this.prismaClient.questionnaire.create({
-      data: objectEntity
+      data: {
+        fitnessLevel: objectEntity.fitnessLevel,
+        trainingTime: objectEntity.trainingTime ?? Prisma.skip,
+        exercise: objectEntity.exercise,
+        caloriesLose: objectEntity.caloriesLose ?? Prisma.skip,
+        caloriesWaste: objectEntity.caloriesWaste ?? Prisma.skip,
+        qualifications: objectEntity.qualifications ?? Prisma.skip,
+        experience: objectEntity.experience ?? Prisma.skip,
+        isPersonal: objectEntity.isPersonal ?? Prisma.skip
+      }
     });
     entity.id = newRecord.id;
 

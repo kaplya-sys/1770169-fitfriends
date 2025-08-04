@@ -74,8 +74,9 @@ export class AuthController {
     @Body() dto: CreateUserDTO
   ) {
     const newUser = await this.authService.registerUser(dto, files);
+    const token = await this.authService.createToken(newUser);
 
-    return fillDto(AuthenticatedUserRDO, newUser.toObject(), {exposeDefaultValues: false});
+    return fillDto(AuthenticatedUserRDO, {...newUser.toObject(), ...token}, {exposeDefaultValues: false});
   }
 
   @ApiParam({

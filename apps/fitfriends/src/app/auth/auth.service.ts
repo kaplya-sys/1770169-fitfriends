@@ -60,7 +60,7 @@ export class AuthService {
     const avatar = await this.filesService.saveFile(files);
     const backgrounds = await this.filesService.getByFieldName(FieldName.Background);
     const backgroundIds = backgrounds
-      .filter((background) => background !== null && background.catalog === dto.role)
+      .filter((background) => background !== null && background.subDirectory.includes(dto.role))
       .map((background) => background?.id as string)
       .concat(avatar.id as string);
 
