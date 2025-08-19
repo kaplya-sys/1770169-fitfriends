@@ -1,15 +1,17 @@
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
-import { BackButtonPropsType } from './back-button-props.type';
+type BackButtonPropsType = {
+  blockClassName?: string;
+}
 
-export const BackButton = ({ blockClassName }:BackButtonPropsType) => {
+export const BackButton = ({blockClassName}:BackButtonPropsType) => {
   const navigate = useNavigate();
 
   return (
     <button
-      className={`btn-flat btn-flat--underlined ${ blockClassName }`}
+      className={`btn-flat btn-flat--underlined ${blockClassName}`}
       type="button"
-      onClick={ () => navigate(-1) }
+      onClick={() => navigate(-1)}
     >
       <svg width="14" height="10" aria-hidden="true">
         <use xlinkHref="#arrow-left"></use>

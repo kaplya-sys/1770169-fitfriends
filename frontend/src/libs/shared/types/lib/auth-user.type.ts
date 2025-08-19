@@ -1,3 +1,3 @@
-import {ExtendUser} from './extend-user.type';
+import {CreateUserType} from './create-user.type';
 
-export type AuthUser = Pick<ExtendUser, 'email' | 'password'>
+export type AuthUserType = Pick<CreateUserType, 'email' | 'password'>

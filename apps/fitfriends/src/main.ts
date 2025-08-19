@@ -19,7 +19,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<string>('appConfig.port') || DEFAULT_PORT;
   const hostname = configService.get<string>('appConfig.host');
-  //createSwagger(app);
+  createSwagger(app);
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe({
     transform: true

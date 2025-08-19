@@ -1,11 +1,15 @@
-import { TrainingCard } from '../training-card';
-import { TrainingListPropsType } from './training-list-props.type';
+import {TrainingCard} from '../training-card';
+import {TrainingType} from '../../libs/shared/types';
 
-export const TrainingList = ({ trainings }: TrainingListPropsType) => (
+type TrainingListPropsType = {
+  trainings: TrainingType[];
+}
+
+export const TrainingList = ({trainings}: TrainingListPropsType) => (
   <ul className="training-catalog__list">
     {
       trainings.map((training) => (
-        <TrainingCard training={ training } className='training-catalog__item' key={ training.id } />
+        <TrainingCard training={training} className='training-catalog__item' key={training.id} />
       ))
     }
   </ul>

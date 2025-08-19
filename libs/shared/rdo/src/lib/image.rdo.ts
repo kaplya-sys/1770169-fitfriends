@@ -1,5 +1,5 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {Expose} from 'class-transformer';
+import {Expose, Transform} from 'class-transformer';
 
 import {Image} from '@1770169-fitfriends/types';
 import {
@@ -13,6 +13,7 @@ export class ImageRDO implements Image {
     description: IMAGE_PROPERTY.DESCRIPTION,
     example: IMAGE_PROPERTY.EXAMPLE
   })
+  @Transform(({value}) => value.path)
   @Expose()
   public image!: string;
 
@@ -20,6 +21,7 @@ export class ImageRDO implements Image {
     description: IMAGE_2X_PROPERTY.DESCRIPTION,
     example: IMAGE_2X_PROPERTY.EXAMPLE
   })
+  @Transform(({value}) => value.path)
   @Expose()
   public image2x!: string;
 
@@ -27,6 +29,7 @@ export class ImageRDO implements Image {
     description: IMAGE_WEBP_PROPERTY.DESCRIPTION,
     example: IMAGE_WEBP_PROPERTY.EXAMPLE
   })
+  @Transform(({value}) => value.path)
   @Expose()
   public imageWebp!: string;
 
@@ -34,6 +37,7 @@ export class ImageRDO implements Image {
     description: IMAGE_WEBP_2X_PROPERTY.DESCRIPTION,
     example: IMAGE_WEBP_2X_PROPERTY.EXAMPLE
   })
+  @Transform(({value}) => value.path)
   @Expose()
   public imageWebp2x!: string;
 }

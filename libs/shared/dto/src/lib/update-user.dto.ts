@@ -18,7 +18,7 @@ import {
   LOCATION_PROPERTY,
   NAME_PROPERTY,
   READY_PROPERTY,
-  USER_DESCRIPTION
+  USER_DESCRIPTION_PROPERTY
 } from './dto.const';
 
 export class UpdateUserDTO implements UpdateUser {
@@ -27,7 +27,7 @@ export class UpdateUserDTO implements UpdateUser {
     example: NAME_PROPERTY.EXAMPLE,
     minimum: NAME_PROPERTY.MIN,
     maximum: NAME_PROPERTY.MAX,
-    type: NAME_PROPERTY.TYPE
+    type: String
   })
   @IsString()
   @Length(NAME_PROPERTY.MIN, NAME_PROPERTY.MAX)
@@ -41,7 +41,7 @@ export class UpdateUserDTO implements UpdateUser {
   })
   @IsString()
   @IsOptional()
-  gender?: Gender;
+  public gender?: Gender;
 
   @ApiProperty({
     description: LOCATION_PROPERTY.DESCRIPTION,
@@ -50,40 +50,40 @@ export class UpdateUserDTO implements UpdateUser {
   })
   @IsString()
   @IsOptional()
-  location?: Location;
+  public location?: Location;
 
   @ApiProperty({
     description: EXERCISE_PROPERTY.DESCRIPTION,
     example: EXERCISE_PROPERTY.EXAMPLE,
     enum: EXERCISE_PROPERTY.ENUM,
-    type: [EXERCISE_PROPERTY.TYPE],
-    maxItems: EXERCISE_PROPERTY.MAX_ITEMS
+    maxItems: EXERCISE_PROPERTY.MAX_ITEMS,
+    isArray: true
   })
   @IsArray()
   @ArrayMaxSize(EXERCISE_PROPERTY.MAX_ITEMS)
   @IsOptional()
-  exercise?: Exercise[];
+  public exercises?: Exercise[];
 
   @ApiProperty({
-    description: USER_DESCRIPTION.DESCRIPTION,
-    example: USER_DESCRIPTION.EXAMPLE,
-    minimum: USER_DESCRIPTION.MIN,
-    maximum: USER_DESCRIPTION.MAX,
-    type: USER_DESCRIPTION.TYPE
+    description: USER_DESCRIPTION_PROPERTY.DESCRIPTION,
+    example: USER_DESCRIPTION_PROPERTY.EXAMPLE,
+    minimum: USER_DESCRIPTION_PROPERTY.MIN,
+    maximum: USER_DESCRIPTION_PROPERTY.MAX,
+    type: String
   })
   @IsString()
-  @Length(USER_DESCRIPTION.MIN, USER_DESCRIPTION.MAX)
+  @Length(USER_DESCRIPTION_PROPERTY.MIN, USER_DESCRIPTION_PROPERTY.MAX)
   @IsOptional()
-  description?: string;
+  public description?: string;
 
   @ApiProperty({
     description: READY_PROPERTY.DESCRIPTION,
     example: READY_PROPERTY.EXAMPLE,
-    type: READY_PROPERTY.TYPE
+    type: Boolean
   })
   @IsBoolean()
   @IsOptional()
-  isReady?: boolean;
+  public isReady?: boolean;
 
   @ApiProperty({
     description: FITNESS_LEVEL_PROPERTY.DESCRIPTION,
@@ -92,5 +92,5 @@ export class UpdateUserDTO implements UpdateUser {
   })
   @IsString()
   @IsOptional()
-  fitnessLevel?: FitnessLevel
+  public fitnessLevel?: FitnessLevel
 }

@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 
 import {ConfigType} from '@nestjs/config';
 import {
+  ConflictException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -19,6 +20,7 @@ import {
   CreateUserQuestionnaireDTO,
   UpdateUserDTO
 } from '@1770169-fitfriends/dto';
+import {Role} from '@1770169-fitfriends/models';
 import {createJWTPayload, createMessage} from '@1770169-fitfriends/helpers';
 import {FieldName, RequestFiles, Token, User} from '@1770169-fitfriends/types';
 
@@ -27,16 +29,24 @@ import {UserRepository} from '../user/user.repository';
 import {
   NOT_FOUND_BY_EMAIL_MESSAGE,
   NOT_FOUND_BY_ID_MESSAGE,
-  SERVER_ERROR_MESSAGE,
+  UPDATE_USER_ERROR_MESSAGE,
   TOKEN_CREATION_ERROR,
   TOKEN_GENERATE_ERROR,
   USER_EXISTS_MESSAGE,
-  WRONG_PASSWORD_MESSAGE
+  WRONG_PASSWORD_MESSAGE,
+  UPDATE_USER_BALANCE_ERROR_MESSAGE,
+  DEFAULT_AMOUNT,
+  NOT_FOUND_BALANCE_BY_ID_MESSAGE,
+  QUESTIONNAIRE_EXISTS_MESSAGE
 } from './auth.constant';
+import {BalanceEntity} from '../balance/balance.entity';
+import {BalanceRepository} from '../balance/balance.repository';
 import {RefreshTokenService} from '../refresh-token/refresh-token.service';
+import {FilesEntity} from '../files/files.entity';
 import {FilesService} from '../files/files.service';
 import {QuestionnaireRepository} from '../questionnaire/questionnaire.repository';
 import {QuestionnaireEntity} from '../questionnaire/questionnaire.entity';
+import {UsersQuery} from '@1770169-fitfriends/query';
 
 @Injectable()
 export class AuthService {
@@ -44,66 +54,63 @@ export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly questionnaireRepository: QuestionnaireRepository,
+    private readonly balanceRepository: BalanceRepository,
     private readonly jwtService: JwtService,
     private readonly refreshTokenService: RefreshTokenService,
     private readonly filesService: FilesService,
     @Inject(JwtConfig.KEY)private readonly jwtOptions: ConfigType<typeof JwtConfig>
   ) {}
 
-  public async registerUser(dto: CreateUserDTO, files: RequestFiles): Promise<UserEntity> {
+  public async registerUser(dto: CreateUserDTO, files?: RequestFiles): Promise<UserEntity> {
     const existUser = await this.userRepository.findByEmail(dto.email);
 
-    if(existUser) {
+    if (existUser) {
       throw new NotFoundException(createMessage(USER_EXISTS_MESSAGE, [dto.email]));
     }
 
-    const avatar = await this.filesService.saveFile(files);
-    const backgrounds = await this.filesService.getByFieldName(FieldName.Background);
+    let backgrounds = await this.filesService.getByFieldName(FieldName.Background);
+    if (!backgrounds.length) {
+      await this.filesService.createBackgrounds();
+      backgrounds = await this.filesService.getByFieldName(FieldName.Background);
+    }
     const backgroundIds = backgrounds
-      .filter((background) => background !== null && background.subDirectory.includes(dto.role))
-      .map((background) => background?.id as string)
-      .concat(avatar.id as string);
+      .filter((background): background is FilesEntity => background !== null && background.subDirectory.includes(dto.role))
+      .map((background) => background.id as string);
+    const userEntity = await new UserEntity({...dto, backgroundIds}).setPassword(dto.password);
 
-    const userEntity = await new UserEntity({...dto, avatarId: avatar.id as string, backgroundIds}).setPassword(dto.password);
+    if (files && files.avatar?.length) {
+      const newFiles = await this.filesService.saveFiles(files);
+      backgroundIds.concat(newFiles[0].id as string);
+      userEntity.avatarId = newFiles[0].id;
+    }
+
     return this.userRepository.save(userEntity);
   }
 
-  public async addUserQuestionnaire(id: string, dto: CreateUserQuestionnaireDTO): Promise<UserEntity> {
+  public async addQuestionnaire(id: string, dto: CreateUserQuestionnaireDTO | CreateCoachQuestionnaireDTO, files?: RequestFiles): Promise<UserEntity> {
     const existUser = await this.userRepository.findById(id);
 
     if (!existUser) {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
     }
 
-    const questionnaireEntity = new QuestionnaireEntity(dto);
+    if (existUser.questionnaire) {
+      throw new ConflictException(createMessage(QUESTIONNAIRE_EXISTS_MESSAGE, [id]));
+    }
+    const questionnaireEntity = new QuestionnaireEntity({...dto, userId: id});
+
+    if (files && files.qualifications?.length) {
+      const newFiles = await this.filesService.saveFiles(files);
+      questionnaireEntity.qualifications = newFiles.map((newFile) => newFile.id as string);
+    }
     const newQuestionnaire = await this.questionnaireRepository.save(questionnaireEntity);
-    existUser.questionnaireId = newQuestionnaire.id;
-    const updatedUser = await this.userRepository.update(id, existUser);
+    const {backgrounds, avatar} = await this.getFiles(existUser.role, existUser.avatarId);
 
-    if (!updatedUser) {
-      throw new InternalServerErrorException(SERVER_ERROR_MESSAGE);
+    if (avatar) {
+      return Object.assign(existUser, {avatar, backgrounds, questionnaire: newQuestionnaire.toObject()});
     }
 
-    return updatedUser;
-  }
-
-  public async addCoachQuestionnaire(id: string, dto: CreateCoachQuestionnaireDTO): Promise<UserEntity> {
-    const existUser = await this.userRepository.findById(id);
-
-    if (!existUser) {
-      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
-    }
-
-    const questionnaireEntity = new QuestionnaireEntity(dto);
-    const newQuestionnaire = await this.questionnaireRepository.save(questionnaireEntity);
-    existUser.questionnaireId = newQuestionnaire.id;
-    const updatedUser = await this.userRepository.update(id, existUser);
-
-    if (!updatedUser) {
-      throw new InternalServerErrorException(SERVER_ERROR_MESSAGE);
-    }
-
-    return updatedUser;
+    return Object.assign(existUser, {backgrounds, questionnaire: newQuestionnaire.toObject()});
   }
 
   public async updateUser(id: string, dto: UpdateUserDTO): Promise<UserEntity> {
@@ -120,28 +127,37 @@ export class AuthService {
         hasUpdates = true;
       }
     }
+    const {backgrounds, avatar} = await this.getFiles(existUser.role, existUser.avatarId);
 
     if (!hasUpdates) {
-      return existUser;
+      if (avatar) {
+        return Object.assign(existUser, {avatar, backgrounds});
+      }
+
+      return Object.assign(existUser, {backgrounds});
     }
     const updatedUser = await this.userRepository.update(id, existUser);
 
     if (!updatedUser) {
-      throw new InternalServerErrorException(SERVER_ERROR_MESSAGE);
+      throw new InternalServerErrorException(UPDATE_USER_ERROR_MESSAGE);
     }
 
-    return updatedUser;
+    if (avatar) {
+      return Object.assign(updatedUser, {avatar, backgrounds});
+    }
+
+    return Object.assign(updatedUser, {backgrounds});
   }
 
   public async verifyUser(dto: AuthUserDTO): Promise<UserEntity> {
     const existUser = await this.userRepository.findByEmail(dto.email);
 
-    if(!existUser) {
+    if (!existUser) {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_EMAIL_MESSAGE, [dto.email]));
     }
     const isMatch = await existUser.comparePassword(dto.password);
 
-    if(!isMatch) {
+    if (!isMatch) {
       throw new UnauthorizedException(WRONG_PASSWORD_MESSAGE);
     }
 
@@ -151,21 +167,123 @@ export class AuthService {
   public async getUserById(id: string): Promise<UserEntity> {
     const existUser = await this.userRepository.findById(id);
 
-    if(!existUser) {
+    if (!existUser) {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
     }
+    const {backgrounds, avatar} = await this.getFiles(existUser.role, existUser.avatarId);
 
-    return existUser;
+    if (avatar) {
+      return Object.assign(existUser, {avatar, backgrounds});
+    }
+
+    return Object.assign(existUser, {backgrounds});
   }
 
   public async getUserByEmail(email: string): Promise<UserEntity> {
     const existUser = await this.userRepository.findByEmail(email);
 
-    if(!existUser) {
+    if (!existUser) {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_EMAIL_MESSAGE, [email]))
     }
 
     return existUser;
+  }
+
+  public async getUsersByRole(query: UsersQuery): Promise<UserEntity[]> {
+    const users = await this.userRepository.findByRole(query);
+
+    const result = Promise.all(
+      users
+        .filter((user) => user !== null)
+        .map(async (user) => {
+          const {backgrounds, avatar} = await this.getFiles(user.role, user.avatarId);
+
+          if (avatar) {
+            return Object.assign(user, {avatar, backgrounds});
+          }
+
+          return Object.assign(user, {backgrounds});
+        })
+    );
+
+    return result;
+  }
+
+  public async getUserBalance(userId: string): Promise<BalanceEntity[]> {
+    const existUser = await this.userRepository.findById(userId);
+
+    if(!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [userId]));
+    }
+    const userBalance = await this.balanceRepository.findByUserId(userId);
+    const result = await Promise.all(
+      userBalance
+        .filter((balance) => balance !== null)
+        .map(async (balance) => {
+          const video = await this.filesService.getFile(balance.training?.videoId as string);
+          const background = await this.filesService.getFile(balance.training?.backgroundId as string);
+
+          if ('training' in balance && typeof balance.training === 'object') {
+            balance.training.video = video.toObject();
+            balance.training.background = background.toObject()
+          }
+
+          return balance;
+        })
+    );
+
+    return result;
+  }
+
+  public async updateOrCreateUserBalance(userId: string, trainingId: string, amount = DEFAULT_AMOUNT): Promise<BalanceEntity> {
+    const existUser = await this.userRepository.findById(userId);
+
+    if (!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [userId]));
+    }
+    const balanceEntity = new BalanceEntity({userId, trainingId, amount});
+    const userBalance = await this.balanceRepository.findByTrainingId(trainingId);
+
+    if (userBalance) {
+      balanceEntity.amount = userBalance.amount + amount;
+      const balance = await this.balanceRepository.update(userBalance.id, balanceEntity);
+
+      if (!balance) {
+        throw new InternalServerErrorException(UPDATE_USER_BALANCE_ERROR_MESSAGE);
+      }
+
+      return balance;
+    }
+
+    return this.balanceRepository.create(balanceEntity);
+  }
+
+  public async useUserBalance(userId: string, trainingId: string): Promise<BalanceEntity> {
+    const existUser = await this.userRepository.findById(userId);
+
+    if (!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [userId]));
+    }
+    const userBalance = await this.balanceRepository.findByTrainingId(trainingId);
+
+    if (!userBalance) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BALANCE_BY_ID_MESSAGE, [trainingId]));
+    }
+
+    if (userBalance.amount === 0) {
+      return userBalance;
+    }
+    const balanceEntity = new BalanceEntity({
+      userId,
+      trainingId,
+      amount: userBalance.amount - DEFAULT_AMOUNT});
+    const balance = await this.balanceRepository.update(userBalance.id, balanceEntity);
+
+    if (!balance) {
+      throw new InternalServerErrorException(UPDATE_USER_BALANCE_ERROR_MESSAGE);
+    }
+
+    return balance;
   }
 
   public async createToken(user: User): Promise<Token> {
@@ -190,5 +308,21 @@ export class AuthService {
       this.logger.error(createMessage(TOKEN_GENERATE_ERROR, [error]));
       throw new InternalServerErrorException(TOKEN_CREATION_ERROR);
     }
+  }
+
+  private async getFiles(userRole: Role, avatarId: string | null | undefined) {
+    const backgrounds = await this.filesService.getByFieldName(FieldName.Background);
+    const userBackgrounds = backgrounds
+      .filter((background): background is FilesEntity => background !== null && background.subDirectory.includes(userRole))
+      .map((background) => background.toObject());
+
+    if (avatarId) {
+      const avatar = await this.filesService.getFile(avatarId);
+      userBackgrounds.concat(avatar.toObject());
+
+      return {avatar: avatar.toObject(), backgrounds: userBackgrounds};
+    }
+
+    return {backgrounds: userBackgrounds};
   }
 }

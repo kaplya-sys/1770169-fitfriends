@@ -1,1 +1,1 @@
-export const STATIC_BASE_PATH = 'http://localhost:5000/static';
+export const NO_FOUND_PARAM_ERROR = 'Обязательный параметр отсутствует.';

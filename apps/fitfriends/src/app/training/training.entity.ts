@@ -1,11 +1,12 @@
 import {Entity} from '@1770169-fitfriends/core';
-import {FitnessLevel, Exercise, TrainingTime, Gender} from '@1770169-fitfriends/models';
-import {Training} from '@1770169-fitfriends/types';
+import {FitnessLevel, Exercise, TrainingTime, Gender, Prisma} from '@1770169-fitfriends/models';
+import {FileUpload, Training} from '@1770169-fitfriends/types';
 
 export class TrainingEntity implements Training, Entity<string> {
   public id?: string;
   public title!: string;
   public backgroundId!: string;
+  public background?: FileUpload;
   public level!: FitnessLevel;
   public type!: Exercise;
   public trainingTime!: TrainingTime;
@@ -15,6 +16,7 @@ export class TrainingEntity implements Training, Entity<string> {
   public description!: string;
   public price!: number;
   public videoId!: string;
+  public video?: FileUpload;
   public coachName!: string;
   public specialOffer!: boolean;
   public createdAt?: Date;
@@ -24,36 +26,12 @@ export class TrainingEntity implements Training, Entity<string> {
     this.populate(training);
   }
 
-  static fromObject(training: Training) {
-    return new TrainingEntity(training);
-  }
-
-  public toObject() {
-    return {
-      id: this.id,
-      title: this.title,
-      description: this.description,
-      backgroundId: this.backgroundId,
-      level: this.level,
-      type: this.type,
-      trainingTime: this.trainingTime,
-      calories: this.calories,
-      gender: this.gender,
-      rating: this.rating,
-      price: this.price,
-      videoId: this.videoId,
-      coachName: this.coachName,
-      specialOffer: this.specialOffer,
-      createdAt: this.createdAt,
-      coachId: this.coachId
-    };
-  }
-
   public populate(training: Training) {
       this.id = training.id;
       this.title = training.title;
       this.description = training.description;
       this.backgroundId = training.backgroundId;
+      this.background = training.background;
       this.level = training.level;
       this.type = training.type;
       this.trainingTime = training.trainingTime;
@@ -62,11 +40,58 @@ export class TrainingEntity implements Training, Entity<string> {
       this.rating = training.rating;
       this.price = training.price;
       this.videoId = training.videoId;
+      this.video = training.video;
       this.coachName = training.coachName;
       this.specialOffer = training.specialOffer;
       this.createdAt = training.createdAt;
       this.coachId = training.coachId;
 
       return this;
+  }
+
+  public toObject() {
+    return {
+      id: this.id,
+      title: this.title,
+      description: this.description,
+      backgroundId: this.backgroundId,
+      background: this.background,
+      level: this.level,
+      type: this.type,
+      trainingTime: this.trainingTime,
+      calories: this.calories,
+      gender: this.gender,
+      rating: this.rating,
+      price: this.price,
+      videoId: this.videoId,
+      video: this.video,
+      coachName: this.coachName,
+      specialOffer: this.specialOffer,
+      createdAt: this.createdAt,
+      coachId: this.coachId
+    };
+  }
+
+  public toPrismaObject() {
+    return {
+      title: this.title,
+      description: this.description,
+      backgroundId: this.backgroundId,
+      level: this.level,
+      type: this.type,
+      trainingTime: this.trainingTime,
+      calories: this.calories,
+      gender: this.gender,
+      rating: this.rating ?? Prisma.skip,
+      price: this.price,
+      videoId: this.videoId,
+      coachName: this.coachName,
+      specialOffer: this.specialOffer,
+      coachId: this.coachId
+    };
+  }
+
+  static fromObject(training: Training) {
+    return new TrainingEntity(training);
   }
 }

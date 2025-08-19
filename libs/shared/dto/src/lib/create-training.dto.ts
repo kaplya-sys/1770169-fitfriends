@@ -29,7 +29,7 @@ export class CreateTrainingDTO implements CreateTraining {
     example: TITLE_PROPERTY.EXAMPLE,
     minimum: TITLE_PROPERTY.MIN,
     maximum: TITLE_PROPERTY.MAX,
-    type: TITLE_PROPERTY.TYPE
+    type: String
   })
   @IsString()
   @Length(TITLE_PROPERTY.MIN, TITLE_PROPERTY.MAX)
@@ -41,7 +41,7 @@ export class CreateTrainingDTO implements CreateTraining {
     example: DESCRIPTION_PROPERTY.EXAMPLE,
     minimum: DESCRIPTION_PROPERTY.MIN,
     maximum: DESCRIPTION_PROPERTY.MAX,
-    type: DESCRIPTION_PROPERTY.TYPE
+    type: String
   })
   @IsString()
   @Length(DESCRIPTION_PROPERTY.MIN, DESCRIPTION_PROPERTY.MAX)
@@ -61,7 +61,7 @@ export class CreateTrainingDTO implements CreateTraining {
     description: PRICE_PROPERTY.DESCRIPTION,
     example: PRICE_PROPERTY.EXAMPLE,
     minimum: PRICE_PROPERTY.MIN,
-    type: PRICE_PROPERTY.TYPE
+    type: Number
   })
   @IsInt()
   @Min(PRICE_PROPERTY.MIN)
@@ -92,7 +92,7 @@ export class CreateTrainingDTO implements CreateTraining {
     example: CALORIES_PROPERTY.EXAMPLE,
     minimum: CALORIES_PROPERTY.MIN,
     maximum: CALORIES_PROPERTY.MAX,
-    type: CALORIES_PROPERTY.TYPE
+    type: Number
   })
   @IsInt()
   @Min(CALORIES_PROPERTY.MIN)

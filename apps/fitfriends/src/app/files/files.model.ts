@@ -39,7 +39,6 @@ export class FilesModel extends Document<ObjectId> implements FileUpload {
   public mimetype!: string;
 
   @Prop({
-    required: true,
     type: Object
   })
   public image?: FileInfo;

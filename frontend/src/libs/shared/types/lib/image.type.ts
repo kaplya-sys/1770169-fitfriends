@@ -1,6 +1,6 @@
-import {FileInfo} from './file-info.type'
-
-export type Image = {
-  file: FileInfo;
-  file2x: FileInfo;
-}
+export type ImageType = {
+  image: string;
+  image2x: string;
+  imageWebp: string;
+  imageWebp2x: string;
+};

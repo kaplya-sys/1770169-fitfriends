@@ -1,42 +1,54 @@
-export const Video = () => (
+import {STATIC_BASE_PATH} from '../../libs/shared/constants';
+import {TrainingType} from '../../libs/shared/types';
+import {Picture} from '../picture';
+
+type VideoProps = {
+  training: TrainingType;
+  isPlaying: boolean;
+  onPlayClick: () => void;
+}
+
+export const Video = ({training, isPlaying, onPlayClick}: VideoProps) => (
   <div className="training-video">
     <h2 className="training-video__title">Видео</h2>
     <div className="training-video__video">
       <div className="training-video__thumbnail">
-        <picture>
-          <source
-            type="image/webp"
-            srcSet="img/content/training-video/video-thumbnail.webp, img/content/training-video/video-thumbnail@2x.webp 2x"
-          />
-          <img
-            src="img/content/training-video/video-thumbnail.png"
-            srcSet="img/content/training-video/video-thumbnail@2x.png 2x"
-            width="922"
-            height="566"
-            alt="Обложка видео"
-          />
-        </picture>
+        {
+          isPlaying ?
+            <video controls width="922" height={566}>
+              <source src={`${STATIC_BASE_PATH}/${training.video}`}/>
+            </video> :
+            <Picture
+              width={922}
+              height={566}
+              alt='Обложка видео'
+              image={training.background}
+            />
+        }
       </div>
-      <button className="training-video__play-button btn-reset">
-        <svg width="18" height="30" aria-hidden="true">
-          <use xlinkHref="#icon-arrow"></use>
-        </svg>
-      </button>
+      {!isPlaying &&
+        <button className="training-video__play-button btn-reset" onClick={onPlayClick}>
+          <svg width="18" height="30" aria-hidden="true">
+            <use xlinkHref="#icon-arrow"></use>
+          </svg>
+        </button>}
     </div>
     <div className="training-video__buttons-wrapper">
-      <button
-        className="btn training-video__button training-video__button--start"
-        type="button"
-        disabled
-      >
-        Приступить
-      </button>
-      <button
-        className="btn training-video__button training-video__button--stop"
-        type="button"
-      >
-          Закончить
-      </button>
+      {isPlaying ?
+        <button
+          className="btn training-video__button training-video__button--stop"
+          onClick={onPlayClick}
+          type="button"
+        >
+            Закончить
+        </button> :
+        <button
+          className="btn training-video__button training-video__button--start"
+          type="button"
+          onClick={onPlayClick}
+        >
+          Приступить
+        </button>}
     </div>
   </div>
 );

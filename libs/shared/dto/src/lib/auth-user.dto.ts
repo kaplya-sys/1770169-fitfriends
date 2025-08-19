@@ -14,7 +14,7 @@ export class AuthUserDTO implements AuthUser {
   @ApiProperty({
     description: EMAIL_PROPERTY.DESCRIPTION,
     example: EMAIL_PROPERTY.EXAMPLE,
-    type: EMAIL_PROPERTY.TYPE
+    type: String
   })
   @IsEmail()
   @IsNotEmpty()
@@ -25,7 +25,7 @@ export class AuthUserDTO implements AuthUser {
     example: PASSWORD_PROPERTY.EXAMPLE,
     minimum: PASSWORD_PROPERTY.MIN,
     maximum: PASSWORD_PROPERTY.MAX,
-    type: PASSWORD_PROPERTY.TYPE
+    type: String
   })
   @IsString()
   @Length(PASSWORD_PROPERTY.MIN, PASSWORD_PROPERTY.MAX)

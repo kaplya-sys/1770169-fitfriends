@@ -1,11 +1,14 @@
-import { LayoutProps } from './layout-props.type';
-import { Header } from '../header';
+import { PropsWithChildren } from 'react';
 
-export const Layout = ({ children }: LayoutProps) => (
+import {Header} from '../header';
+
+type LayoutProps = PropsWithChildren
+
+export const Layout = ({children}: LayoutProps) => (
   <div className='wrapper'>
     <Header />
     <main>
-      { children }
+      {children}
     </main>
   </div>
 );

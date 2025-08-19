@@ -2,7 +2,7 @@ import {Middleware, PayloadAction} from '@reduxjs/toolkit';
 
 import {RootState} from '../store';
 import {browserHistory} from '../../libs/browser-history';
-import {AppRoute, RedirectPayload} from '../../libs/shared/types';
+import {AppRoute, RedirectPayload} from '../../libs/shared/types-old';
 
 const isRedirectAction = (action: unknown): action is PayloadAction<RedirectPayload> =>
   action !== null

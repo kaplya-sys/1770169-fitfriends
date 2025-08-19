@@ -1,11 +1,24 @@
-export enum ApiRoute {
-  AddProduct = '/products/add',
-  AuthCheck = '/users/check-token',
-  DeleteProduct = '/delete',
-  EditProduct = '/edit',
-  Login = '/users/sign-in',
-  Products = '/products',
-  Register = '/users/sign-up',
-  RefreshToken = '/users/refresh-token',
-  User = '/users'
-}
+export const ApiRoute = {
+  AuthCheck: '/users/check-token',
+  CreateOrder: '/trainings/:id/create-order',
+  CreateCoachQuestionnaire: '/users/:id/create-coach-questionnaire',
+  CreateUserQuestionnaire: '/users/:id/create-user-questionnaire',
+  CreateTraining: '/trainings/create',
+  CreateTrainingFeedback: '/trainings/:id/create-feedback',
+  DeleteTraining: '/trainings/:id/delete',
+  DeleteUser: '/users/:id/delete',
+  EditTraining: '/trainings/:id/edit',
+  EditUser: '/users/:id/edit',
+  Login: '/users/sign-in',
+  Register: '/users/sign-up',
+  RefreshToken: '/users/refresh-token',
+  RecommendedTrainings: '/trainings/recommended-trainings',
+  Trainings: '/trainings',
+  Training: '/trainings/:id',
+  TrainingFeedbacks: '/trainings/:id/feedbacks',
+  User: '/users/:id',
+  Users: '/users',
+  UserBalance: '/users/:id/balance'
+} as const;
+
+export type ApiRouteType = (typeof ApiRoute)[keyof typeof ApiRoute];

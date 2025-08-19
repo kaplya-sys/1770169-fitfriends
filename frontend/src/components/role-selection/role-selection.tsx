@@ -1,14 +1,20 @@
-import { Role } from '@fitfriends/lib/shared/types';
+import {ChangeEvent} from 'react';
 
-import { RoleSelectionProps } from './role-selection-props.type';
+import {Role} from '../../libs/shared/types';
+
+type RoleSelectionProps = {
+  blockClassName: string;
+  value: string;
+  onInputChange: (evt: ChangeEvent<HTMLInputElement>) => void;
+}
 
 export const RoleSelection = ({
   blockClassName,
   value,
   onInputChange
 }: RoleSelectionProps) => (
-  <div className={ `${ blockClassName }__role` }>
-    <h2 className={ `${ blockClassName }__legend` }>Выберите роль</h2>
+  <div className={`${blockClassName}__role`}>
+    <h2 className={`${blockClassName}__legend`}>Выберите роль</h2>
     <div className="role-selector sign-up__role-selector">
       <div className="role-btn">
         <label>
@@ -16,9 +22,9 @@ export const RoleSelection = ({
             className="visually-hidden"
             type="radio"
             name="role"
-            value={ Role.Coach }
-            checked={ Role.Coach === value as Role }
-            onChange={ onInputChange }
+            value={Role.Coach}
+            checked={Role.Coach === value}
+            onChange={onInputChange}
           />
           <span className="role-btn__icon">
             <svg width="12" height="13" aria-hidden="true">
@@ -34,9 +40,9 @@ export const RoleSelection = ({
             className="visually-hidden"
             type="radio"
             name="role"
-            value={ Role.Sportsman }
-            checked={ Role.Sportsman === value as Role }
-            onChange={ onInputChange }
+            value={Role.User}
+            checked={Role.User === value}
+            onChange={onInputChange}
           />
           <span className="role-btn__icon">
             <svg width="12" height="13" aria-hidden="true">

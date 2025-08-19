@@ -4,7 +4,7 @@ import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
 import {BasePostgresRepository} from '@1770169-fitfriends/core';
 import {createMessage} from '@1770169-fitfriends/helpers';
 import {TrainingsQuery} from '@1770169-fitfriends/query';
-import {Pagination, Training} from '@1770169-fitfriends/types';
+import {Pagination, RecommendedFindOptions, Training} from '@1770169-fitfriends/types';
 
 import {TrainingEntity} from './training.entity';
 import {DEFAULT_PAGE_COUNT, ELEMENTS_ON_PAGE, NOT_FOUND_BY_ID_MESSAGE} from './training.constant';
@@ -26,9 +26,9 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
   }
 
   public override async save(entity: TrainingEntity): Promise<TrainingEntity> {
-    const objectEntity = entity.toObject();
+    const prismaObject = entity.toPrismaObject();
     const record = await this.prismaClient.training.create({
-      data: objectEntity
+      data: prismaObject
     });
     entity.id = record.id
 
@@ -36,15 +36,33 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
   }
 
   public override async update(id: TrainingEntity['id'], entity: TrainingEntity): Promise<TrainingEntity | null> {
-    const objectEntity = entity.toObject();
+    const prismaObject = entity.toPrismaObject();
     const record = await this.prismaClient.training.update({
       where: {
         id
       },
-      data: objectEntity
+      data: prismaObject
     });
 
     return this.createEntityFromDocument(record);
+  }
+
+  public async findRecommended(options: RecommendedFindOptions): Promise<(TrainingEntity | null)[]> {
+    const records = await this.prismaClient.training.findMany({
+      where: {
+        OR: [
+          {calories: options.calories ?? Prisma.skip},
+          {level: options.level ?? Prisma.skip},
+          {trainingTime: options.trainingTime ?? Prisma.skip},
+          {type: {
+            in: options.type ?? Prisma.skip,
+            }
+          }
+        ]
+      }
+    });
+
+    return records.map((record) => this.createEntityFromDocument(record));
   }
 
   public async find(query?: TrainingsQuery): Promise<Pagination<TrainingEntity>> {
@@ -61,7 +79,13 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
         gte: query?.priceMin ?? Prisma.skip,
         lte: query?.priceMax ?? Prisma.skip
       },
-      rating: query?.rating ?? Prisma.skip
+      rating: {
+        gte: query?.ratingMin ?? Prisma.skip,
+        lte: query?.ratingMax ?? Prisma.skip
+      },
+      type: query?.type?.length ? {
+        in: query?.type
+      } : Prisma.skip
     };
     const orderBy: Prisma.TrainingOrderByWithRelationInput[] = [
       {price: query?.orderByPrice ?? Prisma.skip},
@@ -81,7 +105,7 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
       totalPages: this.calculateNumberPages(trainingCount, take),
       itemsPerPage: take,
       totalItems: trainingCount,
-    }
+    };
   }
 
   public override async findById(id: TrainingEntity['id']): Promise<TrainingEntity | null> {
@@ -92,6 +116,19 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
     });
 
     return this.createEntityFromDocument(record);
+  }
+
+  public async updateRating(id: TrainingEntity['id']) {
+    await this.prismaClient.training.update({
+      where: {
+        id
+      },
+      data: {
+        rating: {
+
+        }
+      }
+    })
   }
 
   public override async delete(id: TrainingEntity['id']): Promise<void> {

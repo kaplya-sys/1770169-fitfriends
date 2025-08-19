@@ -1,15 +1,20 @@
 export enum Route {
   AuthCheck = 'check-token',
+  Balance = ':userId/balance',
   Create = 'create',
+  CreateOrder = ':id/create-order',
   CreateCoachQuestionnaire = ':userId/create-coach-questionnaire',
   CreateUserQuestionnaire = ':userId/create-user-questionnaire',
+  CreateTrainingFeedback = ':id/create-feedback',
   DeleteTraining = ':id/delete',
   EditTraining = ':id/edit',
   EditUser = ':userId/edit',
+  Feedbacks = ':id/feedbacks',
   Login = 'sign-in',
   Register = 'sign-up',
   RefreshToken = 'refresh-token',
-  Trainings = '/',
+  Recommended = 'recommended-trainings',
+  Root = '/',
   Training = ':id',
   User = ':userId'
 };

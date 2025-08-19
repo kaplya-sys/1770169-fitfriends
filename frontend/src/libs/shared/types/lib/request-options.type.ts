@@ -1,15 +1,6 @@
-import {SortDirection} from './sort-direction.enum';
-
-
-export type Query = {
-  page?: number;
-  types?: string[];
-  strings?: string[];
-  price?: SortDirection;
-  date?: SortDirection;
-}
+import {QueryType} from './query.type';
 
 export type RequestOptionsType = {
   id?: string;
-  query?: Query;
+  query?: QueryType;
 }

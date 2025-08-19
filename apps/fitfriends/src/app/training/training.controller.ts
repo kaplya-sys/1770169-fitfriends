@@ -13,13 +13,26 @@ import {
   UseGuards,
   UseInterceptors
 } from '@nestjs/common';
-import {ApiParam, ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags
+} from '@nestjs/swagger';
 import {FileFieldsInterceptor} from '@nestjs/platform-express';
 
 import {FilesTypeValidationPipe, ParseFormDataJsonPipe} from '@1770169-fitfriends/core';
-import {CreateTrainingDTO, UpdateTrainingDTO} from '@1770169-fitfriends/dto';
+import {
+  CreateFeedbackDto,
+  CreateOrderDTO,
+  CreateTrainingDTO,
+  CreateTrainingSwaggerDTO,
+  UpdateTrainingDTO
+} from '@1770169-fitfriends/dto';
 import {fillDto} from '@1770169-fitfriends/helpers';
-import {TrainingRDO, TrainingsWithPaginationRDO} from '@1770169-fitfriends/rdo';
+import {FeedbackRDO, OrderRDO, TrainingRDO, TrainingsWithPaginationRDO} from '@1770169-fitfriends/rdo';
 import {TrainingsQuery} from '@1770169-fitfriends/query';
 import {
   FieldName,
@@ -48,9 +61,14 @@ import {
   UPDATED_RESPONSE,
   BAD_REQUEST_RESPONSE,
   DELETED_RESPONSE,
-  UNAUTHORIZED
+  UNAUTHORIZED,
+  INTERNAL_SERVER_RESPONSE,
+  DATA_TYPE,
+  TRAINING_RATING_MAX_QUERY,
+  TRAINING_RATING_MIN_QUERY,
+  TRAINING_TYPE_QUERY
 } from './training.constant';
-import {JWTAuthGuard} from '../auth/guards/jwt-auth.guard';
+import {JWTAuthGuard} from '../guards/jwt-auth.guard';
 import {TrainingService} from './training.service';
 import {RequestTokenPayload} from '../decorators/request-token-payload.decorator';
 
@@ -78,6 +96,10 @@ export class TrainingController {
     status: HttpStatus.UNAUTHORIZED,
     description: UNAUTHORIZED
   })
+  @ApiConsumes(DATA_TYPE)
+  @ApiBody({
+    type: CreateTrainingSwaggerDTO
+  })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.Create)
@@ -85,15 +107,37 @@ export class TrainingController {
     {name: FieldName.Video, maxCount: MAX_UPLOAD_FILES}
   ]))
   public async create(
-    @UploadedFiles(FilesTypeValidationPipe) file: RequestFiles,
+    @UploadedFiles(FilesTypeValidationPipe) files: RequestFiles,
     @Body(ParseFormDataJsonPipe) dto: CreateTrainingDTO,
     @RequestTokenPayload() tokenPayload: TokenPayload
   ) {
-    const newTraining = await this.trainingService.createTraining(tokenPayload, dto, file);
+    const newTraining = await this.trainingService.createTraining(tokenPayload, dto, files);
 
-    return fillDto(TrainingRDO, newTraining.toObject());
+    return fillDto(TrainingRDO, newTraining.toObject(), {exposeDefaultValues: false});
   }
 
+  @ApiQuery({
+    name: TRAINING_TYPE_QUERY.NAME,
+    description: TRAINING_TYPE_QUERY.DESCRIPTION,
+    enum: TRAINING_TYPE_QUERY.ENUM,
+    example: TRAINING_TYPE_QUERY.EXAMPLE,
+    isArray: true,
+    required: false
+  })
+  @ApiQuery({
+    name: TRAINING_RATING_MAX_QUERY.NAME,
+    type: TRAINING_RATING_MAX_QUERY.TYPE,
+    description: TRAINING_RATING_MAX_QUERY.DESCRIPTION,
+    example: TRAINING_RATING_MAX_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: TRAINING_RATING_MIN_QUERY.NAME,
+    type: TRAINING_RATING_MIN_QUERY.TYPE,
+    description: TRAINING_RATING_MIN_QUERY.DESCRIPTION,
+    example: TRAINING_RATING_MIN_QUERY.EXAMPLE,
+    required: false
+  })
   @ApiQuery({
     name: TRAINING_CALORIES_MAX_QUERY.NAME,
     type: TRAINING_CALORIES_MAX_QUERY.TYPE,
@@ -162,8 +206,9 @@ export class TrainingController {
     description: NOT_FOUND_RESPONSE
   })
   @HttpCode(HttpStatus.OK)
-  @Get(Route.Trainings)
+  @Get(Route.Root)
   public async index(@Query() query: TrainingsQuery) {
+
     const trainings = await this.trainingService.getTrainings(query);
 
     return fillDto(
@@ -176,12 +221,6 @@ export class TrainingController {
     );
   }
 
-  @ApiParam({
-    name: ID_PARAM.NAME,
-    type: String,
-    description: ID_PARAM.DESCRIPTION,
-    example: ID_PARAM.EXAMPLE
-  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: FOUND_RESPONSE,
@@ -197,11 +236,11 @@ export class TrainingController {
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get(Route.Training)
-  public async show(@Param('id') id: string) {
-    const training = await this.trainingService.getTrainingById(id);
+  @Get(Route.Recommended)
+  public async getRecommended(@RequestTokenPayload() tokenPayload: TokenPayload) {
+    const recommendedTrainings = await this.trainingService.getRecommendedTrainings(tokenPayload.sub);
 
-    return fillDto(TrainingRDO, training.toObject(), {exposeDefaultValues: false});
+    return recommendedTrainings.map((recommendedTraining) => fillDto(TrainingRDO, recommendedTraining.toObject(), {exposeDefaultValues: false}));
   }
 
   @ApiParam({
@@ -222,6 +261,10 @@ export class TrainingController {
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: INTERNAL_SERVER_RESPONSE
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -262,5 +305,115 @@ export class TrainingController {
   @Delete(Route.DeleteTraining)
   public async delete(@Param('id') id: string) {
     this.trainingService.deleteTrainingById(id);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: CREATED_RESPONSE,
+    type: TrainingRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: CONFLICT_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: INTERNAL_SERVER_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @Post(Route.CreateTrainingFeedback)
+  public async createFeedback(
+    @Param('id') id: string,
+    @Body() dto: CreateFeedbackDto,
+    @RequestTokenPayload() tokenPayload: TokenPayload
+  ) {
+    const newFeedback = await this.trainingService.createFeedback(id, tokenPayload, dto);
+
+    return fillDto(FeedbackRDO, newFeedback.toObject(), {exposeDefaultValues: false});
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: FOUND_RESPONSE,
+    type: FeedbackRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get(Route.Feedbacks)
+  public async getFeedbacks(@Param('id') id: string) {
+    const feedbacks = await this.trainingService.getFeedbacksByTrainingId(id);
+
+    return feedbacks.map((feedback) => fillDto(FeedbackRDO, feedback.toObject(), {exposeDefaultValues: false}));
+  }
+
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: CREATED_RESPONSE,
+    type: OrderRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @Post(Route.CreateOrder)
+  public async createOrder(
+    @Param('id') id: string,
+    @Body() dto: CreateOrderDTO,
+    @RequestTokenPayload() tokenPayload: TokenPayload
+  ) {
+    const newOrder = await this.trainingService.createOrder(id, tokenPayload.sub, dto);
+
+    return fillDto(FeedbackRDO, newOrder.toObject(), {exposeDefaultValues: false});
+  }
+
+  @ApiParam({
+    name: ID_PARAM.NAME,
+    type: String,
+    description: ID_PARAM.DESCRIPTION,
+    example: ID_PARAM.EXAMPLE
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: FOUND_RESPONSE,
+    type: TrainingRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get(Route.Training)
+  public async show(@Param('id') id: string) {
+    const training = await this.trainingService.getTrainingById(id);
+
+    return fillDto(TrainingRDO, training.toObject(), {exposeDefaultValues: false});
   }
 }

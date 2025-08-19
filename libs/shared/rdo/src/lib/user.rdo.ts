@@ -1,37 +1,25 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {Expose, Type} from 'class-transformer';
 
-import {
-  Exercise,
-  FitnessLevel,
-  Gender,
-  Location,
-  Role,
-  TrainingTime
-} from '@1770169-fitfriends/models';
+import {Gender, Location, Role} from '@1770169-fitfriends/models';
 
 import {
   AVATAR_PROPERTY,
   BACKGROUND_PROPERTY,
   BIRTHDAY_PROPERTY,
-  CALORIES_LOSE_PROPERTY,
-  CALORIES_WASTE_PROPERTY,
   DATE_PROPERTY,
   DESCRIPTION_PROPERTY,
   EMAIL_PROPERTY,
-  EXERCISE_PROPERTY,
-  FITNESS_LEVEL_PROPERTY,
   GENDER_PROPERTY,
   ID_PROPERTY,
   LOCATION_PROPERTY,
   NAME_PROPERTY,
-  PERSONAL_TRAINING_PROPERTY,
-  QUALIFICATIONS_PROPERTY,
+  QUESTIONNAIRE_PROPERTY,
   READY_PROPERTY,
-  ROLE_PROPERTY,
-  TRAINING_TIME_PROPERTY
+  ROLE_PROPERTY
 } from './rdo.constant';
 import {ImageRDO} from './image.rdo';
+import {QuestionnaireRdo} from './questionnaire.rdo';
 
 export class UserRDO {
   @ApiProperty({
@@ -49,11 +37,12 @@ export class UserRDO {
   public email!: string;
 
   @ApiProperty({
-    description: AVATAR_PROPERTY.DESCRIPTION
+    description: AVATAR_PROPERTY.DESCRIPTION,
+    type: ImageRDO
   })
   @Type(() => ImageRDO)
   @Expose()
-  public avatar!: ImageRDO;
+  public avatar?: ImageRDO;
 
   @ApiProperty({
     description: NAME_PROPERTY.DESCRIPTION,
@@ -74,96 +63,57 @@ export class UserRDO {
     example: GENDER_PROPERTY.EXAMPLE
   })
   @Expose()
-  gender!: Gender;
+  public gender!: Gender;
 
   @ApiProperty({
     description: LOCATION_PROPERTY.DESCRIPTION,
     example: LOCATION_PROPERTY.EXAMPLE
   })
   @Expose()
-  location!: Location;
+  public location!: Location;
 
   @ApiProperty({
-    description: BACKGROUND_PROPERTY.DESCRIPTION
+    description: BACKGROUND_PROPERTY.DESCRIPTION,
+    type: ImageRDO,
+    isArray: true
   })
   @Type(() => ImageRDO)
   @Expose()
-  backgrounds!: ImageRDO[];
+  public backgrounds!: ImageRDO[];
 
   @ApiProperty({
     description: READY_PROPERTY.DESCRIPTION,
     example: READY_PROPERTY.EXAMPLE
   })
   @Expose()
-  isReady!: boolean;
+  public isReady!: boolean;
 
   @ApiProperty({
     description: DATE_PROPERTY.DESCRIPTION,
     example: DATE_PROPERTY.EXAMPLE
   })
   @Expose()
-  createdAt!: Date;
-
-  @ApiProperty({
-    description: EXERCISE_PROPERTY.DESCRIPTION,
-    example: EXERCISE_PROPERTY.EXAMPLE
-  })
-  @Expose()
-  exercise!: Exercise[];
-
-  @ApiProperty({
-    description: FITNESS_LEVEL_PROPERTY.DESCRIPTION,
-    example: FITNESS_LEVEL_PROPERTY.EXAMPLE
-  })
-  @Expose()
-  fitnessLevel!: FitnessLevel;
-
-  @ApiProperty({
-    description: CALORIES_LOSE_PROPERTY.DESCRIPTION,
-    example: CALORIES_LOSE_PROPERTY.EXAMPLE
-  })
-  @Expose()
-  caloriesLose!: number;
-
-  @ApiProperty({
-    description: CALORIES_WASTE_PROPERTY.DESCRIPTION,
-    example: CALORIES_WASTE_PROPERTY.EXAMPLE
-  })
-  @Expose()
-  caloriesWaste!: number;
-
-  @ApiProperty({
-    description: QUALIFICATIONS_PROPERTY.DESCRIPTION
-  })
-  @Type(() => ImageRDO)
-  @Expose()
-  qualifications!: ImageRDO[];
-
-  @ApiProperty({
-    description: PERSONAL_TRAINING_PROPERTY.DESCRIPTION,
-    example: PERSONAL_TRAINING_PROPERTY.EXAMPLE
-  })
-  @Expose()
-  isPersonal!: boolean;
+  public createdAt!: Date;
 
   @ApiProperty({
     description: BIRTHDAY_PROPERTY.DESCRIPTION,
     example: BIRTHDAY_PROPERTY.EXAMPLE
   })
   @Expose()
-  birthday?: Date;
+  public birthday?: Date;
 
   @ApiProperty({
     description: DESCRIPTION_PROPERTY.DESCRIPTION,
     example: DESCRIPTION_PROPERTY.EXAMPLE
   })
   @Expose()
-  description?: string;
+  public description?: string;
 
   @ApiProperty({
-    description: TRAINING_TIME_PROPERTY.DESCRIPTION,
-    example: TRAINING_TIME_PROPERTY.EXAMPLE
+    description: QUESTIONNAIRE_PROPERTY.DESCRIPTION,
+    type: QuestionnaireRdo
   })
+  @Type(() => QuestionnaireRdo)
   @Expose()
-  trainingTime?: TrainingTime;
+  public questionnaire?: QuestionnaireRdo;
 }

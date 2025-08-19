@@ -8,8 +8,8 @@ import {Product} from '../../pages/product';
 import {AddProduct} from '../../pages/add-product/add-product';
 import {EditProduct} from '../../pages/edit-product/edit-product';
 import {NotFound} from '../../pages/not-found';
-import {BREADCRUMBS_NAMES} from '../shared/constant';
-import {AppRoute, NameSpace, Params} from '../shared/types';
+import {BREADCRUMBS_NAMES} from '../shared/constants';
+import {AppRoute, NameSpace, Params} from '../shared/types-old';
 import {Layout} from '../../components/layout';
 import {getGuitarAction, store} from '../../store';
 

@@ -1,32 +1,32 @@
-import { PaymentMethod } from '@fitfriends/lib/shared/types';
+import {ChangeEvent} from 'react';
 
-import { PaymentPropsType } from './payment-props.type';
-import { PAYMENT_OPTIONS } from './payment-props.constant';
+import {PaymentMethod, PaymentMethodType} from '../../libs/shared/types';
 
-export const Payment = ({ selectedValue, onInputChange }: PaymentPropsType) => (
+type PaymentPropsType = {
+  selectedValue: PaymentMethodType;
+  onInputChange: (evt: ChangeEvent<HTMLInputElement>) => void;
+}
+
+export const Payment = ({selectedValue, onInputChange}: PaymentPropsType) => (
   <section className="payment-method">
     <h4 className="payment-method__title">Выберите способ оплаты</h4>
     <ul className="payment-method__list">
       {
-        PAYMENT_OPTIONS.map((option) => (
-          <li className="payment-method__item" key={ option.id }>
+        Object.values(PaymentMethod).map((paymentMethod) => (
+          <li className="payment-method__item" key={paymentMethod}>
             <div className="btn-radio-image">
               <label>
                 <input
                   type="radio"
-                  name={ option.name }
-                  aria-label={ option.label }
-                  value={ option.value }
-                  onChange={ onInputChange }
-                  checked={ option.value === selectedValue as PaymentMethod }
+                  name="payment"
+                  aria-label={paymentMethod}
+                  value={paymentMethod}
+                  onChange={onInputChange}
+                  checked={paymentMethod === selectedValue}
                 />
                 <span className="btn-radio-image__image">
-                  <svg
-                    width={ option.width }
-                    height={ option.height }
-                    aria-hidden="true"
-                  >
-                    <use xlinkHref={ option.logo }></use>
+                  <svg width="58" height="20" aria-hidden="true">
+                    <use xlinkHref={`#${paymentMethod}-logo`}></use>
                   </svg>
                 </span>
               </label>

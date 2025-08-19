@@ -1,18 +1,18 @@
-import { Link, useLocation } from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 
-import { AppRoute } from '../../lib/shared/types';
-import { Search } from '../search';
-import { Navigation } from '../navigation';
+import {Navigation} from '../navigation';
+import {Search} from '../search';
+import {AppRoute} from '../../libs/shared/types';
 
 export const Header = () => {
-  const nav = useLocation();
+  const navigation = useLocation();
 
   return (
     <header className="header">
       <div className="container">
         {
-          nav.pathname !== '/' ?
-            <Link className="header__logo" to={ AppRoute.Home } aria-label="Переход на главную">
+          navigation.pathname !== '/' ?
+            <Link className="header__logo" to={AppRoute.Home} aria-label="Переход на главную">
               <svg width="187" height="70" aria-hidden="true">
                 <use xlinkHref="#logo"></use>
               </svg>
@@ -23,16 +23,8 @@ export const Header = () => {
               </svg>
             </span>
         }
-        <Navigation />
-        <Search
-          foundItems={
-            [{
-              id: crypto.randomUUID(),
-              title: 'Бокс'
-            }]
-          }
-          isActive={ false }
-        />
+        <Navigation/>
+        <Search/>
       </div>
     </header>
   );

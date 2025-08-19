@@ -2,8 +2,8 @@ import axios, {AxiosError, InternalAxiosRequestConfig} from 'axios';
 
 import {getAccessToken, removeAccessToken, setAccessToken} from './access-token.service';
 import {getRefreshToken, removeRefreshToken, setRefreshToken} from './refresh-token.service';
-import {ApiRoute, InternalAxiosRequestConfigWithRetry, Token} from '../libs/shared/types';
-import {API_URL, REQUEST_TIMEOUT} from './service.const';
+import {ApiRoute, InternalAxiosRequestConfigWithRetry, TokenType} from '../libs/shared/types';
+import {API_URL, REFRESH_TOKEN_ERROR, REQUEST_TIMEOUT} from './service.const';
 
 export const createApi = () => {
   const api = axios.create({
@@ -29,7 +29,11 @@ export const createApi = () => {
 
       try {
         const refreshToken = getRefreshToken();
-        const {data} = await api.post<Token>(ApiRoute.RefreshToken, {refreshToken});
+
+        if (!refreshToken) {
+          throw new Error(REFRESH_TOKEN_ERROR);
+        }
+        const {data} = await api.post<TokenType>(ApiRoute.RefreshToken, {refreshToken});
         setAccessToken(data.accessToken);
         setRefreshToken(data.refreshToken);
         config.headers.Authorization = `Bearer ${data.accessToken}`;

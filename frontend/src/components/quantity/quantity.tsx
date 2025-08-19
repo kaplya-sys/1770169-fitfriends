@@ -1,12 +1,16 @@
-import { QuantityPropsType } from './quantity-props.type';
+type QuantityPropsType = {
+  selectedValue: number;
+  onIncrementClick: () => void;
+  onDecrementClick: () => void;
+}
 
-export const Quantity = ({ selectedValue, onIncrementClick, onDecrementClick }: QuantityPropsType) => (
+export const Quantity = ({selectedValue, onIncrementClick, onDecrementClick}: QuantityPropsType) => (
   <div className="input-quantity">
     <button
       className="btn-icon btn-icon--quantity"
       type="button"
       aria-label="minus"
-      onClick={ onDecrementClick }
+      onClick={onDecrementClick}
     >
       <svg width="12" height="12" aria-hidden="true">
         <use xlinkHref="#icon-minus"></use>
@@ -16,7 +20,7 @@ export const Quantity = ({ selectedValue, onIncrementClick, onDecrementClick }: 
       <label>
         <input
           type="text"
-          value={ selectedValue }
+          value={selectedValue}
           size={2}
           readOnly
         />
@@ -26,7 +30,7 @@ export const Quantity = ({ selectedValue, onIncrementClick, onDecrementClick }: 
       className="btn-icon btn-icon--quantity"
       type="button"
       aria-label="plus"
-      onClick={ onIncrementClick }
+      onClick={onIncrementClick}
     >
       <svg width="12" height="12" aria-hidden="true">
         <use xlinkHref="#icon-plus"></use>

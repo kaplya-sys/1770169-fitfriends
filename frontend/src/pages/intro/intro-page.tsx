@@ -1,5 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { AppRoute } from '../../lib/shared/types';
+import {Link, useNavigate} from 'react-router-dom';
+
+import {AppRoute} from '../../libs/shared/types';
 
 export const IntroPage = () => {
   const navigate = useNavigate();
@@ -10,10 +11,10 @@ export const IntroPage = () => {
         <div className="intro">
           <div className="intro__background">
             <picture>
-              <source type="image/webp" srcSet="img/content/sitemap//background.webp, img/content/sitemap//background@2x.webp 2x" />
+              <source type="image/webp" srcSet="img/content/sitemap/background.webp, img/content/sitemap/background@2x.webp 2x"/>
               <img
-                src="img/content/sitemap//background.jpg"
-                srcSet="img/content/sitemap//background@2x.jpg 2x"
+                src="img/content/sitemap/background.jpg"
+                srcSet="img/content/sitemap/background@2x.jpg 2x"
                 width="1440"
                 height="1024"
                 alt="Фон с бегущей девушкой"
@@ -26,10 +27,10 @@ export const IntroPage = () => {
             </svg>
             <div className="intro__title-logo">
               <picture>
-                <source type="image/webp" srcSet="img/content/sitemap//title-logo.webp, img/content/sitemap//title-logo@2x.webp 2x" />
+                <source type="image/webp" srcSet="img/content/sitemap/title-logo.webp, img/content/sitemap/title-logo@2x.webp 2x"/>
                 <img
-                  src="img/content/sitemap//title-logo.png"
-                  srcSet="img/content/sitemap//title-logo@2x.png 2x"
+                  src="img/content/sitemap/title-logo.png"
+                  srcSet="img/content/sitemap/title-logo@2x.png 2x"
                   width="934"
                   height="455"
                   alt="Логотип Fit Friends"
@@ -45,7 +46,7 @@ export const IntroPage = () => {
                 Регистрация
               </button>
               <p className="intro__text">
-                Есть аккаунт? <Link className="intro__link" to={ AppRoute.Login }>Вход</Link>
+                Есть аккаунт? <Link className="intro__link" to={AppRoute.Login}>Вход</Link>
               </p>
             </div>
           </div>

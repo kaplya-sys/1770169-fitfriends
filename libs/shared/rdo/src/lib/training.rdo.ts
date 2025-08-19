@@ -1,5 +1,5 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {Expose, Type} from 'class-transformer';
+import {Expose, Transform, Type} from 'class-transformer';
 
 import {
   FitnessLevel,
@@ -64,7 +64,8 @@ export class TrainingRDO {
   public price!: number;
 
   @ApiProperty({
-    description: BACKGROUND_PROPERTY.DESCRIPTION
+    description: BACKGROUND_PROPERTY.DESCRIPTION,
+    type: ImageRDO
   })
   @Type(() => ImageRDO)
   @Expose()
@@ -109,6 +110,7 @@ export class TrainingRDO {
     description: TRAINING_VIDEO_PROPERTY.DESCRIPTION,
     example: TRAINING_VIDEO_PROPERTY.EXAMPLE
   })
+  @Transform(({value}) => value.video.path)
   @Expose()
   public video!: string;
 

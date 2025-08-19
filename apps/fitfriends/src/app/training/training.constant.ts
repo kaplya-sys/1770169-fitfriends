@@ -1,10 +1,16 @@
 export const NOT_FOUND_BY_ID_MESSAGE ='Тренировка с идентификатором: %id% не найдена.';
-export const SERVER_ERROR_MESSAGE = 'Не удалось обновить тренировку из-за ошибки сервера.';
+export const UPDATE_TRAINING_ERROR_MESSAGE = 'Не удалось обновить тренировку из-за ошибки сервера.';
+export const FEEDBACK_ERROR_MESSAGE = 'Отзывы к тренировке могут публиковать только пользователи с ролью "Пользователь"';
+export const TRAINING_ERROR_MESSAGE = 'Создать тренировку могут только пользователи с ролью "Тренер"';
+export const AVERAGE_ERROR_MESSAGE = 'Не удалось получить среднее значение из-за ошибки сервера.';
 export const ELEMENTS_ON_PAGE = 50;
 export const MAX_UPLOAD_FILES = 1;
 export const DEFAULT_PAGE_COUNT = 1;
+export const SPECIAL_TRAINING_COUNT = 9;
 export const ROUTE_PREFIX = 'trainings';
 export const TAG = 'Trainings';
+export const BACKGROUND_SUBDIRECTORY = 'training';
+export const DATA_TYPE = 'multipart/form-data';
 
 export const CREATED_RESPONSE = 'Объект успешно создан.';
 export const UPDATED_RESPONSE = 'Объект успешно обновлен.';
@@ -14,17 +20,36 @@ export const NOT_FOUND_RESPONSE = 'Объект не найден.';
 export const CONFLICT_RESPONSE = 'Объект уже существует.';
 export const BAD_REQUEST_RESPONSE = 'Некорректные данные.';
 export const UNAUTHORIZED = 'Ошибка авторизации пользователя.'
+export const INTERNAL_SERVER_RESPONSE = 'Сервер вернул ошибку.'
 
-export const TRAINING_CALORIES_MAX_QUERY = {
+export const TRAINING_TYPE_QUERY = {
+  NAME: 'type',
+  DESCRIPTION: 'Фильтрация тренировок по типу упражнения.',
+  ENUM: ['yoga', 'running', 'boxing', 'stretching', 'crossfit', 'aerobics', 'pilates'],
+  EXAMPLE: ['yoga', 'boxing', 'crossfit'],
+}
+export const TRAINING_CALORIES_MIN_QUERY = {
   NAME: 'caloriesMin',
   DESCRIPTION: 'Фильтрация тренировок по количеству калорий, от минимального значения.',
   EXAMPLE: 1000,
   TYPE: Number
 }
-export const TRAINING_CALORIES_MIN_QUERY = {
+export const TRAINING_CALORIES_MAX_QUERY = {
   NAME: 'caloriesMax',
   DESCRIPTION: 'Фильтрация тренировок по количеству калорий, до максимального значения.',
   EXAMPLE: 5000,
+  TYPE: Number
+}
+export const TRAINING_RATING_MIN_QUERY = {
+  NAME: 'ratingMin',
+  DESCRIPTION: 'Фильтрация тренировок по рейтингу, от минимального значения.',
+  EXAMPLE: 1,
+  TYPE: Number
+}
+export const TRAINING_RATING_MAX_QUERY = {
+  NAME: 'ratingMax',
+  DESCRIPTION: 'Фильтрация тренировок по рейтингу, до максимального значения.',
+  EXAMPLE: 5,
   TYPE: Number
 }
 export const TRAINING_PRICE_MIN_QUERY = {

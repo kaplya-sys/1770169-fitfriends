@@ -1,3 +1,5 @@
+import {Exercise, Role} from '@1770169-fitfriends/models';
+
 import {SortDirection} from './sort-direction.enum';
 
 export interface Query {
@@ -7,7 +9,10 @@ export interface Query {
   caloriesMax?: number;
   priceMin?: number;
   priceMax?: number;
-  rating?: number;
+  ratingMin?: number;
+  ratingMax?: number;
+  type?: Exercise[];
   orderByDate?: SortDirection;
   orderByPrice?: SortDirection;
+  role?: Role;
 };

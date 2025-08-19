@@ -1,6 +1,18 @@
+import {ChangeEvent} from 'react';
 import classNames from 'classnames';
 
-import { CustomTextareaProps } from './custom-textarea-props.type';
+export type CustomTextareaProps = {
+  name: string;
+  value?: string;
+  defaultValue?: string;
+  className?: string;
+  isReadonly?: boolean;
+  errorMessage?: string;
+  fieldText?: string;
+  textPosition?: string;
+  placeholder?: string;
+  onTextareaChange: (evt: ChangeEvent<HTMLTextAreaElement>) => void;
+}
 
 export const CustomTextarea = ({
   name,
@@ -14,22 +26,22 @@ export const CustomTextarea = ({
   placeholder,
   onTextareaChange
 }: CustomTextareaProps) => (
-  <div className={ classNames(className, 'custom-textarea', {
-    [`custom-textarea--with-text-${ textPosition }`]: fieldText && textPosition,
+  <div className={classNames('custom-textarea', className, {
+    [`custom-textarea--with-text-${textPosition}`]: fieldText && textPosition,
     'custom-textarea--readonly': isReadonly,
     'custom-textarea--error': errorMessage
   })}
   >
     <label>
       <textarea
-        name={ name }
-        value={ value }
-        defaultValue={ defaultValue }
-        placeholder={ placeholder }
-        onChange={ onTextareaChange }
+        name={name}
+        value={value}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
+        onChange={onTextareaChange}
       />
-      { fieldText && <span className="custom-textarea__text">{ fieldText }</span> }
-      { errorMessage && <span className="custom-textarea__error">{ errorMessage }</span> }
+      {fieldText && <span className="custom-textarea__text">{fieldText}</span>}
+      {errorMessage && <span className="custom-textarea__error">{errorMessage}</span>}
     </label>
   </div>
 );

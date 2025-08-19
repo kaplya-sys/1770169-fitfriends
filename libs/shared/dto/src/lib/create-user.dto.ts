@@ -28,7 +28,7 @@ export class CreateUserDTO implements CreateUser {
     example: NAME_PROPERTY.EXAMPLE,
     minimum: NAME_PROPERTY.MIN,
     maximum: NAME_PROPERTY.MAX,
-    type: NAME_PROPERTY.TYPE
+    type: String
   })
   @IsString()
   @Length(NAME_PROPERTY.MIN, NAME_PROPERTY.MAX)
@@ -38,7 +38,7 @@ export class CreateUserDTO implements CreateUser {
   @ApiProperty({
     description: EMAIL_PROPERTY.DESCRIPTION,
     example: EMAIL_PROPERTY.EXAMPLE,
-    type: EMAIL_PROPERTY.TYPE
+    type: String
   })
   @IsEmail()
   @IsNotEmpty()
@@ -49,7 +49,7 @@ export class CreateUserDTO implements CreateUser {
     example: PASSWORD_PROPERTY.EXAMPLE,
     minimum: PASSWORD_PROPERTY.MIN,
     maximum: PASSWORD_PROPERTY.MAX,
-    type: PASSWORD_PROPERTY.TYPE
+    type: String
   })
   @IsString()
   @Length(PASSWORD_PROPERTY.MIN, PASSWORD_PROPERTY.MAX)
@@ -72,7 +72,7 @@ export class CreateUserDTO implements CreateUser {
   })
   @IsString()
   @IsNotEmpty()
-  gender!: Gender;
+  public gender!: Gender;
 
   @ApiProperty({
     description: LOCATION_PROPERTY.DESCRIPTION,
@@ -81,16 +81,16 @@ export class CreateUserDTO implements CreateUser {
   })
   @IsString()
   @IsNotEmpty()
-  location!: Location;
+  public location!: Location;
 
   @ApiProperty({
     description: BIRTHDAY_PROPERTY.DESCRIPTION,
     example: BIRTHDAY_PROPERTY.EXAMPLE,
     format: BIRTHDAY_PROPERTY.FORMAT,
-    type: BIRTHDAY_PROPERTY.TYPE
+    type: Date
   })
   @IsISO8601({strict: true})
-  @Transform(({value}) => new Date(value))
+  @Transform(({value}) => new Date(value).toISOString())
   @IsOptional()
-  birthday?: Date;
+  public birthday?: Date;
 }

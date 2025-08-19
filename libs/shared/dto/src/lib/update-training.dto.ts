@@ -18,7 +18,7 @@ export class UpdateTrainingDTO implements UpdateTraining {
     example: TITLE_PROPERTY.EXAMPLE,
     minimum: TITLE_PROPERTY.MIN,
     maximum: TITLE_PROPERTY.MAX,
-    type: TITLE_PROPERTY.TYPE
+    type: String
   })
   @IsString()
   @Length(TITLE_PROPERTY.MIN, TITLE_PROPERTY.MAX)
@@ -30,7 +30,7 @@ export class UpdateTrainingDTO implements UpdateTraining {
     example: DESCRIPTION_PROPERTY.EXAMPLE,
     minimum: DESCRIPTION_PROPERTY.MIN,
     maximum: DESCRIPTION_PROPERTY.MAX,
-    type: DESCRIPTION_PROPERTY.TYPE
+    type: String
   })
   @IsString()
   @Length(DESCRIPTION_PROPERTY.MIN, DESCRIPTION_PROPERTY.MAX)
@@ -42,7 +42,7 @@ export class UpdateTrainingDTO implements UpdateTraining {
     description: PRICE_PROPERTY.DESCRIPTION,
     example: PRICE_PROPERTY.EXAMPLE,
     minimum: PRICE_PROPERTY.MIN,
-    type: PRICE_PROPERTY.TYPE
+    type: Number
   })
   @IsInt()
   @Min(PRICE_PROPERTY.MIN)

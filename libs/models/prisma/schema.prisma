@@ -43,7 +43,7 @@ enum TrainingTime {
   short
   medium
   long
-  extra_long
+  extraLong
 }
 
 enum PaymentMethod {
@@ -69,7 +69,7 @@ model User {
   name            String            @db.VarChar(15)
   email           String            @unique @db.VarChar(40)
   password        String            @db.VarChar(60)
-  avatarId        String            @db.Char(36)
+  avatarId        String?            @db.VarChar(36)
   gender          Gender
   birthday        DateTime?
   description     String?           @db.VarChar(140)
@@ -79,33 +79,59 @@ model User {
   isReady         Boolean           @default(false) @map("is_ready")
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
-  questionnaireId String?           @unique @map("questionnaire_id") @db.Char(36)
-  questionnaire   Questionnaire?    @relation(fields: [questionnaireId], references: [id], onDelete: Cascade)
-  balance         Balance?          @relation
-  refreshSessions RefreshSessions[] @relation
-  feedbacks       Feedback[]        @relation
-  orders          Order[]           @relation
-  trainings       Training[]        @relation
+  questionnaire   Questionnaire?
+  balance         Balance[]
+  refreshSessions RefreshSessions[]
+  feedbacks       Feedback[]
+  orders          Order[]
+  trainings       Training[]
 
   @@map("users")
 }
 
 model RefreshSessions {
   id        String   @id @default(uuid())
-  tokenId   String   @unique @map("token_id") @db.Char(36)
+  tokenId   String   @unique @map("token_id") @db.VarChar(36)
   expiresIn DateTime @map("expires_in")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  userId    String   @map("user_id") @db.Char(36)
+  userId    String   @map("user_id") @db.VarChar(36)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("refresh-sessions")
 }
 
+model Questionnaire {
+  id             String        @id @default(uuid())
+  fitnessLevel   FitnessLevel  @map("fitness_level")
+  exercises      Exercise[]
+  trainingTime   TrainingTime? @map("training_time")
+  qualifications String[]
+  caloriesLose   Int?          @default(0) @map("calories_lose")
+  caloriesWaste  Int?          @default(0) @map("calories_waste")
+  experience     String?       @db.VarChar(140)
+  isPersonal     Boolean?      @default(false) @map("is_personal")
+  userId         String        @unique @map("user_id") @db.VarChar(36)
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("questionnaire")
+}
+
+model Balance {
+  id         String   @id @default(uuid())
+  amount     Int      @default(0)
+  userId     String   @map("user_id") @db.VarChar(36)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingId String   @map("training_id") @db.VarChar(36)
+  training   Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+
+  @@map("balance")
+}
+
 model Training {
   id           String       @id @default(uuid())
   title        String       @db.VarChar(15)
-  backgroundId String       @db.Char(36)
+  backgroundId String       @db.VarChar(36)
   level        FitnessLevel
   type         Exercise
   trainingTime TrainingTime @map("training_time")
@@ -114,44 +140,31 @@ model Training {
   rating       Int          @default(0)
   description  String       @db.VarChar(140)
   price        Int          @default(0)
-  videoId      String       @db.Char(36)
-  coachName    String       @db.Char(15)
+  videoId      String       @db.VarChar(36)
+  coachName    String       @db.VarChar(15)
   specialOffer Boolean      @default(false) @map("special_offer")
   createdAt    DateTime     @default(now()) @map("created_at")
   updatedAt    DateTime     @updatedAt @map("updated_at")
-  coachId      String       @map("coach_id") @db.Char(36)
+  coachId      String       @map("coach_id") @db.VarChar(36)
   coach        User         @relation(fields: [coachId], references: [id], onDelete: Cascade)
-  feedbacks    Feedback[]   @relation
-  balances     Balance[]    @relation
-  orders       Order[]      @relation
+  feedbacks    Feedback[]
+  balances     Balance[]
+  orders       Order[]
 
   @@map("trainings")
 }
 
-model Questionnaire {
-  id             String        @id @default(uuid())
-  fitnessLevel   FitnessLevel  @map("fitness_level")
-  exercise       Exercise[]
-  trainingTime   TrainingTime? @map("training_time")
-  qualifications String[]
-  caloriesLose   Int?          @default(0) @map("calories_lose")
-  caloriesWaste  Int?          @default(0) @map("calories_waste")
-  experience     String?       @db.Char(140)
-  isPersonal     Boolean?      @default(false) @map("is_personal")
-  user           User?         @relation()
-
-  @@map("questionnaire")
-}
-
-model Balance {
+model Feedback {
   id         String   @id @default(uuid())
-  amount     Int      @default(0)
-  userId     String   @unique @map("user_id") @db.Char(36)
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  trainingId String   @map("training_id") @db.Char(36)
+  assessment Int
+  content    String   @db.VarChar(1024)
+  createdAt  DateTime @default(now()) @map("created_at")
+  authorId   String   @map("author_id") @db.VarChar(36)
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  trainingId String   @map("training_id") @db.VarChar(36)
   training   Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
 
-  @@map("balance")
+  @@map("feedbacks")
 }
 
 model Order {
@@ -162,23 +175,10 @@ model Order {
   amount     Int
   payment    PaymentMethod
   createdAt  DateTime      @default(now()) @map("created_at")
-  userId     String        @map("user_id") @db.Char(36)
+  userId     String        @map("user_id") @db.VarChar(36)
   user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  trainingId String        @map("training_id") @db.Char(36)
+  trainingId String        @map("training_id") @db.VarChar(36)
   training   Training      @relation(fields: [trainingId], references: [id], onDelete: Cascade)
 
   @@map("orders")
-}
-
-model Feedback {
-  id         String   @id @default(uuid())
-  assessment Int
-  content    String   @db.Char(1024)
-  createdAt  DateTime @default(now()) @map("created_at")
-  authorId   String   @map("author_id") @db.Char(36)
-  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  trainingId String   @map("training_id") @db.Char(36)
-  training   Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
-
-  @@map("feedbacks")
 }

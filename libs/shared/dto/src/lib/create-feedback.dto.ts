@@ -19,24 +19,24 @@ export class CreateFeedbackDto implements CreateFeedback {
     example: ASSESSMENT_PROPERTY.EXAMPLE,
     minimum: ASSESSMENT_PROPERTY.MIN,
     maximum: ASSESSMENT_PROPERTY.MAX,
-    type: ASSESSMENT_PROPERTY.TYPE
+    type: Number
   })
   @IsInt()
   @Min(ASSESSMENT_PROPERTY.MIN)
   @Max(ASSESSMENT_PROPERTY.MAX)
   @Transform(({value}) => parseInt(value, 10))
   @IsNotEmpty()
-  assessment!: number;
+  public assessment!: number;
 
   @ApiProperty({
     description: CONTENT_PROPERTY.DESCRIPTION,
     example: CONTENT_PROPERTY.EXAMPLE,
     minimum: CONTENT_PROPERTY.MIN,
     maximum: CONTENT_PROPERTY.MAX,
-    type: CONTENT_PROPERTY.TYPE
+    type: String
   })
   @IsString()
   @Length(CONTENT_PROPERTY.MIN, CONTENT_PROPERTY.MAX)
   @IsNotEmpty()
-  content!: string;
+  public content!: string;
 }

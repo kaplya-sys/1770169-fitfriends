@@ -23,13 +23,20 @@ export const REFRESH_TOKEN_PROPERTY = {
   EXAMPLE: 'T2VyLm5lckBnbWFpbC5jb20'
 }
 export const AVATAR_PROPERTY = {
-  DESCRIPTION: 'Аватар пользователя.',
+  DESCRIPTION: 'Аватар пользователя.'
 }
 export const BACKGROUND_PROPERTY = {
-  DESCRIPTION: 'Фоновая картинка для карточки.',
+  DESCRIPTION: 'Фоновая картинка для карточки.'
 }
 export const QUALIFICATIONS_PROPERTY = {
-  DESCRIPTION: 'Сертификаты пользователя.',
+  DESCRIPTION: 'Сертификаты пользователя.'
+}
+export const QUESTIONNAIRE_PROPERTY = {
+  DESCRIPTION: 'Опросник пользователя.'
+}
+export const EXPERIENCE_PROPERTY = {
+  DESCRIPTION: 'Информация об опыте работы тренера.',
+  EXAMPLE: 'Я считаю, что настоящий опыт заключается не в количестве потраченных лет, а в достижении результатов.'
 }
 export const IMAGE_PROPERTY = {
   DESCRIPTION: 'Полный путь к изображению.',
@@ -131,6 +138,9 @@ export const SPECIAL_OFFER_PROPERTY = {
   DESCRIPTION: 'Признак специального предложения.',
   EXAMPLE: true
 }
+export const ENTITIES_PROPERTY = {
+  DESCRIPTION: 'Тренировки.',
+}
 export const TOTAL_PAGES_PROPERTY = {
   DESCRIPTION: 'Общее количество страниц.',
   EXAMPLE: 3
@@ -151,7 +161,37 @@ export const TRAINING_DATE_PROPERTY = {
   DESCRIPTION: 'Дата добавления тренировки.',
   EXAMPLE: '2022-01-18T17:36:34.064Z'
 }
-export const PRODUCT_IMAGE_PROPERTY = {
-  DESCRIPTION: 'изображениями двойной плотности',
-  EXAMPLE: 'upload/cat.jpg'
+export const ASSESSMENT_PROPERTY = {
+  DESCRIPTION: 'Оценка тренировки.',
+  EXAMPLE: 5
+}
+export const CONTENT_PROPERTY = {
+  DESCRIPTION: 'Отзыв о тренировке.',
+  EXAMPLE: 'Хорошая тренировка, но все же не хватило немного динамики. Для меня оказалась слишком легкой.'
+}
+export const FEEDBACK_DATE_PROPERTY = {
+  DESCRIPTION: 'Дата публикации отзыва.',
+  EXAMPLE: '2022-01-18T17:36:34.064Z'
+}
+export const AUTHOR_DATE_PROPERTY = {
+  DESCRIPTION: 'Автор отзыва.'
+}
+export const AMOUNT_PROPERTY = {
+  DESCRIPTION: 'Количество доступных тренировок.',
+  EXAMPLE: 5
+}
+export const TRAINING_PROPERTY = {
+  DESCRIPTION: 'Купленная тренировка.'
+}
+export const COUNT_PROPERTY = {
+  DESCRIPTION: 'Количество приобретенных тренировок.',
+  EXAMPLE: 3
+}
+export const ORDER_AMOUNT_PROPERTY = {
+  DESCRIPTION: 'Общая сумма заказа.',
+  EXAMPLE: 1500
+}
+export const PAYMENT_PROPERTY = {
+  DESCRIPTION: 'Вариант оплаты заказа.',
+  EXAMPLE: ['mir']
 }

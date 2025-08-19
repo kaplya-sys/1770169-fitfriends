@@ -1,9 +1,16 @@
-import {IsOptional, IsNumber, IsEnum, Max} from 'class-validator';
+import {
+  IsOptional,
+  IsNumber,
+  IsEnum,
+  Max,
+  IsArray
+} from 'class-validator';
 import {Transform} from 'class-transformer';
 
 import {Query, SortDirection} from '@1770169-fitfriends/types';
 
 import {DEFAULT_ENTITY_COUNT, DEFAULT_PAGE_COUNT} from './query.constant';
+import {Exercise} from '@1770169-fitfriends/models';
 
 export class TrainingsQuery implements Query {
   @Transform(({value}) => parseInt(value, 10))
@@ -29,7 +36,17 @@ export class TrainingsQuery implements Query {
   @Transform(({value}) => parseInt(value, 10))
   @IsNumber()
   @IsOptional()
-  public rating?: number;
+  public ratingMin?: number;
+
+  @Transform(({value}) => parseInt(value, 10))
+  @IsNumber()
+  @IsOptional()
+  public ratingMax?: number;
+
+  @IsArray()
+  @IsEnum(Exercise, {each: true})
+  @IsOptional()
+  public type?: Exercise[];
 
   @IsEnum(SortDirection)
   @IsOptional()

@@ -20,7 +20,8 @@ import {
   DATE_FORMAT,
   DEFAULT_UPLOAD_DIRECTORY,
   FILE_WRITE_ERROR,
-  NOT_FOUND_BY_ID_MESSAGE
+  NOT_FOUND_BY_ID_MESSAGE,
+  uuids
 } from './files.constant';
 import {FilesRepository} from './files.repository';
 
@@ -53,7 +54,7 @@ export class FilesService {
           subDirectory: normalizePath(subDirectory),
           video: {
             hashName: video,
-            path: videoPath
+            path: normalizePath(join(subDirectory, video))
           }
         };
       }
@@ -78,19 +79,19 @@ export class FilesService {
         subDirectory: normalizePath(subDirectory),
         image: {
           hashName: image,
-          path: imagePath
+          path: normalizePath(join(subDirectory, image))
         },
         image2x: {
           hashName: image2x,
-          path: image2xPath
+          path: normalizePath(join(subDirectory, image2x))
         },
         imageWebp: {
           hashName: imageWebp,
-          path: imageWebpPath
+          path: normalizePath(join(subDirectory, imageWebp))
         },
         imageWebp2x: {
           hashName: imageWebp2x,
-          path: imageWebp2xPath
+          path: normalizePath(join(subDirectory, imageWebp2x))
         }
       };
     } catch (err: unknown) {
@@ -100,15 +101,18 @@ export class FilesService {
     }
   }
 
-  public async saveFile(file: RequestFiles): Promise<FilesEntity> {
-    const [key, value] = Object.entries(file)[0];
-    const recordedFile = await this.writeFile(value[0], key as FieldName);
-    const filesEntity = FilesEntity.fromObject({
+  public async saveFiles(files: RequestFiles): Promise<FilesEntity[]> {
+    const uploads: FilesEntity[] = [];
+
+    for (const [key, value] of Object.entries(files)) {
+      for (const file of value) {
+      const recordedFile = await this.writeFile(file, key as FieldName);
+      const filesEntity = FilesEntity.fromObject({
         catalog: recordedFile.catalog,
         subDirectory: recordedFile.subDirectory,
-        originalName: value[0].originalname,
-        size: value[0].size,
-        mimetype: value[0].mimetype,
+        originalName: file.originalname,
+        size: file.size,
+        mimetype: file.mimetype,
         image: recordedFile.image && {
           hashName: recordedFile.image.hashName,
           path: recordedFile.image.path
@@ -131,7 +135,60 @@ export class FilesService {
         }
       });
 
-    return this.filesRepository.save(filesEntity);
+      const newFile = await this.filesRepository.save(filesEntity);
+      uploads.push(newFile);
+
+    }
+  }
+
+    return uploads;
+  }
+
+  public async createBackgrounds(): Promise<void> {
+    Object.keys(BACKGROUND).forEach((key) => BACKGROUND[key].forEach(async (image, index) => {
+      const subDirectory = join(FieldName.Background, key.toLowerCase());
+      const [filename, fileExtension] = image.split('.');
+      const image2x = `${filename}@2x.${fileExtension}`;
+      const imageWebp = `${filename}.webp`;
+      const imageWebp2x = `${filename}@2x.webp`;
+      const newEntity = new FilesEntity({
+        id: uuids[index],
+        catalog: FieldName.Background,
+        subDirectory: normalizePath(subDirectory),
+        originalName: image,
+        size: 0,
+        mimetype: lookup(fileExtension) as string
+      });
+
+      if (key === FieldName.Video) {
+        const video = `${filename}.${fileExtension}`;
+        newEntity.video = {
+          hashName: video,
+          path: normalizePath(join(subDirectory, video))
+        }
+
+        return await this.filesRepository.save(newEntity);
+      }
+
+      newEntity.image = {
+        hashName: image,
+        path: normalizePath(join(subDirectory, image))
+      };
+      newEntity.image2x = {
+        hashName: image,
+        path: normalizePath(join(subDirectory, image2x))
+      };
+      newEntity.imageWebp = {
+        hashName: image,
+        path: normalizePath(join(subDirectory, imageWebp))
+      },
+      newEntity.imageWebp2x = {
+        hashName: image,
+        path: normalizePath(join(subDirectory, imageWebp2x))
+      };
+
+      return await this.filesRepository.save(newEntity);
+    }));
   }
 
   public async getFile(id: string): Promise<FilesEntity> {
@@ -146,46 +203,6 @@ export class FilesService {
 
   public async getByFieldName(catalog: FieldName): Promise<(FilesEntity | null)[]> {
     return this.filesRepository.getFilesByFieldName(catalog);
-  }
-
-  public async createBackgrounds(): Promise<void> {
-    Object.keys(BACKGROUND).forEach((key) => BACKGROUND[key].forEach(async (image) => {
-      const subDirectory = join(FieldName.Background, key.toLowerCase());
-      const uploadDirectory = join(this.filesOptions.uploadDirectory || DEFAULT_UPLOAD_DIRECTORY, subDirectory);
-      const [filename, fileExtension] = image.split('.')
-      const image2x = `${filename}@2x.${fileExtension}`;
-      const imageWebp = `${filename}.webp`;
-      const imageWebp2x = `${filename}@2x.webp`;
-      const imagePath = normalizePath(join(uploadDirectory, image));
-      const image2xPath = normalizePath(join(uploadDirectory, image2x));
-      const imageWebpPath = normalizePath(join(uploadDirectory, imageWebp));
-      const imageWebp2xPath = normalizePath(join(uploadDirectory, imageWebp2x));
-      const newEntity = new FilesEntity({
-        catalog: FieldName.Background,
-        subDirectory: normalizePath(subDirectory),
-        originalName: image,
-        size: 0,
-        mimetype: lookup(fileExtension) as string,
-        image: {
-          hashName: image,
-          path: imagePath
-        },
-        image2x: {
-          hashName: image,
-          path:image2xPath
-        },
-        imageWebp: {
-          hashName: image,
-          path: imageWebpPath
-        },
-        imageWebp2x: {
-          hashName: image,
-          path: imageWebp2xPath
-        }
-      });
-
-      await this.filesRepository.save(newEntity);
-    }))
   }
 
   public async streamVideo(id: string, res: Response, range?: string): Promise<void> {

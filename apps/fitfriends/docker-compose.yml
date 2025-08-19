@@ -11,20 +11,6 @@ services:
       - files_data:/data/db
     networks:
       - 599c27540b41-network
-  mongo_fitfriends_ui:
-    image: mongo-express:latest
-    container_name: fitfriends_mongo-express
-    restart: always
-    ports:
-      - 8084:8081
-    environment:
-      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_DB_BASIC_USERNAME}
-      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_DB_BASIC_PASSWORD}
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo-fitfriends:${MONGO_INITDB_PORT}/
-    networks:
-      - 599c27540b41-network
   postgres-fitfriends:
     image: postgres:16.4
     container_name: fitfriends_database
@@ -38,22 +24,6 @@ services:
       - fitfriends_data:/var/lib/postgresql/data
     networks:
       - 599c27540b41-network
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: fitfriends_pgadmin
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-    ports:
-      - "${PGADMIN_PORT}:80"
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    depends_on:
-      - postgres-fitfriends
-    networks:
-      - 599c27540b41-network
 networks:
   599c27540b41-network:
     name: 599c27540b41-network
@@ -61,4 +31,3 @@ networks:
 volumes:
   files_data:
   fitfriends_data:
-  pgadmin_data:

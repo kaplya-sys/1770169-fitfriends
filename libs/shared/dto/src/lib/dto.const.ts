@@ -1,27 +1,23 @@
 export const EMAIL_PROPERTY = {
   DESCRIPTION: 'Уникальный адрес электронной почты для аутентификация пользователя.',
-  EXAMPLE: 'user@mail.ru',
-  TYPE: String
+  EXAMPLE: 'user@mail.ru'
 }
 export const NAME_PROPERTY = {
   DESCRIPTION: 'Имя пользователя.',
   EXAMPLE: 'Андрей',
   MIN: 1,
-  MAX: 15,
-  TYPE: String
+  MAX: 15
 }
 export const PASSWORD_PROPERTY = {
   DESCRIPTION: 'Пароль для аутентификация пользователя.',
   EXAMPLE: '123456',
   MIN: 6,
-  MAX: 12,
-  TYPE: String
+  MAX: 12
 }
 export const BIRTHDAY_PROPERTY = {
   DESCRIPTION: 'Дата рождения пользователя.',
   EXAMPLE: '2025-07-19T14:30:00',
-  FORMAT: 'ISO8601',
-  TYPE: String
+  FORMAT: 'ISO8601'
 }
 export const ROLE_PROPERTY = {
   DESCRIPTION: 'Тип пользователя: "user" или "coach".',
@@ -33,12 +29,21 @@ export const GENDER_PROPERTY = {
   EXAMPLE: 'female',
   ENUM: ['female', 'male', 'whatever']
 }
-export const USER_DESCRIPTION = {
+export const USER_DESCRIPTION_PROPERTY = {
   DESCRIPTION: 'Информация о пользователе.',
   EXAMPLE: 'Привет! Я Катерина и мне 27 лет. Обожаю спорт и все, что с ним связанно.',
   MIN: 10,
-  MAX: 140,
-  TYPE: String
+  MAX: 140
+}
+export const AVATAR_PROPERTY = {
+  DESCRIPTION: 'Аватарка пользователя.',
+  EXAMPLE: '<Buffer ff d8 ff e0 00 10 4a 46 49 46 ... 78570 more bytes>',
+  FORMAT: 'binary'
+}
+export const VIDEO_PROPERTY = {
+  DESCRIPTION: 'Видео тренировки.',
+  EXAMPLE: '<Buffer 00 00 00 18 66 74 79 70 6d 70 ... 110393330 more bytes>',
+  FORMAT: 'binary'
 }
 export const LOCATION_PROPERTY = {
   DESCRIPTION: 'Станция метро: "petrogradskaya", "pionerskaya", "sportivnaya", "udelnaya" или "zvezdnaya".',
@@ -59,78 +64,81 @@ export const EXERCISE_PROPERTY = {
   DESCRIPTION: 'Тип тренировок: "yoga", "running", "boxing", "stretching", "crossfit", "aerobics" или "pilates".',
   EXAMPLE: ['yoga', 'boxing', 'crossfit'],
   ENUM: ['yoga', 'running', 'boxing', 'stretching', 'crossfit', 'aerobics', 'pilates'],
-  TYPE: String,
   MAX_ITEMS: 3
 }
 export const CALORIES_PROPERTY = {
   DESCRIPTION: 'Количество калорий.',
   EXAMPLE: 3000,
   MIN: 1000,
-  MAX: 5000,
-  TYPE: Number
+  MAX: 5000
 }
 export const CALORIES_LOSE_PROPERTY = {
   DESCRIPTION: 'Количество калорий для сброса.',
   EXAMPLE: 4000,
   MIN: 1000,
-  MAX: 5000,
-  TYPE: Number
+  MAX: 5000
 }
 export const CALORIES_WASTE_PROPERTY = {
   DESCRIPTION: 'Количество калорий для траты в день.',
   EXAMPLE: 1100,
   MIN: 1000,
-  MAX: 5000,
-  TYPE: Number
+  MAX: 5000
 }
 export const EXPERIENCE_PROPERTY = {
   DESCRIPTION: 'Опыт пользователя.',
   EXAMPLE: 'Я профессиональный тренер по боксу.',
   MIN: 10,
-  MAX: 140,
-  TYPE: String
+  MAX: 140
 }
 export const PERSONAL_TRAINING_PROPERTY = {
   DESCRIPTION: 'Готовность проводить индивидуальные тренировки.',
-  EXAMPLE: true,
-  TYPE: Boolean
+  EXAMPLE: true
 }
 export const READY_PROPERTY = {
   DESCRIPTION: 'Готовность к тренировкам.',
-  EXAMPLE: true,
-  TYPE: Boolean
+  EXAMPLE: true
 }
 export const TITLE_PROPERTY = {
   DESCRIPTION: 'Наименование тренировки.',
   EXAMPLE: 'full body stretch',
   MIN: 1,
-  MAX: 15,
-  TYPE: String
+  MAX: 15
 }
 export const DESCRIPTION_PROPERTY = {
   DESCRIPTION: 'Описание тренировки.',
   EXAMPLE: 'Комплекс упражнений на растяжку всего тела для новичков. Плавное погружение в стретчинг и умеренная нагрузка.',
   MIN: 10,
-  MAX: 140,
-  TYPE: String
+  MAX: 140
 }
 export const PRICE_PROPERTY = {
   DESCRIPTION: 'Цена тренировки.',
   EXAMPLE: 1800,
-  MIN: 0,
-  TYPE: Number
+  MIN: 0
 }
 export const ASSESSMENT_PROPERTY = {
   DESCRIPTION: 'Оценка тренировки.',
   EXAMPLE: 5,
   MIN: 1,
-  MAX: 5,
-  TYPE: Number
+  MAX: 5
 }
 export const CONTENT_PROPERTY = {
   DESCRIPTION: 'Отзыв о тренировки.',
   EXAMPLE: 'Спасибо, классная тренировка! Понятная и интересная, с акцентом на правильную технику, как я люблю.',
   MIN: 100,
-  MAX: 1024,
-  TYPE: String
+  MAX: 1024
+}
+export const COUNT_PROPERTY = {
+  DESCRIPTION: 'Количество приобретенных тренировок.',
+  EXAMPLE: 3,
+  MIN: 1,
+  MAX: 50
+}
+export const AMOUNT_PROPERTY = {
+  DESCRIPTION: 'Общая сумма заказа.',
+  EXAMPLE: 1500
+}
+export const PAYMENT_PROPERTY = {
+  DESCRIPTION: 'Вариант оплаты заказа.',
+  ENUM: ['visa', 'mir', 'umoney'],
+  EXAMPLE: ['mir']
 }

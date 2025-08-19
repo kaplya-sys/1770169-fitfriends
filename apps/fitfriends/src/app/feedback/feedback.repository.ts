@@ -13,4 +13,34 @@ export class FeedbackRepository extends BasePostgresRepository<FeedbackEntity, F
   ) {
     super(prismaClient, FeedbackEntity.fromObject)
   }
+
+  public override async save(entity: FeedbackEntity): Promise<FeedbackEntity> {
+    const prismaObject = entity.toPrismaObject();
+    const record = await this.prismaClient.feedback.create({
+      data: prismaObject
+    });
+    entity.id = record.id;
+
+    return entity;
+  }
+
+  public async find(id: string) {
+    const records = await this.prismaClient.feedback.findMany({
+      where: {
+        trainingId: id
+      },
+      include: {author: true}
+    });
+    
+    return records.map((record) => this.createEntityFromDocument(record));
+  }
+
+  public async averageAssessment(id: string) {
+    return this.prismaClient.feedback.aggregate({
+      where: {
+        trainingId: id
+      },
+      _avg: {assessment: true}
+    })
+  }
 }

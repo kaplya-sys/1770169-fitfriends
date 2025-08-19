@@ -52,23 +52,37 @@
           "cwd": "libs/models/prisma"
         }
       },
-      "docker-build": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "docker build -f ./apps/fitfriends/Dockerfile . --tag fitfriends:1.0 --no-cache --build-arg POSTGRES_DB_USERNAME=user --build-arg POSTGRES_DB_PASSWORD=123456 --build-arg POSTGRES_DB_URL=fitfriends --build-arg POSTGRES_DB_PORT=5432 --build-arg POSTGRES_DB_NAME=fitfriends_database"
-        },
-        "dependsOn": [
-          {
-            "target": "build",
-            "projects": "self"
-          }
-        ]
-      },
-      "docker-start": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "nx run fitfriends:docker-build"
-        }
+      "db:fill": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node seed.ts",
+        "cwd": "libs/models/prisma"
       }
+    },
+    "fill": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node seed-files.ts",
+        "cwd": "apps/fitfriends/src/app/files"
+      }
+    },
+    "docker-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -f ./apps/fitfriends/Dockerfile . --tag fitfriends:1.0 --no-cache --build-arg POSTGRES_DB_USERNAME=user --build-arg POSTGRES_DB_PASSWORD=123456 --build-arg POSTGRES_DB_URL=fitfriends --build-arg POSTGRES_DB_PORT=5432 --build-arg POSTGRES_DB_NAME=fitfriends_database"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
+    "docker-start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run fitfriends:docker-build"
+      }
+    }
   }
 }

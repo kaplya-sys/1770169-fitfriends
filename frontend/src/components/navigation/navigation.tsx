@@ -1,16 +1,17 @@
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import classNames from 'classnames';
 
-import { AppRoute } from '../../lib/shared/types';
-import { Notification } from '../notification';
+import {AppRoute} from '../../libs/shared/types';
+import {Notification} from '../notification';
+import {mockNotifications} from '../../../mock-data';
 
 export const Navigation = () => (
   <nav className="main-nav">
     <ul className="main-nav__list">
       <li className="main-nav__item">
         <NavLink
-          className={ ({ isActive }) => classNames('main-nav__link', { 'is-active': isActive }) }
-          to={ AppRoute.Home }
+          className={({isActive}) => classNames('main-nav__link', {'is-active': isActive})}
+          to={AppRoute.Home}
           aria-label="На главную"
         >
           <svg width="18" height="18" aria-hidden="true">
@@ -20,7 +21,7 @@ export const Navigation = () => (
       </li>
       <li className="main-nav__item">
         <NavLink
-          className={ ({ isActive }) => classNames('main-nav__link', { 'is-active': isActive }) }
+          className={({isActive}) => classNames('main-nav__link', {'is-active': isActive})}
           to={AppRoute.PersonalAccount}
           aria-label="Личный кабинет"
         >
@@ -32,7 +33,7 @@ export const Navigation = () => (
       <li className="main-nav__item">
         <NavLink
           className="main-nav__link"
-          to={ AppRoute.Friends }
+          to={AppRoute.MyFriends}
           aria-label="Друзья"
         >
           <svg width="22" height="16" aria-hidden="true">
@@ -47,13 +48,7 @@ export const Navigation = () => (
           </svg>
         </a>
         <Notification
-          notifications={
-            [{
-              id: crypto.randomUUID(),
-              text: 'Катерина пригласила вас на<>&nbsp;</>тренировку',
-              date: '2020-04-02T08:02:17-05:00'
-            }]
-          }
+          notifications={mockNotifications}
           isConfirmed={ false }
         />
       </li>

@@ -17,6 +17,7 @@ import {
   FITNESS_LEVEL_PROPERTY,
   PERSONAL_TRAINING_PROPERTY
 } from './dto.const';
+import {Transform} from 'class-transformer';
 
 export class CreateCoachQuestionnaireDTO implements CreateCoachQuestionnaire {
   @ApiProperty({
@@ -26,38 +27,39 @@ export class CreateCoachQuestionnaireDTO implements CreateCoachQuestionnaire {
   })
   @IsString()
   @IsNotEmpty()
-  fitnessLevel!: FitnessLevel;
+  public fitnessLevel!: FitnessLevel;
 
   @ApiProperty({
     description: EXERCISE_PROPERTY.DESCRIPTION,
     example: EXERCISE_PROPERTY.EXAMPLE,
     enum: EXERCISE_PROPERTY.ENUM,
-    type: [EXERCISE_PROPERTY.TYPE],
-    maxItems: EXERCISE_PROPERTY.MAX_ITEMS
+    maxItems: EXERCISE_PROPERTY.MAX_ITEMS,
+    isArray: true
   })
   @IsArray()
   @ArrayMaxSize(EXERCISE_PROPERTY.MAX_ITEMS)
   @IsNotEmpty()
-  exercise!: Exercise[];
+  public exercises!: Exercise[];
 
   @ApiProperty({
     description: EXPERIENCE_PROPERTY.DESCRIPTION,
     example: EXPERIENCE_PROPERTY.EXAMPLE,
     minimum: EXPERIENCE_PROPERTY.MIN,
     maximum: EXPERIENCE_PROPERTY.MAX,
-    type: EXPERIENCE_PROPERTY.TYPE
+    type: String
   })
   @IsString()
   @Length(EXPERIENCE_PROPERTY.MIN, EXPERIENCE_PROPERTY.MAX)
   @IsNotEmpty()
-  experience!: string;
+  public experience!: string;
 
   @ApiProperty({
     description: PERSONAL_TRAINING_PROPERTY.DESCRIPTION,
     example: PERSONAL_TRAINING_PROPERTY.EXAMPLE,
-    type: PERSONAL_TRAINING_PROPERTY.TYPE
+    type: Boolean
   })
+  @Transform(({value}) => value === 'true' || value === true)
   @IsBoolean()
   @IsNotEmpty()
-  isPersonal!: boolean;
+  public isPersonal!: boolean;
 }

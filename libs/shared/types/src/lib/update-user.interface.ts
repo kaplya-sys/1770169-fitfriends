@@ -2,7 +2,7 @@ import {Exercise, FitnessLevel, Gender, Location} from '@1770169-fitfriends/mode
 
 export interface UpdateUser {
   name?: string;
-  exercise?: Exercise[];
+  exercises?: Exercise[];
   gender?: Gender;
   description?: string;
   isReady?: boolean;

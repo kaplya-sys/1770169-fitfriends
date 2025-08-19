@@ -1,17 +1,18 @@
 import {Questionnaire} from '@1770169-fitfriends/types';
-import {FitnessLevel, TrainingTime, Exercise} from '@1770169-fitfriends/models';
+import {FitnessLevel, TrainingTime, Exercise, Prisma} from '@1770169-fitfriends/models';
 import {Entity} from '@1770169-fitfriends/core';
 
 export class QuestionnaireEntity implements Questionnaire, Entity<string> {
   public id?: string;
   public fitnessLevel!: FitnessLevel;
-  public trainingTime?: TrainingTime;
-  public exercise!: Exercise[];
-  public caloriesLose?: number;
-  public caloriesWaste?: number;
+  public trainingTime?: null | TrainingTime;
+  public exercises!: Exercise[];
+  public userId!: string;
+  public caloriesLose?: null | number;
+  public caloriesWaste?: null | number;
   public qualifications?: string[];
-  public experience?: string;
-  public isPersonal?: boolean;
+  public experience?: null | string;
+  public isPersonal?: null | boolean;
 
   constructor(questionnaire: Questionnaire) {
     this.populate(questionnaire);
@@ -25,7 +26,8 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
     this.id = questionnaire.id;
     this.fitnessLevel = questionnaire.fitnessLevel;
     this.trainingTime = questionnaire.trainingTime;
-    this.exercise = questionnaire.exercise;
+    this.exercises = questionnaire.exercises;
+    this.userId = questionnaire.userId;
     this.caloriesLose = questionnaire.caloriesLose;
     this.caloriesWaste = questionnaire.caloriesWaste;
     this.qualifications = questionnaire.qualifications;
@@ -40,12 +42,27 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
       id: this.id,
       fitnessLevel: this.fitnessLevel,
       trainingTime: this.trainingTime,
-      exercise: this.exercise,
+      exercises: this.exercises,
+      userId: this.userId,
       caloriesLose: this.caloriesLose,
       caloriesWaste: this.caloriesWaste,
       qualifications: this.qualifications,
       experience: this.experience,
       isPersonal: this.isPersonal
+    };
+  }
+
+  public toPrismaObject() {
+    return {
+      fitnessLevel: this.fitnessLevel,
+      exercises: this.exercises,
+      userId: this.userId,
+      trainingTime: this.trainingTime ?? Prisma.skip,
+      qualifications: this.qualifications ?? Prisma.skip,
+      caloriesLose: this.caloriesLose ?? Prisma.skip,
+      caloriesWaste: this.caloriesWaste ?? Prisma.skip,
+      experience: this.experience ?? Prisma.skip,
+      isPersonal: this.isPersonal ?? Prisma.skip
     };
   }
 }

@@ -29,7 +29,7 @@ export class CreateUserQuestionnaireDTO implements CreateUserQuestionnaire {
   })
   @IsString()
   @IsNotEmpty()
-  fitnessLevel!: FitnessLevel;
+  public fitnessLevel!: FitnessLevel;
 
   @ApiProperty({
     description: TRAINING_TIME_PROPERTY.DESCRIPTION,
@@ -38,45 +38,45 @@ export class CreateUserQuestionnaireDTO implements CreateUserQuestionnaire {
   })
   @IsString()
   @IsNotEmpty()
-  trainingTime!: TrainingTime;
+  public trainingTime!: TrainingTime;
 
   @ApiProperty({
     description: EXERCISE_PROPERTY.DESCRIPTION,
     example: EXERCISE_PROPERTY.EXAMPLE,
     enum: EXERCISE_PROPERTY.ENUM,
-    type: [EXERCISE_PROPERTY.TYPE],
-    maxItems: EXERCISE_PROPERTY.MAX_ITEMS
+    maxItems: EXERCISE_PROPERTY.MAX_ITEMS,
+    isArray: true
   })
   @IsArray()
   @ArrayMaxSize(EXERCISE_PROPERTY.MAX_ITEMS)
   @IsNotEmpty()
-  exercise!: Exercise[];
+  public exercises!: Exercise[];
 
   @ApiProperty({
     description: CALORIES_LOSE_PROPERTY.DESCRIPTION,
     example: CALORIES_LOSE_PROPERTY.EXAMPLE,
     minimum: CALORIES_LOSE_PROPERTY.MIN,
     maximum: CALORIES_LOSE_PROPERTY.MAX,
-    type: CALORIES_LOSE_PROPERTY.TYPE
+    type: Number
   })
   @IsInt()
   @Min(CALORIES_LOSE_PROPERTY.MIN)
   @Max(CALORIES_LOSE_PROPERTY.MAX)
   @Transform(({value}) => parseInt(value, 10))
   @IsNotEmpty()
-  caloriesLose!: number;
+  public caloriesLose!: number;
 
   @ApiProperty({
     description: CALORIES_WASTE_PROPERTY.DESCRIPTION,
     example: CALORIES_WASTE_PROPERTY.EXAMPLE,
     minimum: CALORIES_WASTE_PROPERTY.MIN,
     maximum: CALORIES_WASTE_PROPERTY.MAX,
-    type: CALORIES_WASTE_PROPERTY.TYPE
+    type: Number
   })
   @IsInt()
   @Min(CALORIES_WASTE_PROPERTY.MIN)
   @Max(CALORIES_WASTE_PROPERTY.MAX)
   @Transform(({value}) => parseInt(value, 10))
   @IsNotEmpty()
-  caloriesWaste!: number;
+  public caloriesWaste!: number;
 }

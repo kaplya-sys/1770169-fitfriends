@@ -3,6 +3,7 @@ import {Expose, Type} from 'class-transformer';
 
 import {
   CURRENT_PAGE_PROPERTY,
+  ENTITIES_PROPERTY,
   ITEMS_PER_PAGE_PROPERTY,
   TOTAL_ITEMS_PROPERTY,
   TOTAL_PAGES_PROPERTY
@@ -10,6 +11,11 @@ import {
 import {TrainingRDO} from './training.rdo';
 
 export class TrainingsWithPaginationRDO {
+  @ApiProperty({
+    description: ENTITIES_PROPERTY.DESCRIPTION,
+    type: TrainingRDO,
+    isArray: true
+  })
   @Type(() => TrainingRDO)
   @Expose()
   public entities!: TrainingRDO[];
