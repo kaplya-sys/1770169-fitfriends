@@ -1,5 +1,6 @@
 export const REGEX = /%([^%]*)%/;
 export const TIME_REGEX = /^(\d+)(year|y|month|m|day|d|week|w|hour|h|minute|m|second|s)/;
+export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 export const APP_VALIDATE_ERROR_MESSAGE = '[App Config Validation Error]: %message%.';
 export const MONGO_VALIDATE_ERROR_MESSAGE = '[Mongo Config Validation Error]: %message%.';
 export const WRONG_TIME_ERROR = '[parseTime] Wrong time string: %time%';

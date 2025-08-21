@@ -30,7 +30,7 @@ export const registerAction = createAsyncThunk<AuthenticatedUserType, FormData, 
     const {data: user} = await api.post<AuthenticatedUserType>(ApiRoute.Register, data);
     setAccessToken(user.accessToken);
     setRefreshToken(user.refreshToken);
-    dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.Questionnaire, {id: user.id})}));
+    dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.Questionnaire, {id: user.sub})}));
 
     return user;
   } catch (error: unknown) {
@@ -56,7 +56,7 @@ export const authAction = createAsyncThunk<AuthenticatedUserType, AuthUserType, 
 
       return user;
     }
-    dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.PersonalAccount, {id: user.id})}));
+    dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.PersonalAccount, {id: user.sub})}));
 
     return user;
   } catch (error: unknown) {

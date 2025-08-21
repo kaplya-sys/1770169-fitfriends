@@ -64,7 +64,7 @@ export const QuestionnairePage = () => {
 
         if (data.qualifications !== null) {
           for (let i = 0; i < data.qualifications.length; i++) {
-            formData.append('qualifications', data.qualifications[i]);
+            formData.append('qualification', data.qualifications[i]);
           }
         }
 

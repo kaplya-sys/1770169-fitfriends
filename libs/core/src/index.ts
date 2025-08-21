@@ -6,3 +6,4 @@ export * from './lib/pipes/mongo-id-validation.pipe';
 export * from './lib/pipes/files-type-validation.pipe';
 export * from './lib/pipes/parse-form-data-json.pipe';
 export * from './lib/pipes/image-size-validation.pipe';
+export * from './lib/pipes/uuid-validation.pipe';

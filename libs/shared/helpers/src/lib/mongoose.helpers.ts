@@ -4,7 +4,7 @@ import {MongooseModuleAsyncOptions} from '@nestjs/mongoose';
 
 import {MongooseConfig} from '@1770169-fitfriends/types';
 
-import {createMessage, getMongoConnectionString} from './common.helpers';
+import {createMessage} from './common.helpers';
 import {MONGO_VALIDATE_ERROR_MESSAGE} from './helpers.constant';
 
 const mongooseSchema = Joi.object({
@@ -23,6 +23,10 @@ function validateConfig(config: MongooseConfig): void {
     throw new Error(createMessage(MONGO_VALIDATE_ERROR_MESSAGE, [error.message]));
   }
 }
+
+export function getMongoConnectionString({host, port, name, username, userPassword, authSource}: MongooseConfig): string {
+  return `mongodb://${username}:${userPassword}@${host}:${port}/${name}?authSource=${authSource}`;
+};
 
 export function getMongooseConfig(): MongooseConfig {
   const config: MongooseConfig = {

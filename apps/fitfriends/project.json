@@ -59,13 +59,6 @@
         "cwd": "libs/models/prisma"
       }
     },
-    "fill": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "npx ts-node seed-files.ts",
-        "cwd": "apps/fitfriends/src/app/files"
-      }
-    },
     "docker-build": {
       "executor": "nx:run-commands",
       "options": {

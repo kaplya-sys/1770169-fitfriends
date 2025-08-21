@@ -30,13 +30,13 @@ export const createQuestionnaireAction = createAsyncThunk<UserType, FormData, {
     }
 
     if (user.role === Role.User) {
-      const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateUserQuestionnaire, {id: user.id}), createData);
+      const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateUserQuestionnaire, {id: user.sub}), createData);
       dispatch(redirectToRoute({route: AppRoute.Home}));
 
       return data;
     }
-    const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateCoachQuestionnaire, {id: user.id}), createData);
-    dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.PersonalAccount, {id: user.id})}));
+    const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateCoachQuestionnaire, {id: user.sub}), createData);
+    dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.PersonalAccount, {id: user.sub})}));
 
     return data;
   } catch (error: unknown) {
@@ -70,19 +70,12 @@ export const updateUserAction = createAsyncThunk<UserType, UpdateUserType, {
   }
 });
 
-export const getUserAction = createAsyncThunk<UserType, void, {
+export const getUserAction = createAsyncThunk<UserType, RequestOptionsType, {
   extra: AxiosInstance;
   rejectValue: ErrorRequestType | string;
-  state: RootState;
-}>('user/getUser', async (_, {rejectWithValue, extra: api, getState}) => {
+}>('user/getUser', async ({id}, {rejectWithValue, extra: api}) => {
   try {
-    const state = getState();
-    const user = state[NameSpace.User].user;
-
-    if (!user) {
-      throw new Error(AUTH_ERROR_MESSAGE);
-    }
-    const {data} = await api.get<UserType>(getRouteWithParam(ApiRoute.User, {id: user.id}));
+    const {data} = await api.get<UserType>(getRouteWithParam(ApiRoute.User, {id}));
 
     return data;
   } catch (error: unknown) {

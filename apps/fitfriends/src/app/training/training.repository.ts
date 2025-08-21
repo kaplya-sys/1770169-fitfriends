@@ -47,18 +47,15 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
     return this.createEntityFromDocument(record);
   }
 
-  public async findRecommended(options: RecommendedFindOptions): Promise<(TrainingEntity | null)[]> {
+  public async findRecommended(option: RecommendedFindOptions): Promise<(TrainingEntity | null)[]> {
     const records = await this.prismaClient.training.findMany({
       where: {
-        OR: [
-          {calories: options.calories ?? Prisma.skip},
-          {level: options.level ?? Prisma.skip},
-          {trainingTime: options.trainingTime ?? Prisma.skip},
-          {type: {
-            in: options.type ?? Prisma.skip,
-            }
-          }
-        ]
+        calories: option?.calories ?? Prisma.skip,
+        level: option?.level ?? Prisma.skip,
+        trainingTime: option?.trainingTime ?? Prisma.skip,
+        type: {
+          in: option?.type ?? Prisma.skip,
+        }
       }
     });
 

@@ -46,14 +46,14 @@ export const PersonalAccountPage = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getUserAction());
+    dispatch(getUserAction({id}));
   }, [dispatch, id]);
   const user = useAppSelector(selectUser);
 
   if (!user) {
     return null;
   }
-  setData({
+  /*setData({
     name: user.name,
     gender: user.gender,
     location: user.location,
@@ -61,7 +61,7 @@ export const PersonalAccountPage = () => {
     description: user.description,
     isReady: user.isReady,
     fitnessLevel: user.questionnaire.fitnessLevel
-  });
+  });*/
   const handleEditButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
 
@@ -152,7 +152,7 @@ export const PersonalAccountPage = () => {
                     <button
                       className="user-info-edit__control-btn"
                       aria-label="обновить"
-                      onClick={() => void dispatch(getUserAction())}
+                      onClick={() => void dispatch(getUserAction({id}))}
                     >
                       <svg width="16" height="16" aria-hidden="true">
                         <use xlinkHref="#icon-change"></use>

@@ -1,5 +1,492 @@
-import {PrismaClient, TrainingTime, FitnessLevel, Gender, Role, Exercise, Location, PaymentMethod} from '../src';
+import mongoose, {model, Types, Schema} from 'mongoose';
+import {lookup} from 'mime-types';
 
+import {
+  PrismaClient,
+  TrainingTime,
+  FitnessLevel,
+  Gender,
+  Role,
+  Exercise,
+  Location,
+  PaymentMethod
+} from '../src';
+
+const videos = [
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aa4'),
+    catalog: 'video',
+    subDirectory: 'video',
+    originalName: 'test-video.mp4',
+    size: 0,
+    mimetype: lookup('test-video.mp4'),
+    video: {
+      hashName: 'test-video.mp4',
+      path: 'video/test-video.mp4'
+    }
+  }
+];
+
+const qualifications = [
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aa5'),
+    catalog: 'qualification',
+    subDirectory: 'qualification',
+    originalName: 'certificate-1.jpg',
+    size: 0,
+    mimetype: lookup('certificate-1.jpg'),
+    image: {
+      hashName: 'certificate-1.jpg',
+      path: 'qualification/certificate-1.jpg'
+    },
+    image2x: {
+      hashName: 'certificate-1@2x.jpg',
+      path: 'qualification/certificate-1@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'certificate-1.webp',
+      path: 'qualification/certificate-1.webp'
+    },
+    imageWebp2x: {
+      hashName: 'certificate-1@2x.webp',
+      path: 'qualification/certificate-1@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aa6'),
+    catalog: 'qualification',
+    subDirectory: 'qualification',
+    originalName: 'certificate-2.jpg',
+    size: 0,
+    mimetype: lookup('certificate-2.jpg'),
+    image: {
+      hashName: 'certificate-2.jpg',
+      path: 'qualification/certificate-2.jpg'
+    },
+    image2x: {
+      hashName: 'certificate-2@2x.jpg',
+      path: 'qualification/certificate-2@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'certificate-2.webp',
+      path: 'qualification/certificate-2.webp'
+    },
+    imageWebp2x: {
+      hashName: 'certificate-2@2x.webp',
+      path: 'qualification/certificate-2@2x.webp'
+    }
+  }
+];
+
+const userBackgrounds = [
+  {
+    _id: new Types.ObjectId('68a6ad6bdee8982852ce77ee'),
+    catalog: 'background',
+    subDirectory: 'background/user',
+    originalName: 'user-card-photo1.jpg',
+    size: 0,
+    mimetype: lookup('user-card-photo1.jpg'),
+    image: {
+      hashName: 'user-card-photo1.jpg',
+      path: 'background/user/user-card-photo1.jpg'
+    },
+    image2x: {
+      hashName: 'user-card-photo1@2x.jpg',
+      path: 'background/user/user-card-photo1@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'user-card-photo1.webp',
+      path: 'background/user/user-card-photo1.webp'
+    },
+    imageWebp2x: {
+      hashName: 'user-card-photo1@2x.webp',
+      path: 'background/user/user-card-photo1@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a6ad6bdee8982852ce77ef'),
+    catalog: 'background',
+    subDirectory: 'background/user',
+    originalName: 'user-card-photo2.jpg',
+    size: 0,
+    mimetype: lookup('user-card-photo2.jpg'),
+    image: {
+      hashName: 'user-card-photo2.jpg',
+      path: 'background/user/user-card-photo2.jpg'
+    },
+    image2x: {
+      hashName: 'user-card-photo2@2x.jpg',
+      path: 'background/user/user-card-photo2@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'user-card-photo2.webp',
+      path: 'background/user/user-card-photo2.webp'
+    },
+    imageWebp2x: {
+      hashName: 'user-card-photo2@2x.webp',
+      path: 'background/user/user-card-photo2@2x.webp'
+    }
+  }
+];
+
+const coachBackgrounds = [
+  {
+    _id: new Types.ObjectId('68a6ad6bdee8982852ce77f0'),
+    catalog: 'background',
+    subDirectory: 'background/coach',
+    originalName: 'user-coach-photo1.jpg',
+    size: 0,
+    mimetype: lookup('user-coach-photo1.jpg'),
+    image: {
+      hashName: 'user-coach-photo1.jpg',
+      path: 'background/coach/user-coach-photo1.jpg'
+    },
+    image2x: {
+      hashName: 'user-coach-photo1@2x.jpg',
+      path: 'background/coach/user-coach-photo1@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'user-coach-photo1.webp',
+      path: 'background/coach/user-coach-photo1.webp'
+    },
+    imageWebp2x: {
+      hashName: 'user-coach-photo1@2x.webp',
+      path: 'background/coach/user-coach-photo1@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a6ad6bdee8982852ce77f1'),
+    catalog: 'background',
+    subDirectory: 'background/coach',
+    originalName: 'user-coach-photo2.jpg',
+    size: 0,
+    mimetype: lookup('user-coach-photo2.jpg'),
+    image: {
+      hashName: 'user-coach-photo2.jpg',
+      path: 'background/coach/user-coach-photo2.jpg'
+    },
+    image2x: {
+      hashName: 'user-coach-photo2@2x.jpg',
+      path: 'background/coach/user-coach-photo2@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'user-coach-photo2.webp',
+      path: 'background/coach/user-coach-photo2.webp'
+    },
+    imageWebp2x: {
+      hashName: 'user-coach-photo2@2x.webp',
+      path: 'background/coach/user-coach-photo2@2x.webp'
+    }
+  }
+];
+
+const trainingBackgrounds = [
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aa7'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-01.jpg',
+    size: 0,
+    mimetype: lookup('training-01.jpg'),
+    image: {
+      hashName: 'training-01.jpg',
+      path: 'background/training/training-01.jpg'
+    },
+    image2x: {
+      hashName: 'training-01@2x.jpg',
+      path: 'background/training/training-01@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-01.webp',
+      path: 'background/training/training-01.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-01@2x.webp',
+      path: 'background/training/training-01@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aa8'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-02.jpg',
+    size: 0,
+    mimetype: lookup('training-02.jpg'),
+    image: {
+      hashName: 'training-02.jpg',
+      path: 'background/training/training-02.jpg'
+    },
+    image2x: {
+      hashName: 'training-02@2x.jpg',
+      path: 'background/training/training-02@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-02.webp',
+      path: 'background/training/training-02.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-02@2x.webp',
+      path: 'background/training/training-02@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aa9'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-03.jpg',
+    size: 0,
+    mimetype: lookup('training-03.jpg'),
+    image: {
+      hashName: 'training-03.jpg',
+      path: 'background/training/training-03.jpg'
+    },
+    image2x: {
+      hashName: 'training-03@2x.jpg',
+      path: 'background/training/training-03@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-03.webp',
+      path: 'background/training/training-03.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-03@2x.webp',
+      path: 'background/training/training-03@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aaa'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-04.jpg',
+    size: 0,
+    mimetype: lookup('training-04.jpg'),
+    image: {
+      hashName: 'training-04.jpg',
+      path: 'background/training/training-04.jpg'
+    },
+    image2x: {
+      hashName: 'training-04@2x.jpg',
+      path: 'background/training/training-04@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-04.webp',
+      path: 'background/training/training-04.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-04@2x.webp',
+      path: 'background/training/training-04@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aab'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-05.jpg',
+    size: 0,
+    mimetype: lookup('training-05.jpg'),
+    image: {
+      hashName: 'training-05.jpg',
+      path: 'background/training/training-05.jpg'
+    },
+    image2x: {
+      hashName: 'training-05@2x.jpg',
+      path: 'background/training/training-05@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-05.webp',
+      path: 'background/training/training-05.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-05@2x.webp',
+      path: 'background/training/training-05@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aac'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-06.jpg',
+    size: 0,
+    mimetype: lookup('training-06.jpg'),
+    image: {
+      hashName: 'training-06.jpg',
+      path: 'background/training/training-06.jpg'
+    },
+    image2x: {
+      hashName: 'training-06@2x.jpg',
+      path: 'background/training/training-06@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-06.webp',
+      path: 'background/training/training-06.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-06@2x.webp',
+      path: 'background/training/training-06@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aad'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-07.jpg',
+    size: 0,
+    mimetype: lookup('training-07.jpg'),
+    image: {
+      hashName: 'training-07.jpg',
+      path: 'background/training/training-07.jpg'
+    },
+    image2x: {
+      hashName: 'training-07@2x.jpg',
+      path: 'background/training/training-07@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-07.webp',
+      path: 'background/training/training-07.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-07@2x.webp',
+      path: 'background/training/training-07@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aae'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-08.jpg',
+    size: 0,
+    mimetype: lookup('training-08.jpg'),
+    image: {
+      hashName: 'training-08.jpg',
+      path: 'background/training/training-08.jpg'
+    },
+    image2x: {
+      hashName: 'training-08@2x.jpg',
+      path: 'background/training/training-08@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-08.webp',
+      path: 'background/training/training-08.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-08@2x.webp',
+      path: 'background/training/training-08@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015aaf'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-09.jpg',
+    size: 0,
+    mimetype: lookup('training-09.jpg'),
+    image: {
+      hashName: 'training-09.jpg',
+      path: 'background/training/training-09.jpg'
+    },
+    image2x: {
+      hashName: 'training-09@2x.jpg',
+      path: 'background/training/training-09@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-09.webp',
+      path: 'background/training/training-09.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-09@2x.webp',
+      path: 'background/training/training-09@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a30a546cb39008b0015ab0'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-10.jpg',
+    size: 0,
+    mimetype: lookup('training-10.jpg'),
+    image: {
+      hashName: 'training-10.jpg',
+      path: 'background/training/training-10.jpg'
+    },
+    image2x: {
+      hashName: 'training-10@2x.jpg',
+      path: 'background/training/training-10@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-10.webp',
+      path: 'background/training/training-10.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-10@2x.webp',
+      path: 'background/training/training-10@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a6ad6bdee8982852ce77f2'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-11.jpg',
+    size: 0,
+    mimetype: lookup('training-11.jpg'),
+    image: {
+      hashName: 'training-11.jpg',
+      path: 'background/training/training-11.jpg'
+    },
+    image2x: {
+      hashName: 'training-11@2x.jpg',
+      path: 'background/training/training-11@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-11.webp',
+      path: 'background/training/training-11.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-11@2x.webp',
+      path: 'background/training/training-11@2x.webp'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68a6ad6bdee8982852ce77f3'),
+    catalog: 'background',
+    subDirectory: 'background/training',
+    originalName: 'training-12.jpg',
+    size: 0,
+    mimetype: lookup('training-12.jpg'),
+    image: {
+      hashName: 'training-12.jpg',
+      path: 'background/training/training-12.jpg'
+    },
+    image2x: {
+      hashName: 'training-12@2x.jpg',
+      path: 'background/training/training-12@2x.jpg'
+    },
+    imageWebp: {
+      hashName: 'training-12.webp',
+      path: 'background/training/training-12.webp'
+    },
+    imageWebp2x: {
+      hashName: 'training-12@2x.webp',
+      path: 'background/training/training-12@2x.webp'
+    }
+  }
+];
+
+const feedbacks = [
+  {
+    id: 'f2d8bb21-85aa-4c6d-8581-420a4cec900c',
+    assessment: 4,
+    content: 'Пришел в CrossFit после тренажерного зала, где стало скучно. Здесь скучно не бывает никогда! Каждая тренировка – это новое функциональное испытание: работа с канатами, гирями, подтягивания, бурпи. Выкладываешься на все 100%. Коллектив очень supportive, все друг друга подбадривают, что помогает не сдаться. За полгода получил тело, о котором раньше только мечтал: сильное, выносливое и рельефное. Предупреждение: вызывает сильную зависимость!',
+    authorId: '110a0aeb-dbfb-4f27-8179-513185b00836',
+    trainingId: '15f3d584-4525-4595-b9b6-a8295f90bb85'
+  },
+  {
+    id: '3403700a-78cf-4a97-b75c-287190770a7f',
+    assessment: 3,
+    content: 'Регулярно выполняю эту тренировку дома и вижу результат! Спина стала прямее, появилось больше сил и гибкость тоже стала лучше, хотя упражнения довольно простые.',
+    authorId: '110a0aeb-dbfb-4f27-8179-513185b00836',
+    trainingId: '15f3d584-4525-4595-b9b6-a8295f90bb85'
+  }
+];
 
 const trainings = [
   {
@@ -141,6 +628,7 @@ const trainings = [
     description: "Высокоинтенсивные упражнения для сжигания калорий.",
     price: 2200,
     specialOffer: true,
+    rating: Math.round(feedbacks.map((feedback) => feedback.assessment).reduce((acc, value, _, array) => acc + value / array.length, 0)),
     coachName: 'Виктория',
     backgroundId: '68a30a546cb39008b0015aaf',
     videoId: '68a30a546cb39008b0015aa4',
@@ -174,7 +662,7 @@ const users = [
     gender: Gender.male,
     location: Location.petrogradskaya,
     role: Role.user,
-    backgroundIds: ['68a30a546cb39008b0015aa0', '68a30a546cb39008b0015aa1']
+    backgroundIds: ['68a6ad6bdee8982852ce77ee', '68a6ad6bdee8982852ce77ef']
   },
   {
     id: '5efb3f8b-efb0-4b11-ab65-9e916b23831c',
@@ -184,9 +672,9 @@ const users = [
     gender: Gender.female,
     location: Location.zvezdnaya,
     role: Role.coach,
-    backgroundIds: ['68a30a546cb39008b0015aa2', '68a30a546cb39008b0015aa3']
+    backgroundIds: ['68a6ad6bdee8982852ce77f0', '68a6ad6bdee8982852ce77f1']
   }
-]
+];
 
 const userQuestionnaire = {
   id: '1953d3a5-9b4b-4fb8-93c2-d6ec5c8c7ab2',
@@ -196,17 +684,17 @@ const userQuestionnaire = {
   caloriesLose: 1000,
   caloriesWaste: 3000,
   userId: '110a0aeb-dbfb-4f27-8179-513185b00836'
-}
+};
 
 const coachQuestionnaire = {
   id: '1e887d43-df4a-4350-a2d3-e4e250835676',
   fitnessLevel: FitnessLevel.professional,
   exercises: [Exercise.running, Exercise.crossfit, Exercise.aerobics],
   qualifications: ['68a30a546cb39008b0015aa5', '68a30a546cb39008b0015aa6'],
-  experience: 'Регулярно выполняю эту тренировку дома и вижу результат!',
+  experience: 'Умение составлять и корректировать тренировочные планы в зависимости от индивидуальных запросов и физических возможностей клиентов.',
   isPersonal: true,
   userId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
-}
+};
 
 const orders = [
   {
@@ -229,26 +717,9 @@ const orders = [
     userId: '110a0aeb-dbfb-4f27-8179-513185b00836',
     trainingId: '0cc88507-5583-4bf9-8e6e-2df0362bd2b4'
   }
-]
+];
 
-const feedbacks = [
-  {
-    id: 'f2d8bb21-85aa-4c6d-8581-420a4cec900c',
-    assessment: 4,
-    content: 'Пришел в CrossFit после тренажерного зала, где стало скучно. Здесь скучно не бывает никогда! Каждая тренировка – это новое функциональное испытание: работа с канатами, гирями, подтягивания, бурпи. Выкладываешься на все 100%. Коллектив очень supportive, все друг друга подбадривают, что помогает не сдаться. За полгода получил тело, о котором раньше только мечтал: сильное, выносливое и рельефное. Предупреждение: вызывает сильную зависимость!',
-    authorId: '110a0aeb-dbfb-4f27-8179-513185b00836',
-    trainingId: '15f3d584-4525-4595-b9b6-a8295f90bb85'
-  },
-  {
-    id: '3403700a-78cf-4a97-b75c-287190770a7f',
-    assessment: 3,
-    content: 'Регулярно выполняю эту тренировку дома и вижу результат! Спина стала прямее, появилось больше сил и гибкость тоже стала лучше, хотя упражнения довольно простые.',
-    authorId: '110a0aeb-dbfb-4f27-8179-513185b00836',
-    trainingId: '15f3d584-4525-4595-b9b6-a8295f90bb85'
-  }
-]
-
-async function seedDb(prismaClient: PrismaClient) {
+async function seed(prismaClient: PrismaClient) {
   for(const user of users) {
     await prismaClient.user.create({
       data: user
@@ -283,12 +754,94 @@ async function seedDb(prismaClient: PrismaClient) {
   }
 }
 
+async function seedFiles() {
+  const filesSchema = new Schema({
+    originalName: {
+      type: String,
+      required: true
+    },
+    subDirectory: {
+      type: String,
+      required: true
+    },
+    catalog: {
+      type: String,
+      required: true
+    },
+    size: {
+      type: Number,
+      required: true
+    },
+    mimetype: {
+      type: String,
+      required: true
+    },
+    image: {
+      type: Object,
+      required: false
+    },
+    image2x: {
+      type: Object,
+      required: false
+    },
+    imageWebp: {
+      type: Object,
+      required: false
+    },
+    imageWebp2x: {
+      type: Object,
+      required: false
+    },
+    video: {
+      type: Object,
+      required: false
+    }
+  });
+  const FileModel = model('files', filesSchema);
+
+  for(const video of videos) {
+    const newModel = new FileModel(video);
+    await newModel.save();
+  }
+
+  for(const userBackground of userBackgrounds) {
+    const newModel = new FileModel(userBackground);
+    await newModel.save();
+  }
+
+  for(const coachBackground of coachBackgrounds) {
+    const newModel = new FileModel(coachBackground);
+    await newModel.save();
+  }
+
+  for(const qualification of qualifications) {
+    const newModel = new FileModel(qualification);
+    await newModel.save();
+  }
+
+  for(const trainingBackground of trainingBackgrounds) {
+    const newModel = new FileModel(trainingBackground);
+    await newModel.save();
+  }
+}
+
 async function bootstrap() {
+  const {
+    MONGO_INITDB_NAME,
+    MONGO_INITDB_HOST,
+    MONGO_INITDB_ROOT_USERNAME,
+    MONGO_INITDB_ROOT_PASSWORD,
+    MONGO_INITDB_PORT,
+    MONGO_AUTH_SOURCE
+  } = process.env;
+  const mongoUrl = `mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${MONGO_INITDB_HOST}:${MONGO_INITDB_PORT}/${MONGO_INITDB_NAME}?authSource=${MONGO_AUTH_SOURCE}`;
   const prismaClient = new PrismaClient();
 
   try {
     prismaClient.$connect();
-    await seedDb(prismaClient);
+    mongoose.connect(mongoUrl);
+    await seedFiles();
+    await seed(prismaClient);
     globalThis.process.exit(0);
   } catch (error) {
     globalThis.process.exit(1);

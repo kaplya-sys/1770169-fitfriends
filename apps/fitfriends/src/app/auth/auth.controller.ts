@@ -41,6 +41,7 @@ import {
   Route
 } from '@1770169-fitfriends/types';
 import {UsersQuery} from '@1770169-fitfriends/query';
+import {FilesTypeValidationPipe, UUIDValidationPipe} from '@1770169-fitfriends/core';
 
 import {AuthService} from './auth.service';
 import {JWTAuthGuard} from '../guards/jwt-auth.guard';
@@ -62,7 +63,6 @@ import {
   UNAUTHORIZED,
   UPDATED_RESPONSE
 } from './auth.constant';
-import {FilesTypeValidationPipe} from '@1770169-fitfriends/core';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
@@ -207,7 +207,7 @@ export class AuthController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Balance)
-  public async showBalance(@Param('userId') id: string) {
+  public async showBalance(@Param('userId', UUIDValidationPipe) id: string) {
     const balance = await this.authService.getUserBalance(id);
 
     return balance.map((item) => fillDto(BalanceRDO, item.toObject(), {exposeDefaultValues: false}));
@@ -237,14 +237,14 @@ export class AuthController {
     description: UNAUTHORIZED
   })
   @UseInterceptors(FileFieldsInterceptor([
-    {name: FieldName.Qualifications}
+    {name: FieldName.Qualification}
   ]))
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.CreateUserQuestionnaire)
   public async createUserQuestionnaire(
     @Body() dto: CreateUserQuestionnaireDTO,
-    @Param('userId') id: string
+    @Param('userId', UUIDValidationPipe) id: string
   ) {
     const user = await this.authService.addQuestionnaire(id, dto);
 
@@ -275,7 +275,7 @@ export class AuthController {
     description: UNAUTHORIZED
   })
   @UseInterceptors(FileFieldsInterceptor([
-    {name: FieldName.Qualifications}
+    {name: FieldName.Qualification}
   ]))
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.CREATED)
@@ -283,7 +283,7 @@ export class AuthController {
   public async createCoachQuestionnaire(
     @UploadedFiles(FilesTypeValidationPipe) files: RequestFiles,
     @Body() dto: CreateCoachQuestionnaireDTO,
-    @Param('userId') id: string
+    @Param('userId', UUIDValidationPipe) id: string
   ) {
     const user = await this.authService.addQuestionnaire(id, dto, files);
 
@@ -318,7 +318,7 @@ export class AuthController {
   @Patch(Route.EditUser)
   public async update(
     @Body() dto: UpdateUserDTO,
-    @Param('userId') id: string
+    @Param('userId', UUIDValidationPipe) id: string
   ) {
     const user = await this.authService.updateUser(id, dto);
 
@@ -347,7 +347,7 @@ export class AuthController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.User)
-  public async show(@Param('userId') id: string) {
+  public async show(@Param('userId', UUIDValidationPipe) id: string) {
     const user = await this.authService.getUserById(id);
 
     return fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false});

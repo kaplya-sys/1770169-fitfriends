@@ -90,7 +90,7 @@ export class UserEntity implements ExtendUser, Entity<string> {
   public async setPassword(password: string) {
     const salt = genSaltSync(SALT_ROUNDS);
     this.password = hashSync(password, salt);
-    console.log(this.password)
+
     return this;
   }
 

@@ -3,5 +3,5 @@ export enum FieldName {
   Avatar = 'avatar',
   Video = 'video',
   Background = 'background',
-  Qualifications = 'qualifications'
+  Qualification = 'qualification'
 };

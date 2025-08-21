@@ -69,9 +69,9 @@ export class AuthService {
     }
 
     let backgrounds = await this.filesService.getByFieldName(FieldName.Background);
+
     if (!backgrounds.length) {
-      await this.filesService.createBackgrounds();
-      backgrounds = await this.filesService.getByFieldName(FieldName.Background);
+      backgrounds = await this.filesService.createBackgrounds();
     }
     const backgroundIds = backgrounds
       .filter((background): background is FilesEntity => background !== null && background.subDirectory.includes(dto.role))
@@ -99,7 +99,7 @@ export class AuthService {
     }
     const questionnaireEntity = new QuestionnaireEntity({...dto, userId: id});
 
-    if (files && files.qualifications?.length) {
+    if (files && files.qualification?.length) {
       const newFiles = await this.filesService.saveFiles(files);
       questionnaireEntity.qualifications = newFiles.map((newFile) => newFile.id as string);
     }

@@ -23,7 +23,7 @@ import {
 } from '@nestjs/swagger';
 import {FileFieldsInterceptor} from '@nestjs/platform-express';
 
-import {FilesTypeValidationPipe, ParseFormDataJsonPipe} from '@1770169-fitfriends/core';
+import {FilesTypeValidationPipe, ParseFormDataJsonPipe, UUIDValidationPipe} from '@1770169-fitfriends/core';
 import {
   CreateFeedbackDto,
   CreateOrderDTO,
@@ -32,7 +32,12 @@ import {
   UpdateTrainingDTO
 } from '@1770169-fitfriends/dto';
 import {fillDto} from '@1770169-fitfriends/helpers';
-import {FeedbackRDO, OrderRDO, TrainingRDO, TrainingsWithPaginationRDO} from '@1770169-fitfriends/rdo';
+import {
+  FeedbackRDO,
+  OrderRDO,
+  TrainingRDO,
+  TrainingsWithPaginationRDO
+} from '@1770169-fitfriends/rdo';
 import {TrainingsQuery} from '@1770169-fitfriends/query';
 import {
   FieldName,
@@ -274,7 +279,7 @@ export class TrainingController {
   @HttpCode(HttpStatus.OK)
   @Patch(Route.EditTraining)
   public async update(
-    @Param('id') id: string,
+    @Param('id', UUIDValidationPipe) id: string,
     @Body() dto: UpdateTrainingDTO
   ) {
     const training = await this.trainingService.updateTraining(id, dto);
@@ -303,7 +308,7 @@ export class TrainingController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(Route.DeleteTraining)
-  public async delete(@Param('id') id: string) {
+  public async delete(@Param('id', UUIDValidationPipe) id: string) {
     this.trainingService.deleteTrainingById(id);
   }
 
@@ -332,7 +337,7 @@ export class TrainingController {
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.CreateTrainingFeedback)
   public async createFeedback(
-    @Param('id') id: string,
+    @Param('id', UUIDValidationPipe) id: string,
     @Body() dto: CreateFeedbackDto,
     @RequestTokenPayload() tokenPayload: TokenPayload
   ) {
@@ -357,7 +362,7 @@ export class TrainingController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Feedbacks)
-  public async getFeedbacks(@Param('id') id: string) {
+  public async getFeedbacks(@Param('id', UUIDValidationPipe) id: string) {
     const feedbacks = await this.trainingService.getFeedbacksByTrainingId(id);
 
     return feedbacks.map((feedback) => fillDto(FeedbackRDO, feedback.toObject(), {exposeDefaultValues: false}));
@@ -380,7 +385,7 @@ export class TrainingController {
   @HttpCode(HttpStatus.CREATED)
   @Post(Route.CreateOrder)
   public async createOrder(
-    @Param('id') id: string,
+    @Param('id', UUIDValidationPipe) id: string,
     @Body() dto: CreateOrderDTO,
     @RequestTokenPayload() tokenPayload: TokenPayload
   ) {
@@ -411,7 +416,7 @@ export class TrainingController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Training)
-  public async show(@Param('id') id: string) {
+  public async show(@Param('id', UUIDValidationPipe) id: string) {
     const training = await this.trainingService.getTrainingById(id);
 
     return fillDto(TrainingRDO, training.toObject(), {exposeDefaultValues: false});

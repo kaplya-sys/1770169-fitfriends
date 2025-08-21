@@ -132,12 +132,19 @@ export class TrainingService {
     const existUser = await this.authService.getUserById(userId);
 
     if (existUser.questionnaire && existUser.questionnaire.caloriesWaste && existUser.questionnaire.trainingTime) {
-      const trainings = await this.trainingRepository.findRecommended({
-        type: existUser.questionnaire.exercises,
-        level: existUser.questionnaire.fitnessLevel,
-        calories: existUser.questionnaire.caloriesWaste,
+      const recommendedByType = await this.trainingRepository.findRecommended({
+        type: existUser.questionnaire.exercises
+      });
+      const recommendedByLevel = await this.trainingRepository.findRecommended({
+        level: existUser.questionnaire.fitnessLevel
+      });
+      const recommendedByCalories = await this.trainingRepository.findRecommended({
+        calories: existUser.questionnaire.caloriesWaste
+      });
+      const recommendedByTrainingTime = await this.trainingRepository.findRecommended({
         trainingTime: existUser.questionnaire.trainingTime
       });
+      const trainings = [...recommendedByType, ...recommendedByLevel, ...recommendedByCalories, ...recommendedByTrainingTime];
 
       if (!trainings.length) {
         return [];

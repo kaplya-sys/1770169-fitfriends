@@ -1,4 +1,5 @@
-export const BAD_MONGO_ID_ERROR = 'Неверный идентификатор.';
+export const BAD_MONGO_ID_ERROR = 'Неверный mongoID идентификатор.';
+export const BAD_UUID_ERROR = 'Неверный UUID идентификатор.';
 export const METADATA_PARAM_ERROR = 'Этот pipe должен использоваться только с "params".';
 export const METADATA_CUSTOM_ERROR = 'Этот pipe должен использоваться только c "customs".';
 export const METADATA_BODY_ERROR = 'Этот pipe должен использоваться только c "body".';

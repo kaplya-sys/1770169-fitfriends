@@ -8,10 +8,11 @@ import {
   ImageSize,
   REGEX,
   TIME_REGEX,
+  UUID_REGEX,
   VALUE_PARSE_ERROR,
   WRONG_TIME_ERROR
 } from './helpers.constant';
-import {FileBuffer, DateTimeUnit, MongooseConfig, TimeAndUnit} from '@1770169-fitfriends/types';
+import {FileBuffer, DateTimeUnit, TimeAndUnit} from '@1770169-fitfriends/types';
 
 export function fillDto<T, P>(dto: new () => T, plainObject: P, options?: ClassTransformOptions): T;
 
@@ -27,10 +28,6 @@ export function createMessage<T>(message: string, expressions: T[] = []): string
   }
 
   return expressions.reduce((accumulator: string, currentValue: T) => accumulator.replace(REGEX, String(currentValue)), message);
-};
-
-export function getMongoConnectionString({host, port, name, username, userPassword, authSource}: MongooseConfig): string {
-  return `mongodb://${username}:${userPassword}@${host}:${port}/${name}?authSource=${authSource}`;
 };
 
 export function parseTime(time: string): TimeAndUnit {
@@ -109,3 +106,6 @@ export const normalizePath = (value: string): string =>  sep === '\\' ? value.re
 
 export const getRandomElement = <T>(elements: T[]): T => elements[Math.floor(Math.random() * elements.length)];
 
+export const isUUID = (uuid: string) => {
+  return UUID_REGEX.test(uuid);
+}

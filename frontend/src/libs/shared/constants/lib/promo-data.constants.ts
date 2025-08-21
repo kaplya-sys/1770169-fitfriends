@@ -2,18 +2,18 @@ import {PromoType} from '../../types';
 
 export const promotions: PromoType[] = [
   {
-    trainingId: '73813328-1901-40e8-a877-c707016082fa',
+    trainingId: '44fb186c-0eb0-4093-a4d2-2e796bc1fda0',
     promoText: 'Горячие предложения на тренировки на фитболе',
-    newPrice: 600,
+    newPrice: 2600,
   },
   {
-    trainingId: 'a8b64c42-b792-46e5-b690-c44c85f08518',
+    trainingId: 'ffc8635c-6129-48c4-aed0-c80b0ee6d05d',
     promoText: 'Горячие предложения на\u00A0Тренировки с\u00A0резинкой для фитнеса',
-    newPrice: 1400
+    newPrice: 1900
   },
-  /*{
-    trainingId: '',
+  {
+    trainingId: 'ed4586fa-ea74-4eee-8752-6e437c59d6d4',
     promoText: 'Горячие предложения на\u00A0Комплекс упражнений на\u00A0растяжку всего тела для новичков',
-    newPrice: 1800
-  }*/
+    newPrice: 900
+  }
 ];
