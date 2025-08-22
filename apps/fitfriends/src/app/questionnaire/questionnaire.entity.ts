@@ -1,4 +1,4 @@
-import {Questionnaire} from '@1770169-fitfriends/types';
+import {FileUpload, Questionnaire} from '@1770169-fitfriends/types';
 import {FitnessLevel, TrainingTime, Exercise, Prisma} from '@1770169-fitfriends/models';
 import {Entity} from '@1770169-fitfriends/core';
 
@@ -10,7 +10,8 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
   public userId!: string;
   public caloriesLose?: null | number;
   public caloriesWaste?: null | number;
-  public qualifications?: string[];
+  public qualificationIds?: string[];
+  public qualifications?: FileUpload[];
   public experience?: null | string;
   public isPersonal?: null | boolean;
 
@@ -30,6 +31,7 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
     this.userId = questionnaire.userId;
     this.caloriesLose = questionnaire.caloriesLose;
     this.caloriesWaste = questionnaire.caloriesWaste;
+    this.qualificationIds = questionnaire.qualificationIds;
     this.qualifications = questionnaire.qualifications;
     this.experience = questionnaire.experience;
     this.isPersonal = questionnaire.isPersonal;
@@ -46,6 +48,7 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
       userId: this.userId,
       caloriesLose: this.caloriesLose,
       caloriesWaste: this.caloriesWaste,
+      qualificationIds: this.qualificationIds,
       qualifications: this.qualifications,
       experience: this.experience,
       isPersonal: this.isPersonal
@@ -58,7 +61,7 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
       exercises: this.exercises,
       userId: this.userId,
       trainingTime: this.trainingTime ?? Prisma.skip,
-      qualifications: this.qualifications ?? Prisma.skip,
+      qualificationIds: this.qualificationIds ?? Prisma.skip,
       caloriesLose: this.caloriesLose ?? Prisma.skip,
       caloriesWaste: this.caloriesWaste ?? Prisma.skip,
       experience: this.experience ?? Prisma.skip,

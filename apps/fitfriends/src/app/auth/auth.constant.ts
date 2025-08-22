@@ -18,7 +18,8 @@ export const CREATED_RESPONSE = 'Объект успешно создан.';
 export const UPDATED_RESPONSE = 'Объект успешно обновлен.';
 export const FOUND_RESPONSE = 'Объект успешно найден.';
 export const AUTHORIZED_RESPONSE = 'Успешная авторизация пользователя.';
-export const CHECK_TOKEN_RESPONSE = 'Объект пользователя.';
+export const REFRESH_TOKEN_RESPONSE = 'Успешное обновление токена.';
+export const CHECK_TOKEN_RESPONSE = 'Успешная проверка пользователя.';
 
 export const NOT_FOUND_RESPONSE = 'Объект не найден.';
 export const CONFLICT_RESPONSE = 'Объект уже существует.';

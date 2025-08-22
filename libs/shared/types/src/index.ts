@@ -15,6 +15,7 @@ export * from './lib/feedback.interface';
 export * from './lib/field-name.enum';
 export * from './lib/file-buffer.interface';
 export * from './lib/file-info.interface';
+export * from './lib/file-record.interface';
 export * from './lib/file-upload.interface';
 export * from './lib/image-format.enum';
 export * from './lib/image.interface';

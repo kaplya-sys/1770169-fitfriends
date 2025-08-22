@@ -29,7 +29,7 @@ export const Navigation = () => {
         <li className="main-nav__item">
           <NavLink
             className={({isActive}) => classNames('main-nav__link', {'is-active': isActive})}
-            to={getRouteWithParam(AppRoute.PersonalAccount, {id: user?.sub})}
+            to={getRouteWithParam(AppRoute.PersonalAccount, {id: user?.id})}
             aria-label="Личный кабинет"
           >
             <svg width="16" height="18" aria-hidden="true">
@@ -40,7 +40,7 @@ export const Navigation = () => {
         <li className="main-nav__item">
           <NavLink
             className="main-nav__link"
-            to={getRouteWithParam(AppRoute.MyFriends, {id: user?.sub})}
+            to={getRouteWithParam(AppRoute.MyFriends, {id: user?.id})}
             aria-label="Друзья"
           >
             <svg width="22" height="16" aria-hidden="true">

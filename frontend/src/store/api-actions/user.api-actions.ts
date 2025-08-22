@@ -30,13 +30,13 @@ export const createQuestionnaireAction = createAsyncThunk<UserType, FormData, {
     }
 
     if (user.role === Role.User) {
-      const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateUserQuestionnaire, {id: user.sub}), createData);
+      const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateUserQuestionnaire, {id: user.id}), createData);
       dispatch(redirectToRoute({route: AppRoute.Home}));
 
       return data;
     }
-    const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateCoachQuestionnaire, {id: user.sub}), createData);
-    dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.PersonalAccount, {id: user.sub})}));
+    const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateCoachQuestionnaire, {id: user.id}), createData);
+    dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.PersonalAccount, {id: user.id})}));
 
     return data;
   } catch (error: unknown) {

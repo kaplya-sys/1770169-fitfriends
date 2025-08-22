@@ -1,5 +1,7 @@
 import {Exercise, FitnessLevel, TrainingTime} from '@1770169-fitfriends/models';
 
+import {FileUpload} from './file-upload.interface';
+
 export interface Questionnaire {
   id?: string;
   fitnessLevel: FitnessLevel;
@@ -8,7 +10,8 @@ export interface Questionnaire {
   userId: string;
   caloriesLose?: null | number;
   caloriesWaste?: null | number;
-  qualifications?: string[];
+  qualificationIds?: string[];
+  qualifications?: FileUpload[];
   experience?: null | string;
   isPersonal?: null | boolean;
 };

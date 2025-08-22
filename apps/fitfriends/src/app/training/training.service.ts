@@ -9,6 +9,7 @@ import {CreateFeedbackDto, CreateOrderDTO, CreateTrainingDTO, UpdateTrainingDTO}
 import {TrainingsQuery} from '@1770169-fitfriends/query';
 import {
   FieldName,
+  FileRecord,
   Pagination,
   RequestFiles,
   TokenPayload
@@ -111,8 +112,10 @@ export class TrainingService {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
     }
     const {video, background} = await this.getFiles(existTraining.videoId, existTraining.backgroundId);
+    existTraining.background = background;
+    existTraining.video = video;
 
-    return Object.assign(existTraining, {video, background});
+    return existTraining;
   }
 
   public async getTrainings(query?: TrainingsQuery): Promise<Pagination<TrainingEntity>> {
@@ -120,16 +123,23 @@ export class TrainingService {
     const entities = await Promise.all(
       trainings.entities.map(async (training) => {
         const {video, background} = await this.getFiles(training.videoId, training.backgroundId);
+        training.background = background;
+        training.video = video;
 
-        return Object.assign(training, {video, background});
+        return training;
       })
     );
+    trainings.entities = entities;
 
-    return Object.assign(trainings, {entities});
+    return trainings;
   }
 
   public async getRecommendedTrainings(userId: string): Promise<(TrainingEntity)[]> {
     const existUser = await this.authService.getUserById(userId);
+
+    if (existUser.role !== Role.user) {
+      return [];
+    }
 
     if (existUser.questionnaire && existUser.questionnaire.caloriesWaste && existUser.questionnaire.trainingTime) {
       const recommendedByType = await this.trainingRepository.findRecommended({
@@ -168,8 +178,10 @@ export class TrainingService {
       const sortedTrainings = await Promise.all(sortedEntries.map(async ([id]) => {
         const training = trainingMap.get(id) as TrainingEntity;
         const {video, background} = await this.getFiles(training.videoId, training.backgroundId);
+        training.background = background;
+        training.video = video;
 
-        return Object.assign(training, {video, background});
+        return training;
       }));
 
       return sortedTrainings;
@@ -214,14 +226,13 @@ export class TrainingService {
       feedbacks
         .filter((feedback) => feedback !== null)
         .map(async (feedback) => {
-        const avatar = await this.filesService.getFile(feedback?.author?.avatarId as string);
+          if (feedback.author) {
+            const avatar = await this.filesService.getFile(feedback.author.avatarId as string);
+            feedback.author.avatar = avatar.toObject();
+          }
 
-        if (feedback?.author?.avatarId) {
-          return Object.assign(feedback, {author: {...feedback.author, avatar: avatar.toObject()}});
-        }
-
-        return feedback;
-      })
+          return feedback;
+        })
     );
 
     return filteredFeedbacks;
@@ -243,13 +254,19 @@ export class TrainingService {
     const {video, background} = await this.getFiles(existTraining.videoId, existTraining.backgroundId);
     await this.authService.updateOrCreateUserBalance(userId, trainingId, newOrder.count);
 
-    return Object.assign(newOrder, {training: {...existTraining, video, background}});
+    if (newOrder.training) {
+      newOrder.training.video = video;
+      newOrder.training.background = background;
+    }
+
+    return newOrder;
   }
 
   private async getFiles(videoId: string, backgroundId: string) {
-    const video = await this.filesService.getFile(videoId);
-    const background = await this.filesService.getFile(backgroundId);
+    const file: Pick<FileRecord, 'video' | 'background'> = {};
+    file.video = (await this.filesService.getFile(videoId)).toObject();
+    file.background = (await this.filesService.getFile(backgroundId)).toObject();
 
-    return {video: video.toObject(), background: background.toObject()}
+    return file;
   }
 }

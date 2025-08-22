@@ -39,7 +39,7 @@ export class QuestionnaireRepository extends BasePostgresRepository<Questionnair
       caloriesLose: record.caloriesLose ?? undefined,
       caloriesWaste: record.caloriesWaste ?? undefined,
       experience: record.experience ?? undefined,
-      isPersonal: record.isPersonal ?? undefined,
+      isPersonal: record.isPersonal ?? undefined
     };
 
     return this.createEntityFromDocument(document);

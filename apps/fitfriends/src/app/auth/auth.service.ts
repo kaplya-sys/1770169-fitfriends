@@ -22,7 +22,8 @@ import {
 } from '@1770169-fitfriends/dto';
 import {Role} from '@1770169-fitfriends/models';
 import {createJWTPayload, createMessage} from '@1770169-fitfriends/helpers';
-import {FieldName, RequestFiles, Token, User} from '@1770169-fitfriends/types';
+import {FieldName, FileRecord, RequestFiles, Token, User} from '@1770169-fitfriends/types';
+import {UsersQuery} from '@1770169-fitfriends/query';
 
 import {UserEntity} from '../user/user.entity';
 import {UserRepository} from '../user/user.repository';
@@ -46,7 +47,6 @@ import {FilesEntity} from '../files/files.entity';
 import {FilesService} from '../files/files.service';
 import {QuestionnaireRepository} from '../questionnaire/questionnaire.repository';
 import {QuestionnaireEntity} from '../questionnaire/questionnaire.entity';
-import {UsersQuery} from '@1770169-fitfriends/query';
 
 @Injectable()
 export class AuthService {
@@ -101,16 +101,22 @@ export class AuthService {
 
     if (files && files.qualification?.length) {
       const newFiles = await this.filesService.saveFiles(files);
-      questionnaireEntity.qualifications = newFiles.map((newFile) => newFile.id as string);
+      questionnaireEntity.qualificationIds = newFiles.map((newFile) => newFile.id as string);
+      questionnaireEntity.qualifications = newFiles;
     }
     const newQuestionnaire = await this.questionnaireRepository.save(questionnaireEntity);
+    existUser.questionnaire = newQuestionnaire.toObject();
     const {backgrounds, avatar} = await this.getFiles(existUser.role, existUser.avatarId);
 
+    if (backgrounds) {
+        existUser.backgrounds = backgrounds;
+      }
+
     if (avatar) {
-      return Object.assign(existUser, {avatar, backgrounds, questionnaire: newQuestionnaire.toObject()});
+      existUser.avatar = avatar;
     }
 
-    return Object.assign(existUser, {backgrounds, questionnaire: newQuestionnaire.toObject()});
+    return existUser;
   }
 
   public async updateUser(id: string, dto: UpdateUserDTO): Promise<UserEntity> {
@@ -127,14 +133,20 @@ export class AuthService {
         hasUpdates = true;
       }
     }
-    const {backgrounds, avatar} = await this.getFiles(existUser.role, existUser.avatarId);
+    const {backgrounds, avatar, qualifications} = await this.getFiles(existUser.role, existUser.avatarId, existUser.questionnaire?.qualificationIds);
 
     if (!hasUpdates) {
-      if (avatar) {
-        return Object.assign(existUser, {avatar, backgrounds});
+      if (backgrounds) {
+        existUser.backgrounds = backgrounds;
       }
 
-      return Object.assign(existUser, {backgrounds});
+      if (avatar) {
+        existUser.avatar = avatar;
+      }
+
+      if (existUser.role === Role.coach && existUser.questionnaire && qualifications?.length) {
+        existUser.questionnaire.qualifications = qualifications;
+      }
     }
     const updatedUser = await this.userRepository.update(id, existUser);
 
@@ -142,11 +154,19 @@ export class AuthService {
       throw new InternalServerErrorException(UPDATE_USER_ERROR_MESSAGE);
     }
 
-    if (avatar) {
-      return Object.assign(updatedUser, {avatar, backgrounds});
+    if (backgrounds) {
+      updatedUser.backgrounds = backgrounds;
     }
 
-    return Object.assign(updatedUser, {backgrounds});
+    if (avatar) {
+      updatedUser.avatar = avatar;
+    }
+
+    if (updatedUser.role === Role.coach && updatedUser.questionnaire && qualifications?.length) {
+      updatedUser.questionnaire.qualifications = qualifications;
+    }
+
+    return updatedUser;
   }
 
   public async verifyUser(dto: AuthUserDTO): Promise<UserEntity> {
@@ -170,13 +190,21 @@ export class AuthService {
     if (!existUser) {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
     }
-    const {backgrounds, avatar} = await this.getFiles(existUser.role, existUser.avatarId);
+    const {backgrounds, avatar, qualifications} = await this.getFiles(existUser.role, existUser.avatarId, existUser.questionnaire?.qualificationIds);
 
-    if (avatar) {
-      return Object.assign(existUser, {avatar, backgrounds});
+    if (backgrounds) {
+      existUser.backgrounds = backgrounds;
     }
 
-    return Object.assign(existUser, {backgrounds});
+    if (avatar) {
+      existUser.avatar = avatar;
+    }
+
+    if (existUser.role === Role.coach && existUser.questionnaire && qualifications?.length) {
+      existUser.questionnaire.qualifications = qualifications;
+    }
+
+    return existUser;
   }
 
   public async getUserByEmail(email: string): Promise<UserEntity> {
@@ -196,13 +224,21 @@ export class AuthService {
       users
         .filter((user) => user !== null)
         .map(async (user) => {
-          const {backgrounds, avatar} = await this.getFiles(user.role, user.avatarId);
+          const {backgrounds, avatar, qualifications} = await this.getFiles(user.role, user.avatarId, user.questionnaire?.qualificationIds);
 
-          if (avatar) {
-            return Object.assign(user, {avatar, backgrounds});
+          if (backgrounds) {
+            user.backgrounds = backgrounds;
           }
 
-          return Object.assign(user, {backgrounds});
+          if (avatar) {
+            user.avatar = avatar;
+          }
+
+          if (user.role === Role.coach && user.questionnaire && qualifications?.length) {
+            user.questionnaire.qualifications = qualifications;
+          }
+
+          return user;
         })
     );
 
@@ -310,19 +346,25 @@ export class AuthService {
     }
   }
 
-  private async getFiles(userRole: Role, avatarId: string | null | undefined) {
+  private async getFiles(userRole: Role, avatarId: string | null | undefined, qualificationIds?: string[] | null | undefined) {
+    const file: FileRecord = {};
     const backgrounds = await this.filesService.getByFieldName(FieldName.Background);
-    const userBackgrounds = backgrounds
+    file.backgrounds = backgrounds
       .filter((background): background is FilesEntity => background !== null && background.subDirectory.includes(userRole))
-      .map((background) => background.toObject());
+      .map((background) => background.toObject())
 
     if (avatarId) {
       const avatar = await this.filesService.getFile(avatarId);
-      userBackgrounds.concat(avatar.toObject());
-
-      return {avatar: avatar.toObject(), backgrounds: userBackgrounds};
+      file.avatar = avatar.toObject();
+      file.backgrounds.concat(avatar.toObject());
     }
 
-    return {backgrounds: userBackgrounds};
+    if (qualificationIds?.length) {
+      file.qualifications = await Promise.all(
+        qualificationIds.map(async (qualification) => (await this.filesService.getFile(qualification)).toObject())
+      )
+    }
+
+    return file;
   }
 }

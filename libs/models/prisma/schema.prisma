@@ -69,7 +69,7 @@ model User {
   name            String            @db.VarChar(15)
   email           String            @unique @db.VarChar(40)
   password        String            @db.VarChar(60)
-  avatarId        String?            @db.VarChar(36)
+  avatarId        String?           @db.VarChar(36)
   gender          Gender
   birthday        DateTime?
   description     String?           @db.VarChar(140)
@@ -102,17 +102,17 @@ model RefreshSessions {
 }
 
 model Questionnaire {
-  id             String        @id @default(uuid())
-  fitnessLevel   FitnessLevel  @map("fitness_level")
-  exercises      Exercise[]
-  trainingTime   TrainingTime? @map("training_time")
-  qualifications String[]
-  caloriesLose   Int?          @default(0) @map("calories_lose")
-  caloriesWaste  Int?          @default(0) @map("calories_waste")
-  experience     String?       @db.VarChar(140)
-  isPersonal     Boolean?      @default(false) @map("is_personal")
-  userId         String        @unique @map("user_id") @db.VarChar(36)
-  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id               String        @id @default(uuid())
+  fitnessLevel     FitnessLevel  @map("fitness_level")
+  exercises        Exercise[]
+  trainingTime     TrainingTime? @map("training_time")
+  qualificationIds String[]
+  caloriesLose     Int?          @default(0) @map("calories_lose")
+  caloriesWaste    Int?          @default(0) @map("calories_waste")
+  experience       String?       @db.VarChar(140)
+  isPersonal       Boolean?      @default(false) @map("is_personal")
+  userId           String        @unique @map("user_id") @db.VarChar(36)
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("questionnaire")
 }

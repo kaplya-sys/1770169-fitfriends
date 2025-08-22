@@ -210,6 +210,11 @@ export class TrainingController {
     status: HttpStatus.NOT_FOUND,
     description: NOT_FOUND_RESPONSE
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Root)
   public async index(@Query() query: TrainingsQuery) {

@@ -31,7 +31,7 @@ export class FeedbackRepository extends BasePostgresRepository<FeedbackEntity, F
       },
       include: {author: true}
     });
-    
+
     return records.map((record) => this.createEntityFromDocument(record));
   }
 

@@ -5,4 +5,6 @@ export * from './lib/order.rdo';
 export * from './lib/questionnaire.rdo';
 export * from './lib/training.rdo';
 export * from './lib/trainings-with-pagination.rdo';
+export * from './lib/token.rdo';
+export * from './lib/token-payload.rdo';
 export * from './lib/user.rdo';

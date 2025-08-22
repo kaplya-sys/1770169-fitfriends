@@ -690,7 +690,7 @@ const coachQuestionnaire = {
   id: '1e887d43-df4a-4350-a2d3-e4e250835676',
   fitnessLevel: FitnessLevel.professional,
   exercises: [Exercise.running, Exercise.crossfit, Exercise.aerobics],
-  qualifications: ['68a30a546cb39008b0015aa5', '68a30a546cb39008b0015aa6'],
+  qualificationIds: ['68a30a546cb39008b0015aa5', '68a30a546cb39008b0015aa6'],
   experience: 'Умение составлять и корректировать тренировочные планы в зависимости от индивидуальных запросов и физических возможностей клиентов.',
   isPersonal: true,
   userId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'

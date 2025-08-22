@@ -3,21 +3,14 @@ import {Expose} from 'class-transformer';
 
 import {Role} from '@1770169-fitfriends/models';
 
-import {
-  ACCESS_TOKEN_PROPERTY,
-  EMAIL_PROPERTY,
-  ID_PROPERTY,
-  NAME_PROPERTY,
-  REFRESH_TOKEN_PROPERTY,
-  ROLE_PROPERTY
-} from './rdo.constant';
+import {EMAIL_PROPERTY, ID_PROPERTY, NAME_PROPERTY, ROLE_PROPERTY} from './rdo.constant';
 
-export class AuthenticatedUserRDO {
+export class TokenPayloadRDO {
   @ApiProperty({
     description: ID_PROPERTY.DESCRIPTION,
     example: ID_PROPERTY.EXAMPLE
   })
-  @Expose()
+  @Expose({name: 'sub'})
   public id!: string;
 
   @ApiProperty({
@@ -34,20 +27,6 @@ export class AuthenticatedUserRDO {
   @Expose()
   public name!: string;
 
-  @ApiProperty({
-    description: ACCESS_TOKEN_PROPERTY.DESCRIPTION,
-    example: ACCESS_TOKEN_PROPERTY.EXAMPLE
-  })
-  @Expose()
-  public accessToken!: string;
-
-  @ApiProperty({
-    description: REFRESH_TOKEN_PROPERTY.DESCRIPTION,
-    example: REFRESH_TOKEN_PROPERTY.EXAMPLE
-  })
-  @Expose()
-  public refreshToken!: string;
-  
   @ApiProperty({
     description: ROLE_PROPERTY.DESCRIPTION,
     example: ROLE_PROPERTY.EXAMPLE

@@ -32,7 +32,7 @@ import {
   UpdateUserDTO
 } from '@1770169-fitfriends/dto';
 import {fillDto} from '@1770169-fitfriends/helpers';
-import {AuthenticatedUserRDO, BalanceRDO, UserRDO} from '@1770169-fitfriends/rdo';
+import {AuthenticatedUserRDO, BalanceRDO, TokenPayloadRDO, TokenRDO, UserRDO} from '@1770169-fitfriends/rdo';
 import {
   FieldName,
   RequestFiles,
@@ -50,6 +50,7 @@ import {LocalAuthGuard} from '../guards/local-auth.guard';
 import {
   AUTHORIZED_RESPONSE,
   BAD_REQUEST_RESPONSE,
+  CHECK_TOKEN_RESPONSE,
   CONFLICT_RESPONSE,
   CREATED_RESPONSE,
   DATA_TYPE,
@@ -57,6 +58,7 @@ import {
   ID_PARAM,
   MAX_UPLOAD_FILES,
   NOT_FOUND_RESPONSE,
+  REFRESH_TOKEN_RESPONSE,
   ROLE_QUERY,
   ROUTE_PREFIX,
   TAG,
@@ -130,8 +132,8 @@ export class AuthController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: AUTHORIZED_RESPONSE,
-    type: AuthenticatedUserRDO
+    description: REFRESH_TOKEN_RESPONSE,
+    type: TokenRDO
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -146,8 +148,8 @@ export class AuthController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: AUTHORIZED_RESPONSE,
-    type: AuthenticatedUserRDO
+    description: CHECK_TOKEN_RESPONSE,
+    type: TokenPayloadRDO
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -157,7 +159,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post(Route.AuthCheck)
   public async checkToken(@Req() {user}: RequestWithTokenPayload) {
-    return user;
+    return fillDto(TokenPayloadRDO, user);
   }
 
   @ApiQuery({

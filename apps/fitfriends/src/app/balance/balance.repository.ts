@@ -46,7 +46,8 @@ export class BalanceRepository extends BasePostgresRepository<BalanceEntity, Bal
     const prismaObject = entity.toPrismaObject();
     const record = await this.prismaClient.balance.update({
       where: {id},
-      data: prismaObject
+      data: prismaObject,
+      include: {training: true}
     });
 
     return this.createEntityFromDocument(record);
