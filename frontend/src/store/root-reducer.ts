@@ -12,6 +12,8 @@ import {userBalanceSlice} from './user-balance/user-balance.slice';
 import {recommendedTrainingsSlice} from './recommended-trainings/recommended-trainings.slice';
 import {orderSlice} from './order/order.slice';
 
+import {rangeSlice} from './range/range.slice';
+
 export const rootReducer = combineReducers({
   [NameSpace.Auth]: authSlice.reducer,
   [NameSpace.Balance]: userBalanceSlice.reducer,
@@ -22,5 +24,6 @@ export const rootReducer = combineReducers({
   [NameSpace.User]: userSlice.reducer,
   [NameSpace.Users]: usersSlice.reducer,
   [NameSpace.Training]: trainingSlice.reducer,
-  [NameSpace.Trainings]: trainingsSlice.reducer
+  [NameSpace.Trainings]: trainingsSlice.reducer,
+  [NameSpace.RangeFilters]: rangeSlice.reducer
 });

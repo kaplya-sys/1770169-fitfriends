@@ -18,7 +18,11 @@ const initialState: InitialState = {
 export const userSlice = createSlice({
   name: NameSpace.User,
   initialState,
-  reducers: {},
+  reducers: {
+    deleteUserAvatar: (state) => {
+      delete state.user?.avatar;
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(createQuestionnaireAction.pending, (state) => {
@@ -57,3 +61,5 @@ export const userSlice = createSlice({
       });
   },
 });
+
+export const {deleteUserAvatar} = userSlice.actions;

@@ -1,5 +1,5 @@
-import {DefaultToObjectType, Entity, EntityId} from './entity.interface';
-import {Repository} from './repository.interface';
+import {DefaultToObjectType, Entity, EntityId, Repository} from "@1770169-fitfriends/types";
+
 
 export abstract class BasePostgresRepository<
     EntityType extends Entity<EntityId, DocumentType>,

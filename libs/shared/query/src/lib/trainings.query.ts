@@ -3,16 +3,21 @@ import {
   IsNumber,
   IsEnum,
   Max,
-  IsArray
+  IsArray,
+  IsString
 } from 'class-validator';
 import {Transform} from 'class-transformer';
 
 import {Query, SortDirection} from '@1770169-fitfriends/types';
 
-import {DEFAULT_ENTITY_COUNT, DEFAULT_PAGE_COUNT} from './query.constant';
-import {Exercise} from '@1770169-fitfriends/models';
+import {MAX_ENTITY_COUNT, DEFAULT_PAGE} from './query.constant';
+import {Exercise, TrainingTime} from '@1770169-fitfriends/models';
 
 export class TrainingsQuery implements Query {
+  @IsString()
+  @IsOptional()
+  public coach?: string;
+
   @Transform(({value}) => parseInt(value, 10))
   @IsNumber()
   @IsOptional()
@@ -48,6 +53,10 @@ export class TrainingsQuery implements Query {
   @IsOptional()
   public type?: Exercise[];
 
+  @IsEnum(TrainingTime)
+  @IsOptional()
+  public trainingTime?: TrainingTime;
+
   @IsEnum(SortDirection)
   @IsOptional()
   public orderByDate?: SortDirection;
@@ -56,14 +65,14 @@ export class TrainingsQuery implements Query {
   @IsOptional()
   public orderByPrice?: SortDirection;
 
-  @Transform(({value}) => parseInt(value, 10) || DEFAULT_ENTITY_COUNT)
+  @Transform(({value}) => parseInt(value, 10))
   @IsNumber()
-  @Max(DEFAULT_ENTITY_COUNT)
+  @Max(MAX_ENTITY_COUNT)
   @IsOptional()
-  public limit?: number = DEFAULT_ENTITY_COUNT;
+  public limit?: number;
 
-  @Transform(({value}) => parseInt(value, 10) || DEFAULT_PAGE_COUNT)
+  @Transform(({value}) => parseInt(value, 10))
   @IsNumber()
   @IsOptional()
-  public page?: number = DEFAULT_PAGE_COUNT;
+  public page?: number = DEFAULT_PAGE;
 }

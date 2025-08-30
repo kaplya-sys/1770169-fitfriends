@@ -48,7 +48,7 @@ export const CreateTraining = () => {
   };
 
   const handleFileChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    if (evt.target.files !== null) {
+    if (evt.target.files?.length) {
       setData((prevState) =>({...prevState, video: evt.target.files[0]}));
     }
   };

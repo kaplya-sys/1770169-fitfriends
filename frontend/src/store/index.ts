@@ -10,6 +10,7 @@ export * from './feedback/feedback.selector';
 export * from './feedbacks/feedbacks.selector';
 export * from './order/order.selector';
 export * from './recommended-trainings/recommended-trainings.selector';
+export * from './range/range.selector';
 export * from './store';
 export * from './training/training.selector';
 export * from './trainings/trainings.selector';

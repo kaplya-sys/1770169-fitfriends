@@ -1,12 +1,6 @@
 import {Document, Model, ObjectId, ToObjectOptions} from 'mongoose';
-import {NotFoundException} from '@nestjs/common';
 
-import {createMessage} from '@1770169-fitfriends/helpers';
-import {Timestamps} from '@1770169-fitfriends/types';
-
-import {Entity, EntityId} from './entity.interface';
-import {Repository} from './repository.interface';
-import {NOT_FOUND_MESSAGE} from './repository.constant';
+import {Entity, EntityId, Repository, Timestamps} from '@1770169-fitfriends/types';
 
 export abstract class BaseMongoRepository<
     EntityType extends Entity<EntityId>,
@@ -43,7 +37,7 @@ export abstract class BaseMongoRepository<
     return entity;
   }
 
-  public async update(id: EntityType['id'], entity: EntityType): Promise<EntityType> {
+  public async update(id: EntityType['id'], entity: EntityType): Promise<EntityType | null> {
     const document = await this.model.findByIdAndUpdate(
       id,
       entity.toObject(),
@@ -53,19 +47,10 @@ export abstract class BaseMongoRepository<
         strict: false
       }).exec();
 
-    if(!document) {
-      throw new NotFoundException(createMessage(NOT_FOUND_MESSAGE, [id]));
-    }
-
-    return entity;
+    return this.createEntityFromDocument(document);
   }
 
   public async delete(id: EntityType['id']): Promise<void> {
-    const document = await this.model.findByIdAndDelete(id);
-
-    if(!document) {
-      throw new NotFoundException(createMessage(NOT_FOUND_MESSAGE, [id]));
-    }
+    await this.model.findByIdAndDelete(id);
   }
-
 }

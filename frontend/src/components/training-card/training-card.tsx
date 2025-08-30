@@ -10,7 +10,7 @@ type TrainingCardPropsType = {
 }
 
 export const TrainingCard = ({training, className}: TrainingCardPropsType) => (
-  <li className={ className }>
+  <li className={className}>
     <div className="thumbnail-training">
       <div className="thumbnail-training__inner">
         <div className="thumbnail-training__image">

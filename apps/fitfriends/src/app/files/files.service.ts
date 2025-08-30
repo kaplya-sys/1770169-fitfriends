@@ -1,5 +1,5 @@
 import {randomUUID} from 'node:crypto';
-import {writeFile} from 'node:fs/promises';
+import {writeFile, unlink} from 'node:fs/promises';
 import {join} from 'node:path';
 
 import 'multer';
@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import {createReadStream, ensureDir} from 'fs-extra';
 import {extension, lookup} from 'mime-types';
 import {Response} from 'express';
-import {Inject, Injectable, Logger, NotFoundException} from '@nestjs/common';
+import {Inject, Injectable, InternalServerErrorException, Logger, NotFoundException} from '@nestjs/common';
 import {ConfigType} from '@nestjs/config';
 
 import {FilesConfig} from '@1770169-fitfriends/config';
@@ -19,7 +19,8 @@ import {
   BACKGROUND,
   DATE_FORMAT,
   DEFAULT_UPLOAD_DIRECTORY,
-  FILE_WRITE_ERROR,
+  DELETE_FILE_ERROR,
+  WRITE_FILE_ERROR,
   NOT_FOUND_BY_ID_MESSAGE
 } from './files.constant';
 import {FilesRepository} from './files.repository';
@@ -95,8 +96,8 @@ export class FilesService {
       };
     } catch (err: unknown) {
       const error = err instanceof Error ? err.message : err;
-      this.logger.error(createMessage(FILE_WRITE_ERROR, [error]));
-      throw new Error(createMessage(FILE_WRITE_ERROR, [error]));
+      this.logger.error(createMessage(WRITE_FILE_ERROR, [error]));
+      throw new Error(createMessage(WRITE_FILE_ERROR, [error]));
     }
   }
 
@@ -229,6 +230,34 @@ export class FilesService {
 
       res.writeHead(200, headers);
       createReadStream(existFile.video?.path as string).pipe(res);
+    }
+  }
+
+  public async updateFile(id: string, files: RequestFiles): Promise<FilesEntity[]> {
+    await this.deleteFile(id);
+
+    return this.saveFiles(files);
+  }
+
+  public async deleteFile(id: string): Promise<void> {
+    const existFile = await this.filesRepository.findById(id);
+
+    if (!existFile) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
+    }
+
+    try {
+      for (const value of Object.values(existFile.toObject())) {
+        if (typeof value === 'object' && 'path' in value) {
+          const filePath = join(this.filesOptions.uploadDirectory || DEFAULT_UPLOAD_DIRECTORY, value.path);
+          await unlink(filePath);
+        }
+      }
+
+      await this.filesRepository.delete(existFile.id);
+    } catch (error) {
+      this.logger.error(createMessage(WRITE_FILE_ERROR, [error]));
+      throw new InternalServerErrorException(createMessage(DELETE_FILE_ERROR, [error]))
     }
   }
 }

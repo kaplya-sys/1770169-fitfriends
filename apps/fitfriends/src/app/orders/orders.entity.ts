@@ -1,6 +1,5 @@
-import {Entity} from '@1770169-fitfriends/core';
 import {Exercise, PaymentMethod} from '@1770169-fitfriends/models';
-import {Order, Training} from '@1770169-fitfriends/types';
+import {Entity, Order, Training} from '@1770169-fitfriends/types';
 
 
 export class OrdersEntity implements Order, Entity<string> {

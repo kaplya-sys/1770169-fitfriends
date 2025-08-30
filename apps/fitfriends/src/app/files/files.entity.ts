@@ -1,5 +1,4 @@
-import {Entity} from '@1770169-fitfriends/core';
-import {FileInfo, FileUpload} from '@1770169-fitfriends/types';
+import {Entity, FileInfo, FileUpload} from '@1770169-fitfriends/types';
 
 export class FilesEntity implements FileUpload, Entity<string> {
   public id?: string;
@@ -36,10 +35,6 @@ export class FilesEntity implements FileUpload, Entity<string> {
     }
   }
 
-  static fromObject(file: FileUpload) {
-    return new FilesEntity(file);
-  }
-
   public populate(file: FileUpload) {
     this.id = file.id;
     this.originalName = file.originalName;
@@ -55,5 +50,9 @@ export class FilesEntity implements FileUpload, Entity<string> {
     this.createdAt = file.createdAt;
 
     return this;
+  }
+
+  static fromObject(file: FileUpload) {
+    return new FilesEntity(file);
   }
 }

@@ -12,7 +12,14 @@ import {
   VALUE_PARSE_ERROR,
   WRONG_TIME_ERROR
 } from './helpers.constant';
-import {FileBuffer, DateTimeUnit, TimeAndUnit} from '@1770169-fitfriends/types';
+import {
+  FileBuffer,
+  DateTimeUnit,
+  TimeAndUnit,
+  Entity,
+  EntityId,
+  EntityConstructor
+} from '@1770169-fitfriends/types';
 
 export function fillDto<T, P>(dto: new () => T, plainObject: P, options?: ClassTransformOptions): T;
 
@@ -102,10 +109,21 @@ export async function convertFileBuffer(buffer: Buffer): Promise<FileBuffer> {
   }
 }
 
-export const normalizePath = (value: string): string =>  sep === '\\' ? value.replace(/\\/g, '/') : value;
+export function normalizePath(value: string): string {
+  return sep === '\\' ? value.replace(/\\/g, '/') : value;
+}
 
-export const getRandomElement = <T>(elements: T[]): T => elements[Math.floor(Math.random() * elements.length)];
+export function getRandomElement<T>(elements: T[]): T {
+  return elements[Math.floor(Math.random() * elements.length)];
+}
 
-export const isUUID = (uuid: string) => {
+export function isUUID(uuid: string): boolean {
   return UUID_REGEX.test(uuid);
+}
+
+export function isKeyOfEntity<
+  P extends object,
+  T extends Entity<EntityId>
+  >(key: string, entity: EntityConstructor<P, T>): key is keyof T & string {
+    return entity.isOwnKey(key);
 }

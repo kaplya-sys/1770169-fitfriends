@@ -11,11 +11,12 @@ import {
   FieldName,
   FileRecord,
   Pagination,
+  RangeFilters,
   RequestFiles,
   TokenPayload
 } from '@1770169-fitfriends/types';
 import {Role} from '@1770169-fitfriends/models';
-import {createMessage, getRandomElement} from '@1770169-fitfriends/helpers';
+import {createMessage, getRandomElement, isKeyOfEntity} from '@1770169-fitfriends/helpers';
 
 import {TrainingRepository} from './training.repository';
 import {TrainingEntity} from './training.entity';
@@ -79,11 +80,9 @@ export class TrainingService {
     let hasChanges = false;
 
     for (const [key, value] of Object.entries(dto)) {
-      if (existTraining) {
-        if (value !== undefined && existTraining[key as keyof TrainingEntity] !== value) {
-        existTraining[key as keyof TrainingEntity] = value as never; //change
+      if (value !== undefined && isKeyOfEntity(key, TrainingEntity) && existTraining[key] !== value) {
+        existTraining[key] = value as never; //change
         hasChanges = true;
-        }
       }
     }
     const {video, background} = await this.getFiles(existTraining.videoId, existTraining.backgroundId);
@@ -191,7 +190,17 @@ export class TrainingService {
   }
 
   public async deleteTrainingById(id: string): Promise<void> {
-    this.trainingRepository.delete(id);
+    const existTraining = await this.trainingRepository.findById(id);
+
+    if (!existTraining) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
+    }
+
+    await this.trainingRepository.delete(id);
+  }
+
+  public async getPriceAndCaloriesRange(): Promise<RangeFilters> {
+    return this.trainingRepository.getRange();
   }
 
   public async createFeedback(id: string, {sub, role}: TokenPayload, dto: CreateFeedbackDto): Promise<FeedbackEntity> {

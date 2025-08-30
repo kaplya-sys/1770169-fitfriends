@@ -1,5 +1,5 @@
 import {PromoTraining, PromoType, TrainingType} from '../../types';
-import {NO_FOUND_PARAM_ERROR} from './helpers.constant';
+import {NO_FOUND_PARAM_ERROR, REGEX} from './helpers.constant';
 
 export const getRouteWithParam = <T extends string>(route: T, param: Record<string, string | number | undefined>): T => {
   let path: T = route;
@@ -25,4 +25,12 @@ export const addPromo = (trainings: TrainingType[], promotions: PromoType[]): Pr
 
     return {...promoTraining, promoText: promo.promoText, newPrice: promo.newPrice};
   });
+};
+
+export const createMessage = <T>(message: string, expressions: T[] = []): string => {
+  if (!expressions.length) {
+    return message.replace(REGEX, '').trim();
+  }
+
+  return expressions.reduce((accumulator: string, currentValue: T) => accumulator.replace(REGEX, String(currentValue)), message);
 };

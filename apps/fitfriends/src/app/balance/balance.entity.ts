@@ -1,5 +1,4 @@
-import {Entity} from "@1770169-fitfriends/core";
-import {Balance, Training} from "@1770169-fitfriends/types";
+import {Balance, Entity, Training} from '@1770169-fitfriends/types';
 
 export class BalanceEntity implements Balance, Entity<string> {
   public id?: string;

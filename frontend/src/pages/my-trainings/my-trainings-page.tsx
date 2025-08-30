@@ -1,20 +1,27 @@
 import {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 
-import {BackButton} from '../../components/back-button';
 import {Layout} from '../../components/layout';
-import {Filters} from '../../components/filters';
-import {TrainingList} from '../../components/training-list';
+import {BackButton} from '../../components/back-button';
+import {ParamsType, TrainingType} from '../../libs/shared/types';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getTrainingsAction, selectRangeFilters, selectTrainings} from '../../store';
+import {TrainingList} from '../../components/training-list';
 import {ShowMore} from '../../components/show-more';
-import {TrainingType} from '../../libs/shared/types';
+import {Filters} from '../../components/filters';
 import {StubGum} from '../../components/stub-gym';
 
-export const TrainingCatalogPage = () => {
+export const MyTrainingsPage = () => {
   const [trainings, setTrainings] = useState<TrainingType[]>([]);
+  const {id} = useParams<ParamsType>();
   const dispatch = useAppDispatch();
   const trainingsWithPagination = useAppSelector(selectTrainings);
   const rangeFilters = useAppSelector(selectRangeFilters);
+
+  useEffect(() => {
+    setTrainings([]);
+    dispatch(getTrainingsAction({query: {coach: id}}));
+  }, [id, dispatch]);
 
   useEffect(() => {
     if (trainingsWithPagination) {
@@ -48,25 +55,25 @@ export const TrainingCatalogPage = () => {
       <section className="inner-page">
         <div className="container">
           <div className="inner-page__wrapper">
-            <h1 className="visually-hidden">Каталог тренировок</h1>
-            <div className="gym-catalog-form">
+            <h1 className="visually-hidden">Мои тренировки</h1>
+            <div className="my-training-form">
               <h2 className="visually-hidden">Мои тренировки Фильтр</h2>
-              <div className="gym-catalog-form__wrapper">
-                <BackButton blockClassName='gym-catalog-form__btnback'/>
+              <div className="my-training-form__wrapper">
+                <BackButton blockClassName='my-training-form__btnback'/>
                 <Filters
                   priceRange={rangeFilters.price}
                   caloryRange={rangeFilters.calories}
-                  className='gym-catalog-form'
-                  isCustom={false}
+                  className='my-training-form'
+                  isCustom
                 />
               </div>
             </div>
-            <div className="training-catalog">
+            <div className="inner-page__content">
               {entities.length ?
                 <div className="my-trainings">
-                  <TrainingList trainings={trainingsWithPagination.entities} className='training-catalog'/>
+                  <TrainingList trainings={trainings} className='my-trainings'/>
                   <ShowMore
-                    className='training-catalog'
+                    className='my-trainings'
                     totalPages={totalPages}
                     currentPage={currentPage}
                     onClickShowMore={handleShowMoreClick}
@@ -81,3 +88,4 @@ export const TrainingCatalogPage = () => {
     </Layout>
   );
 };
+

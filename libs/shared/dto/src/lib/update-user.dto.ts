@@ -20,6 +20,7 @@ import {
   READY_PROPERTY,
   USER_DESCRIPTION_PROPERTY
 } from './dto.const';
+import {Transform} from 'class-transformer';
 
 export class UpdateUserDTO implements UpdateUser {
   @ApiProperty({
@@ -81,6 +82,7 @@ export class UpdateUserDTO implements UpdateUser {
     example: READY_PROPERTY.EXAMPLE,
     type: Boolean
   })
+  @Transform(({value}) => value === 'true' || value === true)
   @IsBoolean()
   @IsOptional()
   public isReady?: boolean;

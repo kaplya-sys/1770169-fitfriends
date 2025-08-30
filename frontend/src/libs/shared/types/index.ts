@@ -28,6 +28,7 @@ export * from './lib/promo-type';
 export * from './lib/query.type';
 export * from './lib/questionnaire.type';
 export * from './lib/range.type';
+export * from './lib/range-filters.type';
 export * from './lib/redirect-payload.type';
 export * from './lib/request-options.type';
 export * from './lib/role.type';

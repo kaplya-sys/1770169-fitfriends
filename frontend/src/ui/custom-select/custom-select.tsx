@@ -2,7 +2,7 @@ import classNames from 'classnames';
 
 type CustomSelectProps<T> = {
   title: string;
-  selectedValue: string;
+  selectedValue?: string;
   isOpen: boolean;
   isReadonly?: boolean;
   errorMessage?: string;
@@ -45,7 +45,7 @@ export const CustomSelect = <T,>({
         aria-label="Выберите одну из опций"
         disabled={isReadonly}
       >
-        <span className="custom-select__text">{nameTransform ? nameTransform[selectedValue] : selectedValue}</span>
+        <span className="custom-select__text">{nameTransform && selectedValue ? nameTransform[selectedValue] : selectedValue}</span>
         <span className="custom-select__icon">
           <svg width="15" height="6" aria-hidden="true">
             <use xlinkHref="#arrow-down"></use>

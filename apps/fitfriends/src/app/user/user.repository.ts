@@ -32,7 +32,9 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
         id
       },
       data: prismaObject,
-      include: {questionnaire: true}
+      include: {
+        questionnaire: true
+      }
     })
 
     return this.createEntityFromDocument(record);
@@ -43,7 +45,9 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
       where: {
         id
       },
-      include: {questionnaire: true}
+      include: {
+        questionnaire: true
+      }
     });
 
     if (!record) {
@@ -58,7 +62,9 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
       where: {
         email
       },
-      include: {questionnaire: true}
+      include: {
+        questionnaire: true
+      }
     })
 
     if (!record) {
@@ -73,10 +79,20 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
       where: {
         role: query.role ?? Role.user
       },
-      include: {questionnaire: true}
+      include: {
+        questionnaire: true
+      }
     })
 
     return records.map((record) => this.createEntityFromDocument(record));
+  }
+
+  public override async delete(id: UserEntity['id']): Promise<void> {
+    await this.prismaClient.user.delete({
+      where: {
+        id
+      }
+    });
   }
 }
 

@@ -1,6 +1,5 @@
-import {Entity} from '@1770169-fitfriends/core';
 import {FitnessLevel, Exercise, TrainingTime, Gender, Prisma} from '@1770169-fitfriends/models';
-import {FileUpload, Training} from '@1770169-fitfriends/types';
+import {Entity, FileUpload, Training} from '@1770169-fitfriends/types';
 
 export class TrainingEntity implements Training, Entity<string> {
   public id?: string;
@@ -82,13 +81,38 @@ export class TrainingEntity implements Training, Entity<string> {
       trainingTime: this.trainingTime,
       calories: this.calories,
       gender: this.gender,
-      rating: this.rating ?? Prisma.skip,
       price: this.price,
       videoId: this.videoId,
       coachName: this.coachName,
       specialOffer: this.specialOffer,
-      coachId: this.coachId
+      coachId: this.coachId,
+      rating: this.rating !== undefined ? this.rating : Prisma.skip
     };
+  }
+
+  static isOwnKey(key: string): boolean {
+    const ownKeys = [
+      'id',
+      'title',
+      'backgroundId',
+      'background',
+      'level',
+      'type',
+      'trainingTime',
+      'calories',
+      'gender',
+      'rating',
+      'description',
+      'price',
+      'videoId',
+      'video',
+      'coachName',
+      'specialOffer',
+      'createdAt',
+      'coachId'
+    ]
+
+    return ownKeys.includes(key);
   }
 
   static fromObject(training: Training) {

@@ -1527,7 +1527,7 @@ input:disabled ~ .role-btn__btn,
 }
 
 .custom-input--error .custom-input__error,
-.custom-input--error .custom-textarea__error {
+.custom-textarea--error .custom-textarea__error {
   opacity: 1;
 }
 

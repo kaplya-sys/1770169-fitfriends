@@ -56,7 +56,7 @@ export const Navigation = () => {
           </a>
           <Notification
             notifications={mockNotifications}
-            isConfirmed={ false }
+            isConfirmed={false}
           />
         </li>
       </ul>

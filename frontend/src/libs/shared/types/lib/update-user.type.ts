@@ -4,6 +4,7 @@ import {GenderType} from './gender.type';
 import {LocationType} from './location.type';
 
 export type UpdateUserType = {
+  avatar?: null | File;
   name?: string;
   gender?: GenderType | '';
   location?: LocationType | '';

@@ -16,13 +16,9 @@ export class RefreshTokenRepository extends BasePostgresRepository<RefreshTokenE
   }
 
   public override async save(entity: RefreshTokenEntity): Promise<RefreshTokenEntity> {
+    const prismaObject = entity.toPrismaObject();
     const newRecord = await this.prismaClient.refreshSessions.create({
-      data: {
-        tokenId: entity.tokenId,
-        userId: entity.userId,
-        expiresIn: entity.expiresIn,
-        createdAt: entity.createdAt
-      }
+      data: prismaObject
     });
     entity.id = newRecord.id;
 

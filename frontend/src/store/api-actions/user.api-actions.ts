@@ -6,7 +6,6 @@ import {
   ApiRoute,
   ErrorRequestType,
   Role,
-  UpdateUserType,
   UserType,
   NameSpace,
   AppRoute,
@@ -15,6 +14,7 @@ import {
 import {AUTH_ERROR_MESSAGE, REQUEST_ERROR_MESSAGE} from './api-actions.constant';
 import {getRouteWithParam} from '../../libs/shared/helpers';
 import {AppDispatch, RootState} from '../store';
+import {deleteUserAvatar} from '../user/user.slice';
 
 export const createQuestionnaireAction = createAsyncThunk<UserType, FormData, {
   extra: AxiosInstance;
@@ -47,11 +47,11 @@ export const createQuestionnaireAction = createAsyncThunk<UserType, FormData, {
   }
 });
 
-export const updateUserAction = createAsyncThunk<UserType, UpdateUserType, {
+export const updateUserAction = createAsyncThunk<UserType, FormData, {
   extra: AxiosInstance;
   rejectValue: ErrorRequestType | string;
   state: RootState;
-}>('user/updateUser', async (updateData, {rejectWithValue, extra: api, getState}) => {
+}>('user/updateUser', async (formData, {rejectWithValue, extra: api, getState}) => {
   try {
     const state = getState();
     const user = state[NameSpace.User].user;
@@ -59,7 +59,7 @@ export const updateUserAction = createAsyncThunk<UserType, UpdateUserType, {
     if (!user) {
       throw new Error(AUTH_ERROR_MESSAGE);
     }
-    const {data} = await api.patch<UserType>(getRouteWithParam(ApiRoute.EditUser, {id: user.id}), updateData);
+    const {data} = await api.patch<UserType>(getRouteWithParam(ApiRoute.EditUser, {id: user.id}), formData);
 
     return data;
   } catch (error: unknown) {
@@ -102,12 +102,34 @@ export const getUsersAction = createAsyncThunk<UserType[], RequestOptionsType, {
   }
 });
 
-export const deleteUserAction = createAsyncThunk<void, void, {
+export const deleteUserAvatarAction = createAsyncThunk<void, void, {
   dispatch: AppDispatch;
   extra: AxiosInstance;
   state: RootState;
   rejectValue: ErrorRequestType | string;
-}>('user/deleteUser', async (_, {dispatch, rejectWithValue, extra: api, getState}) => {
+}>('user/deleteUserAvatar', async (_, {dispatch, rejectWithValue, extra: api, getState}) => {
+  try {
+    const state = getState();
+    const user = state[NameSpace.User].user;
+
+    if (!user) {
+      throw new Error(AUTH_ERROR_MESSAGE);
+    }
+    await api.patch(getRouteWithParam(ApiRoute.DeleteUserAvatar, {id: user.id}));
+    dispatch(deleteUserAvatar());
+  } catch (error: unknown) {
+    if (isAxiosError(error) && error.response) {
+      return rejectWithValue(error.response.data as ErrorRequestType);
+    }
+    return rejectWithValue(error instanceof Error ? error.message : REQUEST_ERROR_MESSAGE);
+  }
+});
+
+export const deleteUserAction = createAsyncThunk<void, void, {
+  extra: AxiosInstance;
+  state: RootState;
+  rejectValue: ErrorRequestType | string;
+}>('user/deleteUser', async (_, {rejectWithValue, extra: api, getState}) => {
   try {
     const state = getState();
     const user = state[NameSpace.User].user;

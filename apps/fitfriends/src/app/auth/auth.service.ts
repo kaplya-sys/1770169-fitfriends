@@ -21,7 +21,7 @@ import {
   UpdateUserDTO
 } from '@1770169-fitfriends/dto';
 import {Role} from '@1770169-fitfriends/models';
-import {createJWTPayload, createMessage} from '@1770169-fitfriends/helpers';
+import {createJWTPayload, createMessage, isKeyOfEntity} from '@1770169-fitfriends/helpers';
 import {FieldName, FileRecord, RequestFiles, Token, User} from '@1770169-fitfriends/types';
 import {UsersQuery} from '@1770169-fitfriends/query';
 
@@ -38,7 +38,8 @@ import {
   UPDATE_USER_BALANCE_ERROR_MESSAGE,
   DEFAULT_AMOUNT,
   NOT_FOUND_BALANCE_BY_ID_MESSAGE,
-  QUESTIONNAIRE_EXISTS_MESSAGE
+  QUESTIONNAIRE_EXISTS_MESSAGE,
+  NOT_FOUND_QUESTIONNAIRE_MESSAGE
 } from './auth.constant';
 import {BalanceEntity} from '../balance/balance.entity';
 import {BalanceRepository} from '../balance/balance.repository';
@@ -119,19 +120,47 @@ export class AuthService {
     return existUser;
   }
 
-  public async updateUser(id: string, dto: UpdateUserDTO): Promise<UserEntity> {
+  public async updateUser(id: string, dto: UpdateUserDTO, files?: RequestFiles): Promise<UserEntity> {
     const existUser = await this.userRepository.findById(id);
 
     if (!existUser) {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
     }
+    const existQuestionnaire = await this.questionnaireRepository.findById(existUser.questionnaire?.id);
+
+    if (!existQuestionnaire) {
+      throw new NotFoundException(createMessage(NOT_FOUND_QUESTIONNAIRE_MESSAGE, [id]));
+    }
     let hasUpdates = false;
+    let hasQuestionnaireUpdates = false;
+
+    if (files?.avatar) {
+      if (existUser.avatarId) {
+        const newFiles = await this.filesService.updateFile(existUser.avatarId, files);
+        existUser.avatarId = newFiles[0].id;
+      } else {
+        const newFiles = await this.filesService.saveFiles(files);
+        existUser.avatarId = newFiles[0].id;
+      }
+      hasUpdates = true;
+    }
 
     for (const [key, value] of Object.entries(dto)) {
-      if (value !== undefined && key in UserEntity && existUser[key as keyof UserEntity] !== value) {
-        existUser[key as keyof UserEntity] = value as never; //change
-        hasUpdates = true;
+      if (value !== undefined) {
+        if (isKeyOfEntity(key, UserEntity) && existUser[key] !== value) {
+          existUser[key] = value as never;
+          hasUpdates = true;
+        }
+
+        if (isKeyOfEntity(key, QuestionnaireEntity) && existQuestionnaire[key] !== value) {
+          existQuestionnaire[key] = value as never;
+          hasQuestionnaireUpdates = true;
+        }
       }
+    }
+
+    if (hasQuestionnaireUpdates) {
+      await this.questionnaireRepository.update(existQuestionnaire?.id, existQuestionnaire);
     }
     const {backgrounds, avatar, qualifications} = await this.getFiles(existUser.role, existUser.avatarId, existUser.questionnaire?.qualificationIds);
 
@@ -344,6 +373,32 @@ export class AuthService {
       this.logger.error(createMessage(TOKEN_GENERATE_ERROR, [error]));
       throw new InternalServerErrorException(TOKEN_CREATION_ERROR);
     }
+  }
+
+  public async deleteUserById(id: string): Promise<void> {
+    const existUser = await this.userRepository.findById(id);
+
+    if (!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
+    }
+
+    await this.userRepository.delete(id);
+  }
+
+  public async deleteUserAvatar(id: string): Promise<void> {
+    const existUser = await this.userRepository.findById(id);
+
+    if (!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
+    }
+
+    if (!existUser.avatarId) {
+      return;
+    }
+
+    await this.filesService.deleteFile(existUser.avatarId);
+    existUser.avatarId = null;
+    await this.userRepository.update(id, existUser);
   }
 
   private async getFiles(userRole: Role, avatarId: string | null | undefined, qualificationIds?: string[] | null | undefined) {

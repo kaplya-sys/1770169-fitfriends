@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import {Route, Routes} from 'react-router-dom';
 
 import {useAppDispatch, useAppSelector} from '../../hooks';
@@ -20,7 +21,8 @@ import {TrainingCatalogPage} from '../../pages/training-catalog';
 import {TrainingCardPage} from '../../pages/training-card';
 import {CreateTraining} from '../../pages/create-training/create-training';
 import {Loader} from '../loader';
-import {useEffect} from 'react';
+import {MyTrainingsPage} from '../../pages/my-trainings';
+
 
 export const App = () => {
   const authorizationStatus = useAppSelector(selectAuthorizationStatus);
@@ -60,6 +62,26 @@ export const App = () => {
           appRoute={AppRoute.Intro}
         >
           <CreateTraining/>
+        </PrivateRoute>
+      }
+      />
+      <Route path={AppRoute.MyTrainings} element={
+        <PrivateRoute
+          authorizationStatus={isAuthenticated}
+          roleStatus={isCoach}
+          appRoute={AppRoute.Intro}
+        >
+          <MyTrainingsPage/>
+        </PrivateRoute>
+      }
+      />
+      <Route path={AppRoute.MyOrders} element={
+        <PrivateRoute
+          authorizationStatus={isAuthenticated}
+          roleStatus={isCoach}
+          appRoute={AppRoute.Intro}
+        >
+          <MyOrdersPage/>
         </PrivateRoute>
       }
       />

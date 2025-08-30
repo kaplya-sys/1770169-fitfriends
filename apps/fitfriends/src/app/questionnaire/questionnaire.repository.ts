@@ -44,4 +44,14 @@ export class QuestionnaireRepository extends BasePostgresRepository<Questionnair
 
     return this.createEntityFromDocument(document);
   }
+
+  public override async findById(id: QuestionnaireEntity['id']): Promise<QuestionnaireEntity | null> {
+    const record = await this.prismaClient.questionnaire.findFirst({
+      where: {
+        id
+      }
+    });
+
+    return this.createEntityFromDocument(record);
+  }
 }

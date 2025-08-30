@@ -8,7 +8,7 @@ import {UserPersonalAccount} from '../../components/user-personal-account';
 import {CustomSelect} from '../../ui/custom-select';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {
-  deleteUserAction,
+  deleteUserAvatarAction,
   getUserAction,
   selectUser,
   updateUserAction
@@ -19,6 +19,8 @@ import {
   FITNESS_LEVEL_NAME,
   GENDER_NAME,
   LOCATION_NAME,
+  MAX_EXERCISES_LENGTH,
+  STATIC_BASE_PATH,
 } from '../../libs/shared/constants';
 import {
   Exercise,
@@ -36,68 +38,140 @@ import {
 import {validateFields} from '../../libs/shared/helpers';
 
 export const PersonalAccountPage = () => {
-  const [data, setData] = useState<UpdateUserType>({});
+  const [data, setData] = useState<UpdateUserType>({
+    avatar: null,
+    description: '',
+    exercises: [],
+    fitnessLevel: '',
+    gender: '',
+    isReady: false,
+    location: '',
+    name: '',
+  });
   const [error, setError] = useState<Partial<Record<keyof UpdateUserType, string>>>({});
   const [isLocationOpen, setIsLocationOpen] = useState<boolean>(false);
   const [isSexOpen, setIsSexOpen] = useState<boolean>(false);
   const [isLevelOpen, setIsLevelOpen] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const {id} = useParams<ParamsType>();
+  const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getUserAction({id}));
   }, [dispatch, id]);
-  const user = useAppSelector(selectUser);
+
+  useEffect(() => {
+    if (user) {
+      setData({
+        name: user.name,
+        description: user.description ?? '',
+        isReady: user.isReady,
+        exercises: user.questionnaire.exercises
+      });
+    }
+  }, [user]);
 
   if (!user) {
     return null;
   }
-  /*setData({
-    name: user.name,
-    gender: user.gender,
-    location: user.location,
-    exercises: user.questionnaire.exercises,
-    description: user.description,
-    isReady: user.isReady,
-    fitnessLevel: user.questionnaire.fitnessLevel
-  });*/
+
+  const handleUserAvatarUpdate = () => {
+    if (data.avatar) {
+      const formData = new FormData();
+      formData.append('avatar', data.avatar);
+
+      dispatch(updateUserAction(formData));
+    }
+  };
+
+  const handleUserAvatarDelete = () => {
+    if (user.avatar) {
+      dispatch(deleteUserAvatarAction());
+    }
+  };
+
   const handleEditButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
 
     if (evt.currentTarget.type === 'button') {
       return setIsEdit((prevState) => !prevState);
     }
+    const formData = new FormData();
     const newError = validateFields(data);
 
     if (!newError) {
-      dispatch(updateUserAction(data));
+      if (data.exercises !== undefined) {
+        for (const exercise of data.exercises) {
+          formData.append('exercises', exercise);
+        }
+      }
+
+      if (data.name !== undefined) {
+        formData.append('name', data.name);
+      }
+
+      if (data.description !== undefined) {
+        formData.append('description', data.description);
+      }
+
+      if (data.gender !== undefined) {
+        formData.append('gender', data.gender);
+      }
+
+      if (data.isReady !== undefined) {
+        formData.append('isReady', String(data.isReady));
+      }
+
+      if (data.fitnessLevel !== undefined) {
+        formData.append('fitnessLevel', data.fitnessLevel);
+      }
+
+      dispatch(updateUserAction(formData));
+      setIsEdit((prevState) => !prevState);
     } else {
       setError(newError);
     }
-    setIsEdit((prevState) => !prevState);
   };
 
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const {name, value} = evt.target;
-    setData((prevState) => {
-      if (name === AttributeName.EXERCISE && data.exercises && evt.target instanceof HTMLInputElement) {
-        if (evt.target.checked && data.exercises.length < 3) {
+    if (evt.target instanceof HTMLTextAreaElement) {
+      return setData((prevState) => ({...prevState, description: evt.target.value}));
+    }
+
+    if (evt.target instanceof HTMLInputElement) {
+      const {name, value, checked, files} = evt.target;
+      setData((prevState) => {
+        if (name === AttributeName.EXERCISES) {
+          if (!data.exercises) {
+            return {
+              ...prevState,
+              exercises: new Array(value as ExerciseType)
+            };
+          }
+
+          if (checked && data.exercises?.length < MAX_EXERCISES_LENGTH) {
+            return {
+              ...prevState,
+              exercises: prevState.exercises?.concat(value as ExerciseType)
+            };
+          }
+
           return {
             ...prevState,
-            exercises: prevState.exercises?.concat(value as ExerciseType)
+            exercises: prevState.exercises?.filter((item) => item !== value)
           };
         }
 
-        return {
-          ...prevState,
-          exercises: prevState.exercises?.filter((item) => item !== value)
-        };
-      }
+        if (files?.length) {
+          return {...prevState, avatar: files[0]};
+        }
 
-      return {...prevState, [name]: value};
-    });
+        return {...prevState, [name]: value};
+      });
+    }
   };
+
   const handleLocationSelectClick = () => {
     setIsLocationOpen((prevState) => !prevState);
   };
@@ -108,6 +182,10 @@ export const PersonalAccountPage = () => {
 
   const handleLevelSelectClick = () => {
     setIsLevelOpen((prevState) => !prevState);
+  };
+
+  const handleReadyClick = () => {
+    setData((prevState) => ({...prevState, isReady: !prevState.isReady}));
   };
 
   const handleLocationClick = (location: LocationType) => {
@@ -135,24 +213,39 @@ export const PersonalAccountPage = () => {
               <div className="user-info__header">
                 <div className="input-load-avatar">
                   <label>
-                    <input className="visually-hidden" type="file" name="user-photo-1" accept="image/png, image/jpeg" />
-                    <span className="input-load-avatar__avatar">
-                      <img
-                        src={user.avatar?.image}
-                        srcSet={user.avatar?.image2x}
-                        width="98"
-                        height="98"
-                        alt="User avatar"
-                      />
+                    <input
+                      className="visually-hidden"
+                      type="file"
+                      name="avatar"
+                      disabled={!isEdit}
+                      accept="image/png, image/jpeg"
+                      onChange={handleInputChange}
+                    />
+                    <span className={classNames({
+                      'input-load-avatar__avatar': user.avatar,
+                      'input-load-avatar__btn': !user.avatar,
+                    })}
+                    >
+                      {user.avatar ?
+                        <img
+                          src={`${STATIC_BASE_PATH}/${user.avatar?.image}`}
+                          srcSet={`${STATIC_BASE_PATH}/${user.avatar?.image2x} 2x`}
+                          width="98"
+                          height="98"
+                          alt="User avatar"
+                        /> :
+                        <svg width="20" height="20" aria-hidden="true">
+                          <use xlinkHref="#icon-import"></use>
+                        </svg>}
                     </span>
                   </label>
                 </div>
-                {user.role === Role.Coach &&
+                {isEdit &&
                   <div className="user-info-edit__controls">
                     <button
                       className="user-info-edit__control-btn"
                       aria-label="обновить"
-                      onClick={() => void dispatch(getUserAction({id}))}
+                      onClick={handleUserAvatarUpdate}
                     >
                       <svg width="16" height="16" aria-hidden="true">
                         <use xlinkHref="#icon-change"></use>
@@ -161,7 +254,7 @@ export const PersonalAccountPage = () => {
                     <button
                       className="user-info-edit__control-btn"
                       aria-label="удалить"
-                      onClick={() => void dispatch(deleteUserAction())}
+                      onClick={handleUserAvatarDelete}
                     >
                       <svg width="14" height="16" aria-hidden="true">
                         <use xlinkHref="#icon-trash"></use>
@@ -183,7 +276,11 @@ export const PersonalAccountPage = () => {
                 </button>
                 <div className="user-info__section">
                   <h2 className="user-info__title">Обо мне</h2>
-                  <div className={classNames('custom-input', {'custom-input--readonly': !isEdit}, 'user-info__input')}>
+                  <div className={classNames('custom-input', {
+                    'custom-input--readonly': !isEdit,
+                    'custom-input--error': error.name,
+                  }, 'user-info__input')}
+                  >
                     <label>
                       <span className="custom-input__label">Имя</span>
                       <span className="custom-input__wrapper">
@@ -195,10 +292,15 @@ export const PersonalAccountPage = () => {
                           onChange={handleInputChange}
                         />
                       </span>
+                      {error.name && <span className="custom-input__error">{error.name}</span>}
                     </label>
                   </div>
-                  {(data.description || isEdit) &&
-                    <div className={classNames('custom-textarea', {'custom-textarea--readonly': !isEdit}, 'user-info__textarea')}>
+                  {(user.description || isEdit) &&
+                    <div className={classNames('custom-textarea', {
+                      'custom-textarea--readonly': !isEdit,
+                      'custom-textarea--error': error.description
+                    }, 'user-info__textarea')}
+                    >
                       <label>
                         <span className="custom-textarea__label">Описание</span>
                         <textarea
@@ -207,6 +309,7 @@ export const PersonalAccountPage = () => {
                           disabled={!isEdit}
                           onChange={handleInputChange}
                         />
+                        {error.description && <span className="custom-textarea__error">{error.description}</span>}
                       </label>
                     </div>}
                 </div>
@@ -219,7 +322,7 @@ export const PersonalAccountPage = () => {
                         name="ready-for-training"
                         checked={data.isReady}
                         disabled={!isEdit}
-                        onChange={() => setData((prevState) => ({...prevState, isReady: !prevState.isReady}))}
+                        onChange={handleReadyClick}
                       />
                       <span className="custom-toggle__icon">
                         <svg width="9" height="6" aria-hidden="true">
@@ -239,7 +342,7 @@ export const PersonalAccountPage = () => {
                           <input
                             className="visually-hidden"
                             type="checkbox"
-                            name="exercise"
+                            name="exercises"
                             value={exercise}
                             disabled={!isEdit}
                             checked= {data.exercises?.includes(exercise)}
@@ -253,7 +356,7 @@ export const PersonalAccountPage = () => {
                 </div>
                 <CustomSelect
                   title='Локация'
-                  selectedValue={data.location || ''}
+                  selectedValue={data.location}
                   errorMessage={error.location}
                   option={Location}
                   isOpen={isLocationOpen}
@@ -266,7 +369,7 @@ export const PersonalAccountPage = () => {
                 />
                 <CustomSelect
                   title='Пол'
-                  selectedValue={data.gender || ''}
+                  selectedValue={data.gender}
                   errorMessage={error.gender}
                   option={Gender}
                   isOpen={isSexOpen}
@@ -279,7 +382,7 @@ export const PersonalAccountPage = () => {
                 />
                 <CustomSelect
                   title='Уровень'
-                  selectedValue={data.fitnessLevel || ''}
+                  selectedValue={data.fitnessLevel}
                   errorMessage={error.fitnessLevel}
                   option={FitnessLevel}
                   isOpen={isLevelOpen}
@@ -293,7 +396,12 @@ export const PersonalAccountPage = () => {
               </form>
             </section>
             <div className="inner-page__content">
-              {user.role === Role.Coach ? <CoachPersonalAccount/> : <UserPersonalAccount/>}
+              {user.role === Role.Coach ?
+                <CoachPersonalAccount
+                  user={user}
+                  onChangeInput={handleInputChange}
+                /> :
+                <UserPersonalAccount/>}
             </div>
           </div>
         </div>

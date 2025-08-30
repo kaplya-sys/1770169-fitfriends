@@ -5,6 +5,7 @@ export enum NameSpace {
   Feedback = 'FEEDBACK',
   Order = 'ORDER',
   Trainings = 'TRAININGS',
+  RangeFilters = 'RANGE_FILTERS',
   RecommendedTrainings = 'RECOMMENDED_TRAININGS',
   Training = 'TRAINING',
   User = 'USER',

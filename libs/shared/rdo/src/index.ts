@@ -3,6 +3,7 @@ export * from './lib/balance.rdo';
 export * from './lib/feedback.rdo';
 export * from './lib/order.rdo';
 export * from './lib/questionnaire.rdo';
+export * from './lib/range-filters.rdo';
 export * from './lib/training.rdo';
 export * from './lib/trainings-with-pagination.rdo';
 export * from './lib/token.rdo';

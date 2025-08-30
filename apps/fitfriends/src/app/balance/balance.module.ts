@@ -1,8 +1,8 @@
-import {Module} from "@nestjs/common";
+import {Module} from '@nestjs/common';
 
-import {PrismaClientModule} from "@1770169-fitfriends/models";
+import {PrismaClientModule} from '@1770169-fitfriends/models';
 
-import {BalanceRepository} from "./balance.repository";
+import {BalanceRepository} from './balance.repository';
 
 @Module({
   imports: [PrismaClientModule],

@@ -1,6 +1,5 @@
-import {FileUpload, Questionnaire} from '@1770169-fitfriends/types';
+import {Entity, FileUpload, Questionnaire} from '@1770169-fitfriends/types';
 import {FitnessLevel, TrainingTime, Exercise, Prisma} from '@1770169-fitfriends/models';
-import {Entity} from '@1770169-fitfriends/core';
 
 export class QuestionnaireEntity implements Questionnaire, Entity<string> {
   public id?: string;
@@ -17,10 +16,6 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
 
   constructor(questionnaire: Questionnaire) {
     this.populate(questionnaire);
-  }
-
-  static fromObject(questionnaire: Questionnaire) {
-    return new QuestionnaireEntity(questionnaire);
   }
 
   public populate(questionnaire: Questionnaire) {
@@ -60,12 +55,33 @@ export class QuestionnaireEntity implements Questionnaire, Entity<string> {
       fitnessLevel: this.fitnessLevel,
       exercises: this.exercises,
       userId: this.userId,
-      trainingTime: this.trainingTime ?? Prisma.skip,
-      qualificationIds: this.qualificationIds ?? Prisma.skip,
-      caloriesLose: this.caloriesLose ?? Prisma.skip,
-      caloriesWaste: this.caloriesWaste ?? Prisma.skip,
-      experience: this.experience ?? Prisma.skip,
-      isPersonal: this.isPersonal ?? Prisma.skip
+      trainingTime: this.trainingTime !== undefined ? this.trainingTime : Prisma.skip,
+      qualificationIds: this.qualificationIds !== undefined ? this.qualificationIds : Prisma.skip,
+      caloriesLose: this.caloriesLose !== undefined ? this.caloriesLose : Prisma.skip,
+      caloriesWaste: this.caloriesWaste !== undefined ? this.caloriesWaste : Prisma.skip,
+      experience: this.experience !== undefined ? this.experience : Prisma.skip,
+      isPersonal: this.isPersonal !== undefined ? this.isPersonal : Prisma.skip
     };
+  }
+
+  static isOwnKey(key: string): boolean {
+    const ownKeys = [
+      'id',
+      'fitnessLevel',
+      'trainingTime',
+      'exercises',
+      'userId',
+      'caloriesLose',
+      'caloriesWaste',
+      'qualificationIds',
+      'qualifications',
+      'experience',
+      'isPersonal'
+    ]
+    return ownKeys.includes(key);
+  }
+
+  static fromObject(questionnaire: Questionnaire) {
+    return new QuestionnaireEntity(questionnaire);
   }
 }

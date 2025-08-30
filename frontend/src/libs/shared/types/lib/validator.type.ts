@@ -1,1 +1,1 @@
-export type ValidatorType = Partial<Record<string, (value: string) => string | null>>;
+export type ValidatorType = Partial<Record<string, (value: string | null | undefined) => string | null>>;

@@ -28,6 +28,13 @@ export const TRAINING_TIME_NAMES: Record<TrainingTimeType, string> = {
   [TrainingTime.ExtraLong]: '80-100',
 } as const;
 
+export const TRAINING_TIME_NAMES_WITH_LABEL: Record<TrainingTimeType, string> = {
+  [TrainingTime.Short]: '10 мин - 30 мин',
+  [TrainingTime.Medium]: '30 мин - 50 мин',
+  [TrainingTime.Long]: '50 мин - 80 мин',
+  [TrainingTime.ExtraLong]: '80 мин - 100 мин',
+} as const;
+
 export const LOCATION_NAME: Record<LocationType, string> = {
   [Location.Pionerskaya]: 'Пионерская',
   [Location.Petrogradskaya]: 'Петроградская',

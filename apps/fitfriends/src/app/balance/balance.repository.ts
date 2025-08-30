@@ -1,10 +1,10 @@
-import {Injectable} from "@nestjs/common";
+import {Injectable} from '@nestjs/common';
 
-import {BasePostgresRepository} from "@1770169-fitfriends/core";
-import {PrismaClientService} from "@1770169-fitfriends/models";
-import {Balance} from "@1770169-fitfriends/types";
+import {BasePostgresRepository} from '@1770169-fitfriends/core';
+import {PrismaClientService} from '@1770169-fitfriends/models';
+import {Balance} from '@1770169-fitfriends/types';
 
-import {BalanceEntity} from "./balance.entity";
+import {BalanceEntity} from './balance.entity';
 
 @Injectable()
 export class BalanceRepository extends BasePostgresRepository<BalanceEntity, Balance> {

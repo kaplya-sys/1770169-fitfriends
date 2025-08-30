@@ -35,6 +35,7 @@ import {fillDto} from '@1770169-fitfriends/helpers';
 import {
   FeedbackRDO,
   OrderRDO,
+  RangeFiltersRDO,
   TrainingRDO,
   TrainingsWithPaginationRDO
 } from '@1770169-fitfriends/rdo';
@@ -253,6 +254,24 @@ export class TrainingController {
     return recommendedTrainings.map((recommendedTraining) => fillDto(TrainingRDO, recommendedTraining.toObject(), {exposeDefaultValues: false}));
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: FOUND_RESPONSE,
+    type: RangeFiltersRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get(Route.Range)
+  public async getRange() {
+    const range = await this.trainingService.getPriceAndCaloriesRange();
+
+    return fillDto(RangeFiltersRDO, range, {exposeDefaultValues: false});
+  }
+
   @ApiParam({
     name: ID_PARAM.NAME,
     type: String,
@@ -314,7 +333,7 @@ export class TrainingController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(Route.DeleteTraining)
   public async delete(@Param('id', UUIDValidationPipe) id: string) {
-    this.trainingService.deleteTrainingById(id);
+    await this.trainingService.deleteTrainingById(id);
   }
 
   @ApiResponse({

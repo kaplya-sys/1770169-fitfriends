@@ -6,6 +6,7 @@ import {
   ErrorRequestType,
   NameSpace,
   PaginatedResponseType,
+  RangeFiltersType,
   RequestOptionsType,
   TrainingType,
   UpdateTrainingType
@@ -115,3 +116,18 @@ export const removeTrainingAction = createAsyncThunk<void, RequestOptionsType, {
   }
 });
 
+export const getRangeFiltersAction = createAsyncThunk<RangeFiltersType, void, {
+  extra: AxiosInstance;
+  rejectValue: ErrorRequestType | string;
+}>('trainings/getRangeFilters', async (_, {rejectWithValue, extra: api}) => {
+  try {
+    const {data} = await api.get<RangeFiltersType>(ApiRoute.RangeFilters);
+
+    return data;
+  } catch (error: unknown) {
+    if (isAxiosError(error) && error.response) {
+      return rejectWithValue(error.response.data as ErrorRequestType);
+    }
+    return rejectWithValue(error instanceof Error ? error.message : REQUEST_ERROR_MESSAGE);
+  }
+});

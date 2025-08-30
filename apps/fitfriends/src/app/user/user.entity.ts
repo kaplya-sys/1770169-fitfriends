@@ -1,8 +1,7 @@
 import {genSaltSync, hashSync, compareSync} from 'bcrypt';
 
-import {ExtendUser, FileUpload, Questionnaire} from '@1770169-fitfriends/types';
+import {Entity, ExtendUser, FileUpload, Questionnaire} from '@1770169-fitfriends/types';
 import {Location, Gender, Role, Prisma} from '@1770169-fitfriends/models';
-import {Entity} from '@1770169-fitfriends/core';
 
 import {SALT_ROUNDS} from './user.constant';
 
@@ -22,6 +21,7 @@ export class UserEntity implements ExtendUser, Entity<string> {
   public backgrounds?: FileUpload[];
   public isReady?: boolean;
   public createdAt?: Date;
+  public updatedAt?: Date;
   public questionnaire?: null | Questionnaire;
 
   constructor(user: ExtendUser) {
@@ -75,15 +75,14 @@ export class UserEntity implements ExtendUser, Entity<string> {
       name: this.name,
       email: this.email,
       password: this.password,
-      avatarId: this.avatarId ?? Prisma.skip,
       gender: this.gender,
-      birthday: this.birthday ?? Prisma.skip,
-      description: this.description ?? Prisma.skip,
       location: this.location,
       role: this.role,
       backgroundIds: this.backgroundIds,
-      isReady: this.isReady ?? Prisma.skip,
-      avatar: this.avatar ?? Prisma.skip
+      avatarId: this.avatarId !== undefined ? this.avatarId : Prisma.skip,
+      birthday: this.birthday !== undefined ? this.birthday : Prisma.skip,
+      description: this.description !== undefined ? this.description : Prisma.skip,
+      isReady: this.isReady !== undefined ? this.isReady: Prisma.skip
     };
   }
 
@@ -96,6 +95,28 @@ export class UserEntity implements ExtendUser, Entity<string> {
 
   public async comparePassword(password: string) {
     return compareSync(password, this.password);
+  }
+
+  static isOwnKey(key: string): boolean {
+    const ownKeys = [
+      'id',
+      'avatar',
+      'avatarId',
+      'backgroundIds',
+      'backgrounds',
+      'birthday',
+      'createdAt',
+      'description',
+      'email',
+      'gender',
+      'isReady',
+      'location',
+      'name',
+      'password',
+      'questionnaire',
+      'role'
+    ]
+    return ownKeys.includes(key);
   }
 
   static fromObject(user: ExtendUser) {

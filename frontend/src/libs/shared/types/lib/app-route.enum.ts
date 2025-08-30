@@ -9,6 +9,7 @@ export const AppRoute = {
   MyFriends: '/users/:id/friends',
   MyOrders: '/users/:id/orders',
   MyPurchases: '/users/:id/purchases',
+  MyTrainings: '/users/:id/trainings',
   PersonalAccount: '/users/:id',
   Questionnaire: '/users/:id/questionnaire',
   Register: '/sign-up',

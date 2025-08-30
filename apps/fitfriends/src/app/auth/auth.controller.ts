@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -65,6 +66,7 @@ import {
   UNAUTHORIZED,
   UPDATED_RESPONSE
 } from './auth.constant';
+import {DELETED_RESPONSE} from '../training/training.constant';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
@@ -316,15 +318,72 @@ export class AuthController {
     description: UNAUTHORIZED
   })
   @UseGuards(JWTAuthGuard)
+  @UseInterceptors(FileFieldsInterceptor([
+    {name: FieldName.Avatar, maxCount: MAX_UPLOAD_FILES}
+  ]))
   @HttpCode(HttpStatus.OK)
   @Patch(Route.EditUser)
   public async update(
+    @UploadedFiles() files: RequestFiles,
     @Body() dto: UpdateUserDTO,
     @Param('userId', UUIDValidationPipe) id: string
   ) {
-    const user = await this.authService.updateUser(id, dto);
+    const user = await this.authService.updateUser(id, dto, files);
 
     return fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false});
+  }
+
+  @ApiParam({
+    name: ID_PARAM.NAME,
+    type: String,
+    description: ID_PARAM.DESCRIPTION,
+    example: ID_PARAM.EXAMPLE
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: UPDATED_RESPONSE,
+    type: UserRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Patch(Route.DeleteUserAvatar)
+  public async deleteUserAvatar(
+    @Param('userId', UUIDValidationPipe) id: string
+  ) {
+    await this.authService.deleteUserAvatar(id);
+  }
+
+  @ApiParam({
+    name: ID_PARAM.NAME,
+    type: String,
+    description: ID_PARAM.DESCRIPTION,
+    example: ID_PARAM.EXAMPLE
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: DELETED_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(Route.DeleteTraining)
+  public async delete(@Param('id', UUIDValidationPipe) id: string) {
+    await this.authService.deleteUserById(id);
   }
 
   @ApiParam({

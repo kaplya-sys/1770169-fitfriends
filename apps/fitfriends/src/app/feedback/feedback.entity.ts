@@ -1,5 +1,4 @@
-import {Entity} from '@1770169-fitfriends/core';
-import {Feedback, User} from '@1770169-fitfriends/types';
+import {Entity, Feedback, User} from '@1770169-fitfriends/types';
 
 export class FeedbackEntity implements Feedback, Entity<string> {
   public id?: string;
@@ -12,10 +11,6 @@ export class FeedbackEntity implements Feedback, Entity<string> {
 
   constructor(feedback: Feedback) {
     this.populate(feedback);
-  }
-
-  static fromObject(feedback: Feedback) {
-    return new FeedbackEntity(feedback);
   }
 
   public populate(feedback: Feedback) {
@@ -43,11 +38,15 @@ export class FeedbackEntity implements Feedback, Entity<string> {
   }
 
   public toPrismaObject() {
-      return {
-        assessment: this.assessment,
-        content: this.content,
-        authorId: this.authorId,
-        trainingId: this.trainingId
-      };
-    }
+    return {
+      assessment: this.assessment,
+      content: this.content,
+      authorId: this.authorId,
+      trainingId: this.trainingId
+    };
+  }
+
+  static fromObject(feedback: Feedback) {
+    return new FeedbackEntity(feedback);
+  }
 }

@@ -1,6 +1,7 @@
 export const USER_EXISTS_MESSAGE = 'Пользователь с таким адресом электронной почты: %email% уже зарегистрирован в системе.';
 export const NOT_FOUND_BY_EMAIL_MESSAGE = 'Пользователь с таким адресом электронной почты: %email% не найден в системе.';
 export const NOT_FOUND_BY_ID_MESSAGE = 'Пользователь с таким идентификатором: %id% не найден в системе.';
+export const NOT_FOUND_QUESTIONNAIRE_MESSAGE = 'Анкета с таким идентификатором: %id% не найден в системе.';
 export const QUESTIONNAIRE_EXISTS_MESSAGE = 'У пользователь с идентификатором: %id% уже заполнена анкета.';
 export const NOT_FOUND_BALANCE_BY_ID_MESSAGE = 'Баланс пользователя с таким идентификатором тренировки: %id% не найден в системе.';
 export const UPDATE_USER_ERROR_MESSAGE = 'Не удалось обновить пользователя из-за ошибки сервера.';

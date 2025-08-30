@@ -1,6 +1,4 @@
-import {Entity} from '@1770169-fitfriends/core';
-import {JwtToken} from '@1770169-fitfriends/types';
-
+import {Entity, JwtToken} from '@1770169-fitfriends/types';
 
 export class RefreshTokenEntity implements JwtToken, Entity<string> {
   public id?: string;
@@ -26,6 +24,15 @@ export class RefreshTokenEntity implements JwtToken, Entity<string> {
   public toObject() {
     return {
       id: this.id,
+      tokenId: this.tokenId,
+      userId: this.userId,
+      expiresIn: this.expiresIn,
+      createdAt: this.createdAt
+    };
+  }
+
+  public toPrismaObject() {
+    return {
       tokenId: this.tokenId,
       userId: this.userId,
       expiresIn: this.expiresIn,

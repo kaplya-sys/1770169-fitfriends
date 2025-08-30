@@ -1,25 +1,25 @@
-import {useState} from 'react';
+import {ChangeEvent, useRef, useState} from 'react';
 import {Link} from 'react-router-dom';
 import classNames from 'classnames';
 
-import {AppRoute} from '../../libs/shared/types';
+import {AppRoute, UserType} from '../../libs/shared/types';
 import {Picture} from '../picture';
 import {StubGum} from '../stub-gym';
-import {useAppSelector} from '../../hooks';
-import {selectUser} from '../../store';
+import {getRouteWithParam} from '../../libs/shared/helpers';
 
-export const CoachPersonalAccount = () => {
+type CoachPersonalAccountProps = {
+  user: UserType;
+  onChangeInput: (evt: ChangeEvent<HTMLInputElement>) => void;
+}
+
+export const CoachPersonalAccount = ({user, onChangeInput}: CoachPersonalAccountProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const user = useAppSelector(selectUser);
-
-  if (!user) {
-    return null;
-  }
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="personal-account-coach">
       <div className="personal-account-coach__navigation">
-        <Link className="thumbnail-link thumbnail-link--theme-light" to="#">
+        <Link className="thumbnail-link thumbnail-link--theme-light" to={getRouteWithParam(AppRoute.MyTrainings, {id: user.id})}>
           <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
             <svg width="30" height="26" aria-hidden="true">
               <use xlinkHref="#icon-flash"></use>
@@ -35,7 +35,7 @@ export const CoachPersonalAccount = () => {
           </div>
           <span className="thumbnail-link__text">Создать тренировку</span>
         </Link>
-        <Link className="thumbnail-link thumbnail-link--theme-light" to="#">
+        <Link className="thumbnail-link thumbnail-link--theme-light" to={getRouteWithParam(AppRoute.MyFriends, {id: user.id})}>
           <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
             <svg width="30" height="26" aria-hidden="true">
               <use xlinkHref="#icon-friends"></use>
@@ -43,7 +43,7 @@ export const CoachPersonalAccount = () => {
           </div>
           <span className="thumbnail-link__text">Мои друзья</span>
         </Link>
-        <Link className="thumbnail-link thumbnail-link--theme-light" to="#">
+        <Link className="thumbnail-link thumbnail-link--theme-light" to={getRouteWithParam(AppRoute.MyOrders, {id: user.id})}>
           <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
             <svg width="30" height="26" aria-hidden="true">
               <use xlinkHref="#icon-bag"></use>
@@ -58,7 +58,21 @@ export const CoachPersonalAccount = () => {
       <div className="personal-account-coach__additional-info">
         <div className="personal-account-coach__label-wrapper">
           <h2 className="personal-account-coach__label">Дипломы и сертификаты</h2>
-          <button className="btn-flat btn-flat--underlined personal-account-coach__button" type="button">
+          <input
+            ref={inputRef}
+            className='visualHidden'
+            type="file"
+            name="qualifications"
+            tabIndex={-1}
+            accept=".pdf, .jpg, .png"
+            multiple
+            onChange={onChangeInput}
+          />
+          <button
+            className="btn-flat btn-flat--underlined personal-account-coach__button"
+            type="button"
+            onClick={() => inputRef.current?.click()}
+          >
             <svg width="14" height="14" aria-hidden="true">
               <use xlinkHref="#icon-import"></use>
             </svg>
@@ -91,20 +105,19 @@ export const CoachPersonalAccount = () => {
                 </div>
                 <div className="certificate-card__buttons">
                   <button
-                    className="btn-flat btn-flat--underlined certificate-card__button certificate-card__button--edit"
+                    className={classNames(
+                      'btn-flat btn-flat--underlined certificate-card__button',
+                      {
+                        'certificate-card__button--edit': isEdit,
+                        'certificate-card__button--save': !isEdit
+                      })}
                     type="button"
                     onClick={() => setIsEdit((prevState) => !prevState)}
                   >
                     <svg width="12" height="12" aria-hidden="true">
                       <use xlinkHref="#icon-edit"></use>
                     </svg>
-                    <span>Изменить</span>
-                  </button>
-                  <button className="btn-flat btn-flat--underlined certificate-card__button certificate-card__button--save" type="button">
-                    <svg width="12" height="12" aria-hidden="true">
-                      <use xlinkHref="#icon-edit"></use>
-                    </svg>
-                    <span>Сохранить</span>
+                    <span>{isEdit ? 'Изменить' : 'Сохранить'}</span>
                   </button>
                   <div className="certificate-card__controls">
                     <button className="btn-icon certificate-card__control" type="button" aria-label="next">

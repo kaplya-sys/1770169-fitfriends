@@ -2,45 +2,61 @@ import {
   EMAIL_FIELD_ERROR,
   EMAIL_REGEX,
   EMPTY_FIELD_ERROR,
-  GUITAR_DESCRIPTION_FIELD_ERROR,
-  GUITAR_TITLE_FIELD_ERROR,
-  GUITAR_PRICE_FIELD_ERROR,
-  GuitarDescriptionLength,
-  GuitarNameLength,
-  GuitarPriceLength,
-  NAME_FIELD_ERROR,
   NameLength,
-  PASSWORD_FIELD_ERROR,
-  PasswordLength
+  PasswordLength,
+  PRICE_FIELD_ERROR,
+  DescriptionLength,
+  FIELD_VALUE_ERROR,
+  FIELD_VALUE_TYPE_ERROR,
+  ExperienceLength,
+  CALORIES_FIELD_ERROR,
+  EXERCISE_MAX_LENGTH_ERROR,
+  EXERCISE_MAX_LENGTH,
+  AttributeName
 } from '../../constants';
-import {ValidatorType} from '../../types';
+import {
+  Exercise,
+  ExerciseType,
+  FitnessLevel,
+  Gender,
+  Location,
+  Role,
+  TrainingTime,
+  ValidatorType
+} from '../../types';
+import {createMessage} from './common.helpers';
 
-const validatePassword = (password: string): string | null => {
-  if (!password.length) {
-    return EMPTY_FIELD_ERROR;
+const validateValue = (value: string | null | undefined, min: number, max: number, emptyCheck = true): string | null => {
+  if (!value) {
+    if (emptyCheck) {
+      return EMPTY_FIELD_ERROR;
+    }
+
+    return null;
   }
 
-  if (password.length < PasswordLength.Min || password.length > PasswordLength.Max) {
-    return PASSWORD_FIELD_ERROR;
+  if (value.length < min || value.length > max) {
+    return createMessage(FIELD_VALUE_ERROR, [min, max]);
   }
 
   return null;
 };
 
-const validateName = (name: string): string | null => {
-  if (!name.length) {
+const validateValueType = <T extends object>(value: string | null | undefined, type: T): string | null => {
+  if (!value) {
     return EMPTY_FIELD_ERROR;
   }
+  const values = Object.values(type);
 
-  if (name.length < NameLength.Min || name.length > NameLength.Max) {
-    return NAME_FIELD_ERROR;
+  if (!values.includes(value)) {
+    return createMessage(FIELD_VALUE_TYPE_ERROR, [values.join(',')]);
   }
 
   return null;
 };
 
-const validateEmail = (email: string): string | null => {
-  if (!email.length) {
+const validateEmail = (email: string | null | undefined): string | null => {
+  if (!email) {
     return EMPTY_FIELD_ERROR;
   }
 
@@ -51,77 +67,78 @@ const validateEmail = (email: string): string | null => {
   return null;
 };
 
-const validateTrainingTitle = (title: string): string | null => {
-  if (!title.length) {
+const validatePrice = (price: string | null | undefined): string | null => {
+  if (!price) {
     return EMPTY_FIELD_ERROR;
   }
-
-  if (title.length < GuitarNameLength.Min || title.length > GuitarNameLength.Max) {
-    return GUITAR_TITLE_FIELD_ERROR;
-  }
-
-  return null;
-};
-
-const validateUserDescription = (description: string): string | null => {
-  if (!description.length) {
-    return EMPTY_FIELD_ERROR;
-  }
-
-  if (description.length < GuitarDescriptionLength.Min || description.length > GuitarDescriptionLength.Max) {
-    return GUITAR_DESCRIPTION_FIELD_ERROR;
-  }
-
-  return null;
-};
-
-const validateTrainingPrice = (price: string): string | null => {
   const value = parseInt(price, 10);
 
-  if (!price.length) {
-    return EMPTY_FIELD_ERROR;
-  }
-
-  if (value < GuitarPriceLength.Min || value > GuitarPriceLength.Max) {
-    return GUITAR_PRICE_FIELD_ERROR;
+  if (isNaN(value) || value < 0 || value !== Number(price)) {
+    return PRICE_FIELD_ERROR;
   }
 
   return null;
 };
 
-/*const validateArticle = (value: string): string | null => {
-  if (!value.length) {
+const validateCalories = (calories: string | null | undefined, min: number, max: number): string | null => {
+  if (!calories) {
     return EMPTY_FIELD_ERROR;
   }
+  const value = parseInt(calories, 10);
 
-  if (value.length < ArticleLength.Min || value.length > ArticleLength.Max) {
-    return ARTICLE_FIELD_ERROR;
+  if (isNaN(value) || value !== Number(calories) || value < min || value > max) {
+    return createMessage(CALORIES_FIELD_ERROR, [min, max]);
   }
 
   return null;
-};*/
+};
 
-const validateDate = (date: string): string | null => {
-  if (!date.length) {
+const validateExercises = (values: string[] | null | undefined): string | null => {
+  if (!values?.length) {
     return EMPTY_FIELD_ERROR;
+  }
+  const exercises = Object.values(Exercise);
+
+  if (!values.every((value) => exercises.includes(value as ExerciseType))) {
+    return createMessage(FIELD_VALUE_TYPE_ERROR, [exercises.join(',')]);
+  }
+
+  if (values.length > EXERCISE_MAX_LENGTH) {
+    return EXERCISE_MAX_LENGTH_ERROR;
   }
 
   return null;
 };
 
 const validator: ValidatorType = {
-  name: validateName,
+  name: (value) => validateValue(value, NameLength.Min, NameLength.Max),
   email: validateEmail,
-  password: validatePassword,
-  date: validateDate,
-  title: validateTrainingTitle,
-  price: validateTrainingPrice,
-  description: validateUserDescription
+  password: (value) => validateValue(value, PasswordLength.Min, PasswordLength.Max),
+  title: (value) => validateValue(value, NameLength.Min, NameLength.Max),
+  price: validatePrice,
+  description: (value) => validateValue(value, DescriptionLength.Min, DescriptionLength.Max, false),
+  type: (value) => validateValueType(value, Exercise),
+  gender: (value) => validateValueType(value, Gender),
+  role: (value) => validateValueType(value, Role),
+  location: (value) => validateValueType(value, Location),
+  fitnessLevel: (value) => validateValueType(value, FitnessLevel),
+  trainingTime: (value) => validateValueType(value, TrainingTime),
+  caloriesLose: (value) => validateCalories(value, NameLength.Min, NameLength.Max),
+  caloriesWaste: (value) => validateCalories(value, NameLength.Min, NameLength.Max),
+  experience: (value) => validateValue(value, ExperienceLength.Min, ExperienceLength.Max)
 };
 
 export const validateFields = <T extends object>(fields: T): Partial<Record<keyof T, string>> | null => {
   const newError: Partial<Record<keyof T, string>> = {};
   Object.entries(fields).forEach(([key, value]: [string, string]) => {
+    if (key === AttributeName.EXERCISES && Array.isArray(value)) {
+      const result = validateExercises(value);
+
+      if(result) {
+        newError[key as keyof T] = result;
+      }
+    }
+
     const validate = validator[key];
 
     if (validate) {

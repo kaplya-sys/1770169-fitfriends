@@ -141,6 +141,20 @@ export const SPECIAL_OFFER_PROPERTY = {
 export const ENTITIES_PROPERTY = {
   DESCRIPTION: 'Тренировки.',
 }
+export const MIN_PROPERTY = {
+  DESCRIPTION: 'Минимальное значение.',
+  EXAMPLE: 600
+}
+export const MAX_PROPERTY = {
+  DESCRIPTION: 'Максимальное значение.',
+  EXAMPLE: 4500
+}
+export const RANGE_PRICE_PROPERTY = {
+  DESCRIPTION: 'Диапазон цен.',
+}
+export const RANGE_CALORIES_PROPERTY = {
+  DESCRIPTION: 'Диапазон калорий.',
+}
 export const TOTAL_PAGES_PROPERTY = {
   DESCRIPTION: 'Общее количество страниц.',
   EXAMPLE: 3

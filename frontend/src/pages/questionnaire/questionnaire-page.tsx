@@ -111,8 +111,8 @@ export const QuestionnairePage = () => {
           return {...prevState, isPersonal: !prevState.isPersonal};
         }
 
-        if (name === AttributeName.EXERCISE) {
-          if (checked) {
+        if (name === AttributeName.EXERCISES) {
+          if (checked && data.exercises?.length < 3) {
             return {
               ...prevState,
               exercises: prevState.exercises?.concat(value as ExerciseType)
@@ -155,7 +155,7 @@ export const QuestionnairePage = () => {
                                 <input
                                   className="visually-hidden"
                                   type="checkbox"
-                                  name="exercise"
+                                  name="exercises"
                                   value={exercise}
                                   checked= {data.exercises.includes(exercise)}
                                   onChange={handleInputChange}
