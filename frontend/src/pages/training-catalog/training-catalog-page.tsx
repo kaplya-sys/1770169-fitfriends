@@ -2,23 +2,39 @@ import {useEffect, useState} from 'react';
 
 import {BackButton} from '../../components/back-button';
 import {Layout} from '../../components/layout';
-import {Filters} from '../../components/filters';
+import {Filter} from '../../components/filter';
 import {TrainingList} from '../../components/training-list';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getTrainingsAction, selectRangeFilters, selectTrainings} from '../../store';
 import {ShowMore} from '../../components/show-more';
-import {TrainingType} from '../../libs/shared/types';
+import {FilterName, QueryType, TrainingType} from '../../libs/shared/types';
 import {StubGum} from '../../components/stub-gym';
+import {DEFAULT_PAGE} from '../../libs/shared/constants';
 
 export const TrainingCatalogPage = () => {
   const [trainings, setTrainings] = useState<TrainingType[]>([]);
+  const [page, setPage] = useState(DEFAULT_PAGE);
+  const [filters, setFilters] = useState<QueryType>({
+    priceMin: null,
+    priceMax: null,
+    caloriesMin: null,
+    caloriesMax: null,
+    ratingMin: null,
+    ratingMax: null,
+    type: [],
+    orderByPrice: null
+  });
   const dispatch = useAppDispatch();
   const trainingsWithPagination = useAppSelector(selectTrainings);
   const rangeFilters = useAppSelector(selectRangeFilters);
 
   useEffect(() => {
+    dispatch(getTrainingsAction({query: {...filters, page}}));
+  }, [filters, page, dispatch]);
+
+  useEffect(() => {
     if (trainingsWithPagination) {
-      if (trainingsWithPagination.currentPage === 1) {
+      if (trainingsWithPagination.currentPage === DEFAULT_PAGE) {
         setTrainings(trainingsWithPagination.entities);
       } else {
         setTrainings(trainings.concat(trainingsWithPagination.entities));
@@ -26,22 +42,19 @@ export const TrainingCatalogPage = () => {
     }
   }, [trainingsWithPagination]);
 
+  const handleFilterChange = (newFilters: QueryType) => {
+    setFilters(newFilters);
+  };
+  const handleShowMoreClick = () => {
+    if (currentPage < totalPages) {
+      setPage((prevState) => prevState + DEFAULT_PAGE);
+    }
+  };
+
   if (!trainingsWithPagination) {
     return null;
   }
   const {currentPage, totalPages, entities} = trainingsWithPagination;
-
-  const handleShowMoreClick = () => {
-    if (currentPage < totalPages) {
-      dispatch(getTrainingsAction({query: {page: currentPage + 1}}));
-    }
-  };
-  const handleBackBeginningClick = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
 
   return (
     <Layout>
@@ -52,28 +65,37 @@ export const TrainingCatalogPage = () => {
             <div className="gym-catalog-form">
               <h2 className="visually-hidden">Мои тренировки Фильтр</h2>
               <div className="gym-catalog-form__wrapper">
-                <BackButton blockClassName='gym-catalog-form__btnback'/>
-                <Filters
+                <BackButton className='btn-flat--underlined gym-catalog-form__back'/>
+                <Filter
+                  className='gym-catalog-form'
+                  filterName={FilterName.TrainingFilter}
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
                   priceRange={rangeFilters.price}
                   caloryRange={rangeFilters.calories}
-                  className='gym-catalog-form'
-                  isCustom={false}
                 />
               </div>
             </div>
             <div className="training-catalog">
-              {entities.length ?
-                <div className="my-trainings">
-                  <TrainingList trainings={trainingsWithPagination.entities} className='training-catalog'/>
-                  <ShowMore
-                    className='training-catalog'
-                    totalPages={totalPages}
-                    currentPage={currentPage}
-                    onClickShowMore={handleShowMoreClick}
-                    onClickBackBeginning={handleBackBeginningClick}
-                  />
-                </div> :
-                <StubGum/>}
+              {
+                entities.length ?
+                  <div className="my-trainings">
+                    <TrainingList
+                      className='training-catalog'
+                      trainings={trainingsWithPagination.entities}
+                    />
+                    {
+                      totalPages > DEFAULT_PAGE &&
+                        <ShowMore
+                          className='training-catalog'
+                          totalPages={totalPages}
+                          currentPage={currentPage}
+                          onClickShowMore={handleShowMoreClick}
+                        />
+                    }
+                  </div> :
+                  <StubGum/>
+              }
             </div>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { PaginatedResponseType } from './../../libs/shared/types/lib/paginated-response.type';
 import {isAxiosError, AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
@@ -15,6 +16,7 @@ import {AUTH_ERROR_MESSAGE, REQUEST_ERROR_MESSAGE} from './api-actions.constant'
 import {getRouteWithParam} from '../../libs/shared/helpers';
 import {AppDispatch, RootState} from '../store';
 import {deleteUserAvatar} from '../user/user.slice';
+import {removeAccessToken, removeRefreshToken} from '../../services';
 
 export const createQuestionnaireAction = createAsyncThunk<UserType, FormData, {
   extra: AxiosInstance;
@@ -54,7 +56,7 @@ export const updateUserAction = createAsyncThunk<UserType, FormData, {
 }>('user/updateUser', async (formData, {rejectWithValue, extra: api, getState}) => {
   try {
     const state = getState();
-    const user = state[NameSpace.User].user;
+    const user = state[NameSpace.Auth].authenticatedUser;
 
     if (!user) {
       throw new Error(AUTH_ERROR_MESSAGE);
@@ -86,12 +88,12 @@ export const getUserAction = createAsyncThunk<UserType, RequestOptionsType, {
   }
 });
 
-export const getUsersAction = createAsyncThunk<UserType[], RequestOptionsType, {
+export const getUsersAction = createAsyncThunk<PaginatedResponseType<UserType>, RequestOptionsType, {
   extra: AxiosInstance;
   rejectValue: ErrorRequestType | string;
 }>('users/getUsers', async ({query}, {rejectWithValue, extra: api}) => {
   try {
-    const {data} = await api.get<UserType[]>(ApiRoute.Users, {params: query});
+    const {data} = await api.get<PaginatedResponseType<UserType>>(ApiRoute.Users, {params: query});
 
     return data;
   } catch (error: unknown) {
@@ -110,7 +112,7 @@ export const deleteUserAvatarAction = createAsyncThunk<void, void, {
 }>('user/deleteUserAvatar', async (_, {dispatch, rejectWithValue, extra: api, getState}) => {
   try {
     const state = getState();
-    const user = state[NameSpace.User].user;
+    const user = state[NameSpace.Auth].authenticatedUser;
 
     if (!user) {
       throw new Error(AUTH_ERROR_MESSAGE);
@@ -126,18 +128,22 @@ export const deleteUserAvatarAction = createAsyncThunk<void, void, {
 });
 
 export const deleteUserAction = createAsyncThunk<void, void, {
+  dispatch: AppDispatch;
   extra: AxiosInstance;
   state: RootState;
   rejectValue: ErrorRequestType | string;
-}>('user/deleteUser', async (_, {rejectWithValue, extra: api, getState}) => {
+}>('user/deleteUser', async (_, {dispatch, rejectWithValue, extra: api, getState}) => {
   try {
     const state = getState();
-    const user = state[NameSpace.User].user;
+    const user = state[NameSpace.Auth].authenticatedUser;
 
     if (!user) {
       throw new Error(AUTH_ERROR_MESSAGE);
     }
     await api.delete(getRouteWithParam(ApiRoute.DeleteUser, {id: user.id}));
+    removeAccessToken();
+    removeRefreshToken();
+    dispatch(redirectToRoute({route: AppRoute.Intro}));
   } catch (error: unknown) {
     if (isAxiosError(error) && error.response) {
       return rejectWithValue(error.response.data as ErrorRequestType);

@@ -18,7 +18,7 @@ export const Search = () => {
         </label>
         <ul className="search__list">
           {
-            balance.map((item) => (
+            balance?.entities.map((item) => (
               <li className={classNames('search__item', {'is-active': !!item.amount})} key={item.training.id}>
                 <Link className="search__link" to="#">{item.training.title}</Link>
               </li>

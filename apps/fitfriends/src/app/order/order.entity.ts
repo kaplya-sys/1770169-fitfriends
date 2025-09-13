@@ -2,7 +2,7 @@ import {Exercise, PaymentMethod} from '@1770169-fitfriends/models';
 import {Entity, Order, Training} from '@1770169-fitfriends/types';
 
 
-export class OrdersEntity implements Order, Entity<string> {
+export class OrderEntity implements Order, Entity<string> {
   public id?: string;
   public exercise!: Exercise;
   public price!: number;
@@ -61,6 +61,6 @@ export class OrdersEntity implements Order, Entity<string> {
   }
 
   static fromObject(order: Order) {
-    return new OrdersEntity(order);
+    return new OrderEntity(order);
   }
 }

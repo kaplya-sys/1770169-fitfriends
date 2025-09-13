@@ -3,7 +3,10 @@ import {Route, Routes} from 'react-router-dom';
 
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {
+  getRangeFiltersAction,
   getRecommendedTrainingsAction,
+  getTrainingsAction,
+  getUsersAction,
   selectAuthenticatedUser,
   selectAuthorizationStatus,
   selectUAuthenticatedUserIsLoading
@@ -22,6 +25,9 @@ import {TrainingCardPage} from '../../pages/training-card';
 import {CreateTraining} from '../../pages/create-training/create-training';
 import {Loader} from '../loader';
 import {MyTrainingsPage} from '../../pages/my-trainings';
+import {MyFriendsPage} from '../../pages/my-friends';
+import {UserInfoPage} from '../../pages/user-info/user-info-page';
+import {UsersPage} from '../../pages/users';
 
 
 export const App = () => {
@@ -34,7 +40,12 @@ export const App = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getRecommendedTrainingsAction());
+    if (isAuthenticated) {
+      dispatch(getRecommendedTrainingsAction());
+      dispatch(getRangeFiltersAction());
+      dispatch(getTrainingsAction({}));
+      dispatch(getUsersAction({}));
+    }
   }, [authenticatedUser, dispatch]);
 
   if (authorizationStatus === AuthorizationStatus.Unknown || isUserLoading) {
@@ -85,6 +96,24 @@ export const App = () => {
         </PrivateRoute>
       }
       />
+      <Route path={AppRoute.MyFriends} element={
+        <PrivateRoute
+          authorizationStatus={isAuthenticated}
+          appRoute={AppRoute.Intro}
+        >
+          <MyFriendsPage/>
+        </PrivateRoute>
+      }
+      />
+      <Route path={AppRoute.UserInfo} element={
+        <PrivateRoute
+          authorizationStatus={isAuthenticated}
+          appRoute={AppRoute.Intro}
+        >
+          <UserInfoPage/>
+        </PrivateRoute>
+      }
+      />
       <Route path={AppRoute.Questionnaire} element={
         <PrivateRoute
           authorizationStatus={isAuthenticated}
@@ -107,6 +136,7 @@ export const App = () => {
       </Route>
       <Route path={AppRoute.Trainings} element={<TrainingCatalogPage/>}/>
       <Route path={AppRoute.Training} element={<TrainingCardPage/>}/>
+      <Route path={AppRoute.Users} element={<UsersPage/>}/>
     </Routes>
   );
 };

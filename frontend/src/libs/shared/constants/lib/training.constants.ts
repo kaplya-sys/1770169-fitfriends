@@ -8,7 +8,9 @@ import {
   Location,
   LocationType,
   TrainingTime,
-  TrainingTimeType
+  TrainingTimeType,
+  RoleType,
+  Role
 } from '../../types';
 
 export const EXERCISE_NAMES: Record<ExerciseType, string> = {
@@ -53,4 +55,9 @@ export const FITNESS_LEVEL_NAME: Record<FitnessLevelType, string> = {
   [FitnessLevel.Beginner]: 'Новичок',
   [FitnessLevel.Amateur]: 'Любитель',
   [FitnessLevel.Professional]: 'Профессионал'
+} as const;
+
+export const ROLE_NAME: Record<RoleType, string> = {
+  [Role.User]: 'Пользователи',
+  [Role.Coach]: 'Тренеры'
 } as const;

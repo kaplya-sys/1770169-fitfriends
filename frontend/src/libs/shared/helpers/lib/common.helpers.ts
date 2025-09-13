@@ -8,7 +8,7 @@ export const getRouteWithParam = <T extends string>(route: T, param: Record<stri
     if (!value) {
       throw new Error(NO_FOUND_PARAM_ERROR);
     }
-    path = route.replace(`:${key}`, value.toString()) as T;
+    path = path.replace(`:${key}`, value.toString()) as T;
   }
 
   return path;
@@ -34,3 +34,7 @@ export const createMessage = <T>(message: string, expressions: T[] = []): string
 
   return expressions.reduce((accumulator: string, currentValue: T) => accumulator.replace(REGEX, String(currentValue)), message);
 };
+
+export const getWeekCalculation = (value: number | undefined): number => value ? value * 7 : 0;
+
+export const formatNumber = (value = 0, locale = 'ru-Ru') => Intl.NumberFormat(locale).format(value);

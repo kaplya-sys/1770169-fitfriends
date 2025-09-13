@@ -2,11 +2,11 @@ import {Module} from '@nestjs/common';
 
 import {PrismaClientModule} from '@1770169-fitfriends/models';
 
-import {OrdersRepository} from './orders.repository';
+import {FriendRepository} from './friend.repository';
 
 @Module({
   imports: [PrismaClientModule],
-  providers: [OrdersRepository],
-  exports: [OrdersRepository]
+  providers: [FriendRepository],
+  exports: [FriendRepository]
 })
-export class OrdersModule {}
+export class FriendModule {}

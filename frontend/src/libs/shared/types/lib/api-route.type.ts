@@ -1,16 +1,21 @@
 export const ApiRoute = {
   AuthCheck: '/users/check-token',
-  CreateOrder: '/trainings/:id/create-order',
+  AddFriend: '/users/:userId/add-friend/:friendId',
+  CreateOrder: '/orders/trainings/:id/create-order',
   CreateCoachQuestionnaire: '/users/:id/create-coach-questionnaire',
   CreateUserQuestionnaire: '/users/:id/create-user-questionnaire',
   CreateTraining: '/trainings/create',
   CreateTrainingFeedback: '/trainings/:id/create-feedback',
+  DeleteFriend: '/users/:userId/delete-friend/:friendId',
   DeleteTraining: '/trainings/:id/delete',
   DeleteUser: '/users/:id/delete',
   DeleteUserAvatar: '/users/:id/delete-avatar',
   EditTraining: '/trainings/:id/edit',
   EditUser: '/users/:id/edit',
   Login: '/users/sign-in',
+  MyFriend: '/users/:userId/my-friend/:friendId',
+  Orders: '/orders',
+  Order: '/orders/:id',
   RangeFilters: '/trainings/range',
   Register: '/users/sign-up',
   RefreshToken: '/users/refresh-token',
@@ -20,7 +25,8 @@ export const ApiRoute = {
   TrainingFeedbacks: '/trainings/:id/feedbacks',
   User: '/users/:id',
   Users: '/users',
-  UserBalance: '/users/:id/balance'
+  UserBalance: '/users/:id/balance',
+  UserFriends: '/users/:id/friends'
 } as const;
 
 export type ApiRouteType = (typeof ApiRoute)[keyof typeof ApiRoute];

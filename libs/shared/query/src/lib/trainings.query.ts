@@ -53,9 +53,10 @@ export class TrainingsQuery implements Query {
   @IsOptional()
   public type?: Exercise[];
 
-  @IsEnum(TrainingTime)
+  @IsArray()
+  @IsEnum(TrainingTime, {each: true})
   @IsOptional()
-  public trainingTime?: TrainingTime;
+  public trainingTime?: TrainingTime[];
 
   @IsEnum(SortDirection)
   @IsOptional()

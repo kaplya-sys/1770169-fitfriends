@@ -1,11 +1,12 @@
 import {Injectable} from '@nestjs/common';
 
 import {BasePostgresRepository} from '@1770169-fitfriends/core';
-import {PrismaClientService, Role} from '@1770169-fitfriends/models';
-import {ExtendUser} from '@1770169-fitfriends/types';
+import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
+import {ExtendUser, Pagination} from '@1770169-fitfriends/types';
 import {UsersQuery} from '@1770169-fitfriends/query';
 
 import {UserEntity} from './user.entity';
+import {DEFAULT_PAGE_COUNT, ELEMENTS_ON_PAGE} from './user.constant';
 
 @Injectable()
 export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUser> {
@@ -13,6 +14,14 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
     protected override readonly prismaClient: PrismaClientService
   ) {
     super(prismaClient, UserEntity.fromObject);
+  }
+
+  private async getUserCount(where: Prisma.UserWhereInput): Promise<number> {
+    return this.prismaClient.user.count({where});
+  }
+
+  private calculateNumberPages(totalCount: number, limit: number): number {
+    return Math.ceil(totalCount / limit);
   }
 
   public override async save(entity: UserEntity): Promise<UserEntity> {
@@ -74,17 +83,39 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
     return this.createEntityFromDocument(record);
   }
 
-  public async findByRole(query: UsersQuery): Promise<(UserEntity | null)[]> {
-    const records = await this.prismaClient.user.findMany({
-      where: {
-        role: query.role ?? Role.user
-      },
-      include: {
-        questionnaire: true
+  public async find(query?: UsersQuery): Promise<Pagination<UserEntity>> {
+    const skip = query?.page && ELEMENTS_ON_PAGE ?
+      (query.page - 1) * ELEMENTS_ON_PAGE :
+      Prisma.skip;
+    const take = ELEMENTS_ON_PAGE;
+    const where: Prisma.UserWhereInput = {
+      location: query?.location?.length ? {
+        in: query.location
+      } : Prisma.skip,
+      role: query?.role !== undefined ? query.role : Prisma.skip,
+      questionnaire: {
+        fitnessLevel: query?.fitnessLevel !== undefined ? query.fitnessLevel : Prisma.skip,
+        exercises: query?.type?.length ? {
+          hasSome: query.type
+        } : Prisma.skip
       }
-    })
+    };
+    const include: Prisma.UserInclude = {questionnaire: true}
 
-    return records.map((record) => this.createEntityFromDocument(record));
+    const [records, userCount] = await Promise.all([
+      this.prismaClient.user.findMany({where, include, take, skip}),
+      this.getUserCount(where)
+    ]);
+
+    return {
+      entities: records
+        .map((record) => this.createEntityFromDocument(record))
+        .filter((entity) => entity !== null),
+      currentPage: query?.page || DEFAULT_PAGE_COUNT,
+      totalPages: this.calculateNumberPages(userCount, take),
+      itemsPerPage: take,
+      totalItems: userCount
+    };
   }
 
   public override async delete(id: UserEntity['id']): Promise<void> {

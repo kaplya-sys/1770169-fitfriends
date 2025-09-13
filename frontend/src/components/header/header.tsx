@@ -3,9 +3,16 @@ import {Link, useLocation} from 'react-router-dom';
 import {Navigation} from '../navigation';
 import {Search} from '../search';
 import {AppRoute} from '../../libs/shared/types';
+import {useAppDispatch} from '../../hooks';
+import {logoutUserAction} from '../../store';
 
 export const Header = () => {
   const navigation = useLocation();
+  const dispatch = useAppDispatch();
+
+  const handleLogoutClick = () => {
+    dispatch(logoutUserAction());
+  };
 
   return (
     <header className="header">
@@ -25,6 +32,7 @@ export const Header = () => {
         }
         <Navigation/>
         <Search/>
+        <button className="btn-flat btn-flat--underlined header__logout-button" type='button' onClick={handleLogoutClick}>Выход</button>
       </div>
     </header>
   );

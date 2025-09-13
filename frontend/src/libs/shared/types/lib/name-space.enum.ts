@@ -3,6 +3,8 @@ export enum NameSpace {
   Balance = 'BALANCE',
   Feedbacks = 'FEEDBACKS',
   Feedback = 'FEEDBACK',
+  Friends = 'FRIENDS',
+  Orders = 'ORDERS',
   Order = 'ORDER',
   Trainings = 'TRAININGS',
   RangeFilters = 'RANGE_FILTERS',

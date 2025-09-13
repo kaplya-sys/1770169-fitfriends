@@ -1,16 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 import {getUsersAction} from '../api-actions/user.api-actions';
-import {ErrorRequestType, NameSpace, UserType} from '../../libs/shared/types';
+import {ErrorRequestType, NameSpace, PaginatedResponseType, UserType} from '../../libs/shared/types';
 
 type InitialState = {
-  users: UserType[];
+  users: PaginatedResponseType<UserType> | null;
   error: ErrorRequestType | string | null | undefined;
   isLoading: boolean;
 };
 
 const initialState: InitialState = {
-  users: [],
+  users: null,
   error: null,
   isLoading: false
 };

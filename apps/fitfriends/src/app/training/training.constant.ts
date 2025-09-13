@@ -3,9 +3,9 @@ export const UPDATE_TRAINING_ERROR_MESSAGE = 'Не удалось обновит
 export const FEEDBACK_ERROR_MESSAGE = 'Отзывы к тренировке могут публиковать только пользователи с ролью "Пользователь"';
 export const TRAINING_ERROR_MESSAGE = 'Создать тренировку могут только пользователи с ролью "Тренер"';
 export const AVERAGE_ERROR_MESSAGE = 'Не удалось получить среднее значение из-за ошибки сервера.';
-export const ELEMENTS_ON_PAGE = 50;
+export const ELEMENTS_ON_PAGE = 7;
 export const MAX_UPLOAD_FILES = 1;
-export const DEFAULT_PAGE_COUNT = 1;
+export const DEFAULT_PAGE = 1;
 export const SPECIAL_TRAINING_COUNT = 9;
 export const ROUTE_PREFIX = 'trainings';
 export const TAG = 'Trainings';
@@ -31,38 +31,32 @@ export const TRAINING_TYPE_QUERY = {
 export const TRAINING_CALORIES_MIN_QUERY = {
   NAME: 'caloriesMin',
   DESCRIPTION: 'Фильтрация тренировок по количеству калорий, от минимального значения.',
-  EXAMPLE: 1000,
-  TYPE: Number
+  EXAMPLE: 1000
 }
 export const TRAINING_CALORIES_MAX_QUERY = {
   NAME: 'caloriesMax',
   DESCRIPTION: 'Фильтрация тренировок по количеству калорий, до максимального значения.',
-  EXAMPLE: 5000,
-  TYPE: Number
+  EXAMPLE: 5000
 }
 export const TRAINING_RATING_MIN_QUERY = {
   NAME: 'ratingMin',
   DESCRIPTION: 'Фильтрация тренировок по рейтингу, от минимального значения.',
-  EXAMPLE: 1,
-  TYPE: Number
+  EXAMPLE: 1
 }
 export const TRAINING_RATING_MAX_QUERY = {
   NAME: 'ratingMax',
   DESCRIPTION: 'Фильтрация тренировок по рейтингу, до максимального значения.',
-  EXAMPLE: 5,
-  TYPE: Number
+  EXAMPLE: 5
 }
 export const TRAINING_PRICE_MIN_QUERY = {
   NAME: 'priceMin',
   DESCRIPTION: 'Фильтрация тренировок по цене, от минимальной цены.',
-  EXAMPLE: 0,
-  TYPE: Number
+  EXAMPLE: 0
 }
 export const TRAINING_PRICE_MAX_QUERY = {
   NAME: 'priceMax',
   DESCRIPTION: 'Фильтрация тренировок по цене, до максимальной цене.',
-  EXAMPLE: 9000,
-  TYPE: Number
+  EXAMPLE: 9000
 }
 export const TRAINING_PRICE_ORDER_QUERY = {
   NAME: 'orderByPrice',
@@ -79,14 +73,12 @@ export const TRAINING_DATE_ORDER_QUERY = {
 export const LIMIT_QUERY = {
   NAME: 'limit',
   DESCRIPTION: 'Количество элементов на странице.',
-  EXAMPLE: 25,
-  TYPE: Number
+  EXAMPLE: 25
 }
 export const PAGE_QUERY = {
   NAME: 'page',
   DESCRIPTION: 'Страница с элементами.',
-  EXAMPLE: 2,
-  TYPE: Number
+  EXAMPLE: 2
 }
 export const ID_PARAM = {
   NAME: 'id',

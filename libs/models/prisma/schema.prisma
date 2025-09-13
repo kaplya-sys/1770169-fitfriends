@@ -85,6 +85,8 @@ model User {
   feedbacks       Feedback[]
   orders          Order[]
   trainings       Training[]
+  friends         Friend[]          @relation("UserFriends")
+  friendsOf       Friend[]          @relation("FriendUsers")
 
   @@map("users")
 }
@@ -99,6 +101,21 @@ model RefreshSessions {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("refresh-sessions")
+}
+
+model Friend {
+  id                 String   @id @default(uuid())
+  userId             String   @map("user_id") @db.VarChar(36)
+  user               User     @relation("UserFriends", fields: [userId], references: [id], onDelete: Cascade)
+  friendId           String   @map("friend_id") @db.VarChar(36)
+  friend             User     @relation("FriendUsers", fields: [friendId], references: [id], onDelete: Cascade)
+  isJoinTraining     Boolean? @map("is_join_training")
+  isPersonalTraining Boolean? @map("is_personal_training")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, friendId])
+  @@map("friends")
 }
 
 model Questionnaire {

@@ -1,15 +1,15 @@
 import {useNavigate} from 'react-router-dom';
 
 type BackButtonPropsType = {
-  blockClassName?: string;
+  className: string;
 }
 
-export const BackButton = ({blockClassName}:BackButtonPropsType) => {
+export const BackButton = ({className}:BackButtonPropsType) => {
   const navigate = useNavigate();
 
   return (
     <button
-      className={`btn-flat btn-flat--underlined ${blockClassName}`}
+      className={`btn-flat ${className}`}
       type="button"
       onClick={() => navigate(-1)}
     >

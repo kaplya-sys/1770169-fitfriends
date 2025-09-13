@@ -6,13 +6,14 @@ import {RangeType} from '../../libs/shared/types';
 import './range-filter.css';
 
 type RangeFilterPropsType = {
-  blockClassName: string;
+  className: string;
+  modifier: string;
   title: string;
   priceRange: RangeType;
   onFilterChange?: (range: RangeType) => void;
 }
 
-export const RangeFilter = ({blockClassName, title, priceRange, onFilterChange}: RangeFilterPropsType) => {
+export const RangeFilter = ({className, modifier, title, priceRange, onFilterChange}: RangeFilterPropsType) => {
   const [range, setRange] = useState<RangeType>(priceRange);
 
   const handleInputChange = (type: 'min' | 'max', evt: ChangeEvent<HTMLInputElement>) => {
@@ -37,10 +38,10 @@ export const RangeFilter = ({blockClassName, title, priceRange, onFilterChange}:
   };
 
   return (
-    <div className={`gym-catalog-form__block gym-catalog-form__block--${blockClassName}`}>
-      <h4 className="gym-catalog-form__block-title">{title}</h4>
-      <div className={`filter-${blockClassName}`}>
-        <div className={`filter-${blockClassName}__input-text filter-${blockClassName}__input-text--min`}>
+    <div className={`${className}__block ${className}__block--${modifier}`}>
+      <h4 className={`${className}__block-title`}>{title}</h4>
+      <div className={`filter-${modifier}`}>
+        <div className={`filter-${modifier}__input-text filter-${modifier}__input-text--min`}>
           <input
             min={priceRange.min}
             max={priceRange.max}
@@ -53,7 +54,7 @@ export const RangeFilter = ({blockClassName, title, priceRange, onFilterChange}:
           />
           <label htmlFor="text-min-cal">от</label>
         </div>
-        <div className={`filter-${ blockClassName}__input-text filter-${blockClassName}__input-text--max`}>
+        <div className={`filter-${modifier}__input-text filter-${modifier}__input-text--max`}>
           <input
             min={priceRange.min}
             max={priceRange.max}

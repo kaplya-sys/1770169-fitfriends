@@ -1,6 +1,7 @@
 export * from './api-actions/api-actions.constant';
 export * from './api-actions/auth.api-actions';
 export * from './api-actions/feedback.api-actions';
+export * from './api-actions/friend.api-actions';
 export * from './api-actions/order.api-actions';
 export * from './api-actions/training.api-actions';
 export * from './api-actions/user-balance.api-actions';
@@ -8,7 +9,9 @@ export * from './api-actions/user.api-actions';
 export * from './auth/auth.selector';
 export * from './feedback/feedback.selector';
 export * from './feedbacks/feedbacks.selector';
+export * from './friends/friends.selector';
 export * from './order/order.selector';
+export * from './orders/orders.selector';
 export * from './recommended-trainings/recommended-trainings.selector';
 export * from './range/range.selector';
 export * from './store';

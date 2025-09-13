@@ -5,7 +5,7 @@ import {
   NotFoundException
 } from '@nestjs/common';
 
-import {CreateFeedbackDto, CreateOrderDTO, CreateTrainingDTO, UpdateTrainingDTO} from '@1770169-fitfriends/dto';
+import {CreateFeedbackDto, CreateTrainingDTO, UpdateTrainingDTO} from '@1770169-fitfriends/dto';
 import {TrainingsQuery} from '@1770169-fitfriends/query';
 import {
   FieldName,
@@ -33,8 +33,6 @@ import {
 import {FeedbackEntity} from '../feedback/feedback.entity';
 import {FeedbackRepository} from '../feedback/feedback.repository';
 import {AuthService} from '../auth/auth.service';
-import {OrdersEntity} from '../orders/orders.entity';
-import {OrdersRepository} from '../orders/orders.repository';
 
 @Injectable()
 export class TrainingService {
@@ -42,8 +40,7 @@ export class TrainingService {
     private readonly trainingRepository: TrainingRepository,
     private readonly filesService: FilesService,
     private readonly authService: AuthService,
-    private readonly feedbackRepository: FeedbackRepository,
-    private readonly ordersRepository: OrdersRepository,
+    private readonly feedbackRepository: FeedbackRepository
   ) {}
 
   public async createTraining({sub, name, role}: TokenPayload, dto: CreateTrainingDTO, file: RequestFiles): Promise<TrainingEntity> {
@@ -120,12 +117,12 @@ export class TrainingService {
   public async getTrainings(query?: TrainingsQuery): Promise<Pagination<TrainingEntity>> {
     const trainings = await this.trainingRepository.find(query);
     const entities = await Promise.all(
-      trainings.entities.map(async (training) => {
-        const {video, background} = await this.getFiles(training.videoId, training.backgroundId);
-        training.background = background;
-        training.video = video;
+      trainings.entities.map(async (entity) => {
+        const {video, background} = await this.getFiles(entity.videoId, entity.backgroundId);
+        entity.background = background;
+        entity.video = video;
 
-        return training;
+        return entity;
       })
     );
     trainings.entities = entities;
@@ -245,30 +242,6 @@ export class TrainingService {
     );
 
     return filteredFeedbacks;
-  }
-
-  public async createOrder(trainingId: string, userId: string, dto: CreateOrderDTO): Promise<OrdersEntity> {
-    const existTraining = await this.trainingRepository.findById(trainingId);
-
-    if (!existTraining) {
-      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [trainingId]));
-    }
-    const orderEntity = new OrdersEntity({
-      ...dto,
-      userId,
-      trainingId
-    })
-
-    const newOrder = await this.ordersRepository.save(orderEntity);
-    const {video, background} = await this.getFiles(existTraining.videoId, existTraining.backgroundId);
-    await this.authService.updateOrCreateUserBalance(userId, trainingId, newOrder.count);
-
-    if (newOrder.training) {
-      newOrder.training.video = video;
-      newOrder.training.background = background;
-    }
-
-    return newOrder;
   }
 
   private async getFiles(videoId: string, backgroundId: string) {

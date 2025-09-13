@@ -69,7 +69,7 @@ export const TrainingCardPage = () => {
             <div className="inner-page__wrapper">
               <h1 className="visually-hidden">Карточка тренировки</h1>
               <aside className="reviews-side-bar">
-                <BackButton blockClassName='reviews-side-bar__back' />
+                <BackButton className='btn-flat--underlined reviews-side-bar__back'/>
                 <Feedbacks feedbacks={feedbacks} onFeedbackClick={handleFeedbackClick}/>
               </aside>
               <div className="training-card">

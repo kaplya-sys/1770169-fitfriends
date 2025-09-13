@@ -33,7 +33,16 @@ import {
   UpdateUserDTO
 } from '@1770169-fitfriends/dto';
 import {fillDto} from '@1770169-fitfriends/helpers';
-import {AuthenticatedUserRDO, BalanceRDO, TokenPayloadRDO, TokenRDO, UserRDO} from '@1770169-fitfriends/rdo';
+import {
+  AuthenticatedUserRDO,
+  BalanceWithPaginationRDO,
+  FriendRDO,
+  FriendsWithPaginationRDO,
+  TokenPayloadRDO,
+  TokenRDO,
+  UserRDO,
+  UsersWithPaginationRDO
+} from '@1770169-fitfriends/rdo';
 import {
   FieldName,
   RequestFiles,
@@ -41,7 +50,7 @@ import {
   RequestWithUser,
   Route
 } from '@1770169-fitfriends/types';
-import {UsersQuery} from '@1770169-fitfriends/query';
+import {BalanceQuery, FriendsQuery, UsersQuery} from '@1770169-fitfriends/query';
 import {FilesTypeValidationPipe, UUIDValidationPipe} from '@1770169-fitfriends/core';
 
 import {AuthService} from './auth.service';
@@ -49,6 +58,7 @@ import {JWTAuthGuard} from '../guards/jwt-auth.guard';
 import {JWTRefreshGuard} from '../guards/jwt-refresh.guard';
 import {LocalAuthGuard} from '../guards/local-auth.guard';
 import {
+  ACTIVE_QUERY,
   AUTHORIZED_RESPONSE,
   BAD_REQUEST_RESPONSE,
   CHECK_TOKEN_RESPONSE,
@@ -56,15 +66,20 @@ import {
   CREATED_RESPONSE,
   DATA_TYPE,
   FOUND_RESPONSE,
-  ID_PARAM,
+  FRIEND_ID_PARAM,
+  USER_ID_PARAM,
+  LIMIT_QUERY,
   MAX_UPLOAD_FILES,
   NOT_FOUND_RESPONSE,
+  PAGE_QUERY,
   REFRESH_TOKEN_RESPONSE,
   ROLE_QUERY,
   ROUTE_PREFIX,
   TAG,
   UNAUTHORIZED,
-  UPDATED_RESPONSE
+  UPDATED_RESPONSE,
+  ID_PARAM,
+  FRIEND_ID_QUERY
 } from './auth.constant';
 import {DELETED_RESPONSE} from '../training/training.constant';
 
@@ -174,7 +189,7 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: FOUND_RESPONSE,
-    type: BalanceRDO
+    type: UserRDO
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -183,22 +198,46 @@ export class AuthController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Root)
-  public async getUsersByRole(@Query() query: UsersQuery) {
-    const users = await this.authService.getUsersByRole(query);
+  public async index(@Query() query: UsersQuery) {
+    const users = await this.authService.getUsers(query);
 
-    return users.map((user) => fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false}));
+    return fillDto(UsersWithPaginationRDO, {
+      ...users,
+      entities: users.entities.map((user) => user.toObject())
+    }, {exposeDefaultValues: false});
   }
 
+  @ApiQuery({
+    name: ACTIVE_QUERY.NAME,
+    type: Boolean,
+    description: ACTIVE_QUERY.DESCRIPTION,
+    example: ACTIVE_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: LIMIT_QUERY.NAME,
+    type: Number,
+    description: LIMIT_QUERY.DESCRIPTION,
+    example: LIMIT_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: PAGE_QUERY.NAME,
+    type: Number,
+    description: PAGE_QUERY.DESCRIPTION,
+    example: PAGE_QUERY.EXAMPLE,
+    required: false
+  })
   @ApiParam({
-    name: ID_PARAM.NAME,
+    name: USER_ID_PARAM.NAME,
     type: String,
-    description: ID_PARAM.DESCRIPTION,
-    example: ID_PARAM.EXAMPLE
+    description: USER_ID_PARAM.DESCRIPTION,
+    example: USER_ID_PARAM.EXAMPLE
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: FOUND_RESPONSE,
-    type: BalanceRDO
+    type: BalanceWithPaginationRDO
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -211,17 +250,23 @@ export class AuthController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Balance)
-  public async showBalance(@Param('userId', UUIDValidationPipe) id: string) {
-    const balance = await this.authService.getUserBalance(id);
+  public async showBalance(
+    @Param('userId', UUIDValidationPipe) id: string,
+    @Query() query: BalanceQuery
+  ) {
+    const balance = await this.authService.getUserBalance(id, query);
 
-    return balance.map((item) => fillDto(BalanceRDO, item.toObject(), {exposeDefaultValues: false}));
+    return fillDto(BalanceWithPaginationRDO, {
+      ...balance,
+      entities: balance.entities.map((balance) => balance.toObject())
+    }, {exposeDefaultValues: false});
   }
 
   @ApiParam({
-    name: ID_PARAM.NAME,
+    name: USER_ID_PARAM.NAME,
     type: String,
-    description: ID_PARAM.DESCRIPTION,
-    example: ID_PARAM.EXAMPLE
+    description: USER_ID_PARAM.DESCRIPTION,
+    example: USER_ID_PARAM.EXAMPLE
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -256,10 +301,10 @@ export class AuthController {
   }
 
   @ApiParam({
-    name: ID_PARAM.NAME,
+    name: USER_ID_PARAM.NAME,
     type: String,
-    description: ID_PARAM.DESCRIPTION,
-    example: ID_PARAM.EXAMPLE
+    description: USER_ID_PARAM.DESCRIPTION,
+    example: USER_ID_PARAM.EXAMPLE
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -294,11 +339,129 @@ export class AuthController {
     return fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false});
   }
 
+  @ApiQuery({
+    name: FRIEND_ID_QUERY.NAME,
+    type: String,
+    description: FRIEND_ID_QUERY.DESCRIPTION,
+    example: FRIEND_ID_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: LIMIT_QUERY.NAME,
+    type: Number,
+    description: LIMIT_QUERY.DESCRIPTION,
+    example: LIMIT_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: PAGE_QUERY.NAME,
+    type: Number,
+    description: PAGE_QUERY.DESCRIPTION,
+    example: PAGE_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: FOUND_RESPONSE,
+    type: FriendsWithPaginationRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get(Route.Friends)
+  public async getFriends(
+    @Param('userId', UUIDValidationPipe) userId: string,
+    @Query() query: FriendsQuery
+  ) {
+    const friends = await this.authService.getFriendsByUserId(userId, query);
+
+    return fillDto(FriendsWithPaginationRDO, {
+      ...friends,
+      entities: friends.entities.map((friend) => friend.toObject())
+    }, {exposeDefaultValues: false});
+  }
+
+  @ApiParam({
+    name: USER_ID_PARAM.NAME,
+    type: String,
+    description: USER_ID_PARAM.DESCRIPTION,
+    example: USER_ID_PARAM.EXAMPLE
+  })
+  @ApiParam({
+    name: FRIEND_ID_PARAM.NAME,
+    type: String,
+    description: FRIEND_ID_PARAM.DESCRIPTION,
+    example: FRIEND_ID_PARAM.EXAMPLE
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: CREATED_RESPONSE,
+    type: FriendRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: BAD_REQUEST_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: CONFLICT_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @Post(Route.AddFriend)
+  public async addUserFriend(
+    @Param('userId', UUIDValidationPipe) userId: string,
+    @Param('friendId', UUIDValidationPipe) friendId: string
+  ) {
+    const friend = await this.authService.addFriend(userId, friendId);
+
+    return fillDto(FriendRDO, friend.toObject(), {exposeDefaultValues: false});
+  }
+
   @ApiParam({
     name: ID_PARAM.NAME,
     type: String,
     description: ID_PARAM.DESCRIPTION,
     example: ID_PARAM.EXAMPLE
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: UPDATED_RESPONSE,
+    type: UserRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(Route.DeleteFriend)
+  public async deleteUserFriend(
+    @Param('id', UUIDValidationPipe) id: string
+  ) {
+    this.authService.deleteFriend(id)
+  }
+
+  @ApiParam({
+    name: USER_ID_PARAM.NAME,
+    type: String,
+    description: USER_ID_PARAM.DESCRIPTION,
+    example: USER_ID_PARAM.EXAMPLE
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -334,10 +497,10 @@ export class AuthController {
   }
 
   @ApiParam({
-    name: ID_PARAM.NAME,
+    name: USER_ID_PARAM.NAME,
     type: String,
-    description: ID_PARAM.DESCRIPTION,
-    example: ID_PARAM.EXAMPLE
+    description: USER_ID_PARAM.DESCRIPTION,
+    example: USER_ID_PARAM.EXAMPLE
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
@@ -358,14 +521,14 @@ export class AuthController {
   public async deleteUserAvatar(
     @Param('userId', UUIDValidationPipe) id: string
   ) {
-    await this.authService.deleteUserAvatar(id);
+    this.authService.deleteUserAvatar(id);
   }
 
   @ApiParam({
-    name: ID_PARAM.NAME,
+    name: USER_ID_PARAM.NAME,
     type: String,
-    description: ID_PARAM.DESCRIPTION,
-    example: ID_PARAM.EXAMPLE
+    description: USER_ID_PARAM.DESCRIPTION,
+    example: USER_ID_PARAM.EXAMPLE
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
@@ -383,14 +546,14 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(Route.DeleteTraining)
   public async delete(@Param('id', UUIDValidationPipe) id: string) {
-    await this.authService.deleteUserById(id);
+    this.authService.deleteUserById(id);
   }
 
   @ApiParam({
-    name: ID_PARAM.NAME,
+    name: USER_ID_PARAM.NAME,
     type: String,
-    description: ID_PARAM.DESCRIPTION,
-    example: ID_PARAM.EXAMPLE
+    description: USER_ID_PARAM.DESCRIPTION,
+    example: USER_ID_PARAM.EXAMPLE
   })
   @ApiResponse({
     status: HttpStatus.OK,

@@ -137,7 +137,7 @@ export const QuestionnairePage = () => {
   return (
     <div className="wrapper">
       <main>
-        <Logo />
+        <Logo/>
         <div className="popup-form popup-form--questionnaire-user">
           <div className="popup-form__wrapper">
             <div className="popup-form__content">

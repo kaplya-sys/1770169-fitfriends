@@ -1,0 +1,17 @@
+.user-card__status--noReady {
+  color: #adadad;
+  border: 1px solid #cfcfcf;
+}
+
+.user-card__status--noReady::after {
+  background-color: #cfcfcf;
+}
+
+.user-card-coach__status--noReady {
+  color: #adadad;
+  border-radius: 100px;
+}
+
+.user-card-coach__status--noReady::after {
+  background-color: #cfcfcf;
+}

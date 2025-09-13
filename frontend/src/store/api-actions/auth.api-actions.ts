@@ -94,3 +94,27 @@ export const logoutUserAction = createAsyncThunk<void, void, {
   removeRefreshToken();
   dispatch(redirectToRoute({route: AppRoute.Intro}));
 });
+
+/*export const logoutAction = createAsyncThunk<void, void, {
+  dispatch: AppDispatch;
+  extra: AxiosInstance;
+  state: RootState;
+  rejectValue: ErrorRequestType | string;
+}>('user/logout', async (_, {dispatch, rejectWithValue, extra: api, getState}) => {
+  try {
+    const state = getState();
+    const user = state[NameSpace.User].user;
+
+    if (!user) {
+      throw new Error(AUTH_ERROR_MESSAGE);
+    }
+    await api.delete(getRouteWithParam('/users/:id/logout', {id: user.id}));
+    removeAccessToken();
+    removeRefreshToken();
+  } catch (error: unknown) {
+    if (isAxiosError(error) && error.response) {
+      return rejectWithValue(error.response.data as ErrorRequestType);
+    }
+    return rejectWithValue(error instanceof Error ? error.message : REQUEST_ERROR_MESSAGE);
+  }
+});*/

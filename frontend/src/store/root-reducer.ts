@@ -11,15 +11,18 @@ import {feedbacksSlice} from './feedbacks/feedbacks.slice';
 import {userBalanceSlice} from './user-balance/user-balance.slice';
 import {recommendedTrainingsSlice} from './recommended-trainings/recommended-trainings.slice';
 import {orderSlice} from './order/order.slice';
-
 import {rangeSlice} from './range/range.slice';
+import {ordersSlice} from './orders/orders.slice';
+import {friendsSlice} from './friends/friends.slice';
 
 export const rootReducer = combineReducers({
   [NameSpace.Auth]: authSlice.reducer,
   [NameSpace.Balance]: userBalanceSlice.reducer,
   [NameSpace.Feedback]: feedbackSlice.reducer,
   [NameSpace.Feedbacks]: feedbacksSlice.reducer,
+  [NameSpace.Friends]: friendsSlice.reducer,
   [NameSpace.Order]: orderSlice.reducer,
+  [NameSpace.Orders]: ordersSlice.reducer,
   [NameSpace.RecommendedTrainings]: recommendedTrainingsSlice.reducer,
   [NameSpace.User]: userSlice.reducer,
   [NameSpace.Users]: usersSlice.reducer,

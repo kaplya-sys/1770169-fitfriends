@@ -1,16 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 import {getUserBalanceAction} from '../api-actions/user-balance.api-actions';
-import {ErrorRequestType, NameSpace, UserBalanceType,} from '../../libs/shared/types';
+import {ErrorRequestType, NameSpace, PaginatedResponseType, UserBalanceType,} from '../../libs/shared/types';
 
 type InitialState = {
-  userBalance: UserBalanceType[];
+  userBalance: PaginatedResponseType<UserBalanceType> | null;
   error: ErrorRequestType | string | null | undefined;
   isLoading: boolean;
 };
 
 const initialState: InitialState = {
-  userBalance: [],
+  userBalance: null,
   error: null,
   isLoading: false
 };

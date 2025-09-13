@@ -12,20 +12,23 @@ type UserCardProps = {
 export const UserCard = ({className, user}: UserCardProps) => (
   <li className={className}>
     <div className="thumbnail-user thumbnail-user--role-user thumbnail-user--dark">
-      {user.avatar &&
-        <div className="thumbnail-user__image">
+      <div className="thumbnail-user__image">
+        {user.avatar ?
           <Picture
             width={82}
             height={82}
             alt=''
             image={user.avatar}
-          />
-        </div>}
-      {/*<div className="thumbnail-user__top-status thumbnail-user__top-status--role-user">
-        <svg width="12" height="12" aria-hidden="true">
-          <use xlinkHref="#icon-crown"></use>
-        </svg>
-      </div>*/}
+          /> :
+          <svg width="20" height="20" aria-hidden="true">
+            <use xlinkHref="#icon-import"></use>
+          </svg>}
+        {/*<div className="thumbnail-user__top-status thumbnail-user__top-status--role-user">
+          <svg width="12" height="12" aria-hidden="true">
+            <use xlinkHref="#icon-crown"></use>
+          </svg>
+        </div>*/}
+      </div>
       <div className="thumbnail-user__header">
         <h3 className="thumbnail-user__name">{user.name}</h3>
         <div className="thumbnail-user__location">
@@ -47,7 +50,7 @@ export const UserCard = ({className, user}: UserCardProps) => (
       </ul>
       <Link
         className="btn btn--outlined btn--dark-bg btn--medium thumbnail-user__button"
-        to={getRouteWithParam(AppRoute.PersonalAccount, {id: user.id})}
+        to={getRouteWithParam(AppRoute.UserInfo, {id: user.id})}
       >
         Подробнее
       </Link>

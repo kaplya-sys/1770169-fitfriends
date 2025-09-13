@@ -673,28 +673,149 @@ const users = [
     location: Location.zvezdnaya,
     role: Role.coach,
     backgroundIds: ['68a6ad6bdee8982852ce77f0', '68a6ad6bdee8982852ce77f1']
+  },
+  {
+    id: '61d1ffbf-5d0b-417d-8ba8-9989b85a667e',
+    name: 'Артём',
+    email: 'jones-sonya35@yandex.ru',
+    password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
+    birthday: '2013-08-18T00:00:00.000Z',
+    gender: Gender.male,
+    location: Location.udelnaya,
+    role: Role.user,
+    backgroundIds: ['68a6ad6bdee8982852ce77ee', '68a6ad6bdee8982852ce77ef']
+  },
+  {
+    id: 'd9eeda2a-088f-4d06-8c33-7bd610c70257',
+    name: 'София',
+    email: 'solano_sherrie84@mail.ru',
+    password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
+    gender: Gender.female,
+    location: Location.pionerskaya,
+    role: Role.coach,
+    backgroundIds: ['68a6ad6bdee8982852ce77f0', '68a6ad6bdee8982852ce77f1']
+  },
+  {
+    id: '70c6380e-2ce2-4df4-9ab8-395fdee57714',
+    name: 'Роберт',
+    email: 'wilson_marcus31@gmail.com',
+    password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
+    birthday: '2012-02-18T00:00:00.000Z',
+    gender: Gender.male,
+    location: Location.sportivnaya,
+    role: Role.user,
+    backgroundIds: ['68a6ad6bdee8982852ce77ee', '68a6ad6bdee8982852ce77ef']
+  },
+  {
+    id: '00feb0c6-ad1b-430f-b8b0-1bd806980ca9',
+    name: 'Вероника',
+    email: 'hurley-dakota67@yandex.ru',
+    password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
+    gender: Gender.female,
+    location: Location.zvezdnaya,
+    role: Role.user,
+    backgroundIds: ['68a6ad6bdee8982852ce77f0', '68a6ad6bdee8982852ce77f1']
+  },
+  {
+    id: '56248ec1-5e1e-4f3c-9328-19ee161276cb',
+    name: 'Антон',
+    email: 'boyce-hagan10@gmail.com',
+    password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
+    birthday: '2011-04-18T00:00:00.000Z',
+    gender: Gender.male,
+    location: Location.pionerskaya,
+    role: Role.user,
+    backgroundIds: ['68a6ad6bdee8982852ce77ee', '68a6ad6bdee8982852ce77ef']
+  },
+  {
+    id: '66826b10-0365-411b-9dc0-269944b97fbc',
+    name: 'Екатерина',
+    email: 'ponce_stevan37@list.ru',
+    password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
+    gender: Gender.female,
+    location: Location.udelnaya,
+    role: Role.user,
+    backgroundIds: ['68a6ad6bdee8982852ce77f0', '68a6ad6bdee8982852ce77f1']
+  },
+];
+
+const userQuestionnaires = [
+  {
+    id: '1953d3a5-9b4b-4fb8-93c2-d6ec5c8c7ab2',
+    fitnessLevel: FitnessLevel.amateur,
+    exercises: [Exercise.running, Exercise.crossfit],
+    trainingTime: TrainingTime.long,
+    caloriesLose: 2100,
+    caloriesWaste: 4600,
+    userId: '110a0aeb-dbfb-4f27-8179-513185b00836'
+  },
+  {
+    id: '3924dd47-4f2f-445e-9e66-1429e804ca20',
+    fitnessLevel: FitnessLevel.professional,
+    exercises: [Exercise.boxing, Exercise.crossfit, Exercise.pilates],
+    trainingTime: TrainingTime.medium,
+    caloriesLose: 1000,
+    caloriesWaste: 5000,
+    userId: '61d1ffbf-5d0b-417d-8ba8-9989b85a667e'
+  },
+  {
+    id: '1111050a-ffe0-46ca-9329-edcb24fb0706',
+    fitnessLevel: FitnessLevel.beginner,
+    exercises: [Exercise.stretching],
+    trainingTime: TrainingTime.short,
+    caloriesLose: 3100,
+    caloriesWaste: 4500,
+    userId: '70c6380e-2ce2-4df4-9ab8-395fdee57714'
+  },
+  {
+    id: '01a133f2-9327-4a17-b9de-8966365e09d8',
+    fitnessLevel: FitnessLevel.beginner,
+    exercises: [Exercise.running, Exercise.aerobics, Exercise.yoga],
+    trainingTime: TrainingTime.extraLong,
+    caloriesLose: 1000,
+    caloriesWaste: 3000,
+    userId: '00feb0c6-ad1b-430f-b8b0-1bd806980ca9'
+  },
+  {
+    id: '4a7f5480-6aca-40b9-80e8-806504f21545',
+    fitnessLevel: FitnessLevel.amateur,
+    exercises: [Exercise.aerobics, Exercise.stretching],
+    trainingTime: TrainingTime.medium,
+    caloriesLose: 1800,
+    caloriesWaste: 3900,
+    userId: '56248ec1-5e1e-4f3c-9328-19ee161276cb'
+  },
+  {
+    id: 'c5c1d25d-3392-4ee4-9472-ea97c0548064',
+    fitnessLevel: FitnessLevel.professional,
+    exercises: [Exercise.yoga, Exercise.crossfit, Exercise.boxing],
+    trainingTime: TrainingTime.long,
+    caloriesLose: 2000,
+    caloriesWaste: 3500,
+    userId: '66826b10-0365-411b-9dc0-269944b97fbc'
   }
 ];
 
-const userQuestionnaire = {
-  id: '1953d3a5-9b4b-4fb8-93c2-d6ec5c8c7ab2',
-  fitnessLevel: FitnessLevel.amateur,
-  exercises: [Exercise.running, Exercise.crossfit],
-  trainingTime: TrainingTime.long,
-  caloriesLose: 1000,
-  caloriesWaste: 3000,
-  userId: '110a0aeb-dbfb-4f27-8179-513185b00836'
-};
-
-const coachQuestionnaire = {
-  id: '1e887d43-df4a-4350-a2d3-e4e250835676',
-  fitnessLevel: FitnessLevel.professional,
-  exercises: [Exercise.running, Exercise.crossfit, Exercise.aerobics],
-  qualificationIds: ['68a30a546cb39008b0015aa5', '68a30a546cb39008b0015aa6'],
-  experience: 'Умение составлять и корректировать тренировочные планы в зависимости от индивидуальных запросов и физических возможностей клиентов.',
-  isPersonal: true,
-  userId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
-};
+const coachQuestionnaires = [
+  {
+    id: '1e887d43-df4a-4350-a2d3-e4e250835676',
+    fitnessLevel: FitnessLevel.professional,
+    exercises: [Exercise.running, Exercise.crossfit, Exercise.aerobics],
+    qualificationIds: ['68a30a546cb39008b0015aa5', '68a30a546cb39008b0015aa6'],
+    experience: 'Умение составлять и корректировать тренировочные планы в зависимости от индивидуальных запросов и физических возможностей клиентов.',
+    isPersonal: true,
+    userId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
+  },
+  {
+    id: '45484449-fb1a-4e7f-ab54-fa35e3a3f506',
+    fitnessLevel: FitnessLevel.beginner,
+    exercises: [Exercise.yoga, Exercise.stretching, Exercise.boxing],
+    qualificationIds: ['68a30a546cb39008b0015aa5', '68a30a546cb39008b0015aa6'],
+    experience: 'Умение составлять и корректировать тренировочные планы в зависимости от индивидуальных запросов и физических возможностей клиентов.',
+    isPersonal: false,
+    userId: 'd9eeda2a-088f-4d06-8c33-7bd610c70257'
+  }
+];
 
 const orders = [
   {
@@ -726,14 +847,17 @@ async function seed(prismaClient: PrismaClient) {
     })
   }
 
-  await prismaClient.questionnaire.create({
-    data: userQuestionnaire
-  });
+  for(const userQuestionnaire of userQuestionnaires) {
+    await prismaClient.questionnaire.create({
+      data: userQuestionnaire
+    });
+  }
 
-  await prismaClient.questionnaire.create({
-    data: coachQuestionnaire
-  });
-
+  for(const coachQuestionnaire of coachQuestionnaires) {
+    await prismaClient.questionnaire.create({
+      data: coachQuestionnaire
+    });
+  }
 
   for(const training of trainings) {
     await prismaClient.training.create({

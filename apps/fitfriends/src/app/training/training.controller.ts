@@ -26,7 +26,6 @@ import {FileFieldsInterceptor} from '@nestjs/platform-express';
 import {FilesTypeValidationPipe, ParseFormDataJsonPipe, UUIDValidationPipe} from '@1770169-fitfriends/core';
 import {
   CreateFeedbackDto,
-  CreateOrderDTO,
   CreateTrainingDTO,
   CreateTrainingSwaggerDTO,
   UpdateTrainingDTO
@@ -34,7 +33,6 @@ import {
 import {fillDto} from '@1770169-fitfriends/helpers';
 import {
   FeedbackRDO,
-  OrderRDO,
   RangeFiltersRDO,
   TrainingRDO,
   TrainingsWithPaginationRDO
@@ -132,42 +130,42 @@ export class TrainingController {
   })
   @ApiQuery({
     name: TRAINING_RATING_MAX_QUERY.NAME,
-    type: TRAINING_RATING_MAX_QUERY.TYPE,
+    type: Number,
     description: TRAINING_RATING_MAX_QUERY.DESCRIPTION,
     example: TRAINING_RATING_MAX_QUERY.EXAMPLE,
     required: false
   })
   @ApiQuery({
     name: TRAINING_RATING_MIN_QUERY.NAME,
-    type: TRAINING_RATING_MIN_QUERY.TYPE,
+    type: Number,
     description: TRAINING_RATING_MIN_QUERY.DESCRIPTION,
     example: TRAINING_RATING_MIN_QUERY.EXAMPLE,
     required: false
   })
   @ApiQuery({
     name: TRAINING_CALORIES_MAX_QUERY.NAME,
-    type: TRAINING_CALORIES_MAX_QUERY.TYPE,
+    type: Number,
     description: TRAINING_CALORIES_MAX_QUERY.DESCRIPTION,
     example: TRAINING_CALORIES_MAX_QUERY.EXAMPLE,
     required: false
   })
   @ApiQuery({
     name: TRAINING_CALORIES_MIN_QUERY.NAME,
-    type: TRAINING_CALORIES_MIN_QUERY.TYPE,
+    type: Number,
     description: TRAINING_CALORIES_MIN_QUERY.DESCRIPTION,
     example: TRAINING_CALORIES_MIN_QUERY.EXAMPLE,
     required: false
   })
   @ApiQuery({
     name: TRAINING_PRICE_MIN_QUERY.NAME,
-    type: TRAINING_PRICE_MIN_QUERY.TYPE,
+    type: Number,
     description: TRAINING_PRICE_MIN_QUERY.DESCRIPTION,
     example: TRAINING_PRICE_MIN_QUERY.EXAMPLE,
     required: false
   })
   @ApiQuery({
     name: TRAINING_PRICE_MAX_QUERY.NAME,
-    type: TRAINING_PRICE_MAX_QUERY.TYPE,
+    type: Number,
     description: TRAINING_PRICE_MAX_QUERY.DESCRIPTION,
     example: TRAINING_PRICE_MAX_QUERY.EXAMPLE,
     required: false
@@ -190,14 +188,14 @@ export class TrainingController {
   })
   @ApiQuery({
     name: LIMIT_QUERY.NAME,
-    type: LIMIT_QUERY.TYPE,
+    type: Number,
     description: LIMIT_QUERY.DESCRIPTION,
     example: LIMIT_QUERY.EXAMPLE,
     required: false
   })
   @ApiQuery({
     name: PAGE_QUERY.NAME,
-    type: PAGE_QUERY.TYPE,
+    type: Number,
     description: PAGE_QUERY.DESCRIPTION,
     example: PAGE_QUERY.EXAMPLE,
     required: false
@@ -222,14 +220,10 @@ export class TrainingController {
 
     const trainings = await this.trainingService.getTrainings(query);
 
-    return fillDto(
-      TrainingsWithPaginationRDO,
-      {
-        ...trainings,
-        entities: trainings.entities.map((training) => training.toObject())
-      },
-      {exposeDefaultValues: false}
-    );
+    return fillDto(TrainingsWithPaginationRDO, {
+      ...trainings,
+      entities: trainings.entities.map((training) => training.toObject())
+    }, {exposeDefaultValues: false});
   }
 
   @ApiResponse({
@@ -390,32 +384,6 @@ export class TrainingController {
     const feedbacks = await this.trainingService.getFeedbacksByTrainingId(id);
 
     return feedbacks.map((feedback) => fillDto(FeedbackRDO, feedback.toObject(), {exposeDefaultValues: false}));
-  }
-
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: CREATED_RESPONSE,
-    type: OrderRDO
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: BAD_REQUEST_RESPONSE
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: UNAUTHORIZED
-  })
-  @UseGuards(JWTAuthGuard)
-  @HttpCode(HttpStatus.CREATED)
-  @Post(Route.CreateOrder)
-  public async createOrder(
-    @Param('id', UUIDValidationPipe) id: string,
-    @Body() dto: CreateOrderDTO,
-    @RequestTokenPayload() tokenPayload: TokenPayload
-  ) {
-    const newOrder = await this.trainingService.createOrder(id, tokenPayload.sub, dto);
-
-    return fillDto(FeedbackRDO, newOrder.toObject(), {exposeDefaultValues: false});
   }
 
   @ApiParam({

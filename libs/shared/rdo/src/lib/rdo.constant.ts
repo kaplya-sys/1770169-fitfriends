@@ -34,9 +34,20 @@ export const QUALIFICATIONS_PROPERTY = {
 export const QUESTIONNAIRE_PROPERTY = {
   DESCRIPTION: 'Опросник пользователя.'
 }
+export const FRIEND_PROPERTY = {
+  DESCRIPTION: 'Добавленный в друзья пользователь.'
+}
 export const EXPERIENCE_PROPERTY = {
   DESCRIPTION: 'Информация об опыте работы тренера.',
   EXAMPLE: 'Я считаю, что настоящий опыт заключается не в количестве потраченных лет, а в достижении результатов.'
+}
+export const IS_JOIN_TRAINING_PROPERTY = {
+  DESCRIPTION: 'Статус о совместной тренировки.',
+  EXAMPLE: false
+}
+export const IS_PERSONAL_TRAINING_PROPERTY = {
+  DESCRIPTION: 'Статус о индивидуальной тренировки.',
+  EXAMPLE: true
 }
 export const IMAGE_PROPERTY = {
   DESCRIPTION: 'Полный путь к изображению.',
@@ -139,7 +150,7 @@ export const SPECIAL_OFFER_PROPERTY = {
   EXAMPLE: true
 }
 export const ENTITIES_PROPERTY = {
-  DESCRIPTION: 'Тренировки.',
+  DESCRIPTION: 'Массив сущностей.',
 }
 export const MIN_PROPERTY = {
   DESCRIPTION: 'Минимальное значение.',

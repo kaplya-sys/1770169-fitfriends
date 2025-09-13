@@ -14,6 +14,7 @@ import {RefreshTokenModule} from '../refresh-token/refresh-token.module';
 import {FilesModule} from '../files/files.module';
 import {QuestionnaireModule} from '../questionnaire/questionnaire.module';
 import {BalanceModule} from '../balance/balance.module';
+import {FriendModule} from '../friend/friend.module';
 
 
 @Module({
@@ -21,6 +22,7 @@ import {BalanceModule} from '../balance/balance.module';
     BalanceModule,
     UserModule,
     FilesModule,
+    FriendModule,
     QuestionnaireModule,
     RefreshTokenModule,
     JwtModule.registerAsync({

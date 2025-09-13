@@ -4,17 +4,19 @@ import {Exercise} from '../../libs/shared/types';
 import {EXERCISE_NAMES} from '../../libs/shared/constants';
 
 type ExercisePropsType = {
+  className: string;
+  modifier: string;
+  title: string;
   onFilterChange: (evt: ChangeEvent<HTMLInputElement>) => void;
 }
 
-
-export const ExerciseFilter = ({onFilterChange}: ExercisePropsType) => (
-  <div className="gym-catalog-form__block gym-catalog-form__block--type">
-    <h4 className="gym-catalog-form__block-title">Тип</h4>
-    <ul className="gym-catalog-form__check-list">
+export const ExerciseFilter = ({className, modifier, title, onFilterChange}: ExercisePropsType) => (
+  <div className={`${className}__block ${className}__block--${modifier}`}>
+    <h4 className={`${className}__block-title`}>{title}</h4>
+    <ul className={`${className}__check-list`}>
       {
         Object.values(Exercise).map((exercise) => (
-          <li className="gym-catalog-form__check-list-item" key={exercise}>
+          <li className={`${className}__check-list-item`} key={exercise}>
             <div className="custom-toggle custom-toggle--checkbox">
               <label>
                 <input
@@ -35,5 +37,11 @@ export const ExerciseFilter = ({onFilterChange}: ExercisePropsType) => (
         ))
       }
     </ul>
+    <button className="btn-show-more user-catalog-form__btn-show" type="button">
+      <span>Посмотреть все</span>
+      <svg className="btn-show-more__icon" width="10" height="4" aria-hidden="true">
+        <use xlinkHref="#arrow-down"></use>
+      </svg>
+    </button>
   </div>
 );

@@ -22,8 +22,8 @@ import {
 } from '@1770169-fitfriends/dto';
 import {Role} from '@1770169-fitfriends/models';
 import {createJWTPayload, createMessage, isKeyOfEntity} from '@1770169-fitfriends/helpers';
-import {FieldName, FileRecord, RequestFiles, Token, User} from '@1770169-fitfriends/types';
-import {UsersQuery} from '@1770169-fitfriends/query';
+import {FieldName, FileRecord, RequestFiles, Token, User, Pagination} from '@1770169-fitfriends/types';
+import {BalanceQuery, FriendsQuery, UsersQuery} from '@1770169-fitfriends/query';
 
 import {UserEntity} from '../user/user.entity';
 import {UserRepository} from '../user/user.repository';
@@ -39,7 +39,9 @@ import {
   DEFAULT_AMOUNT,
   NOT_FOUND_BALANCE_BY_ID_MESSAGE,
   QUESTIONNAIRE_EXISTS_MESSAGE,
-  NOT_FOUND_QUESTIONNAIRE_MESSAGE
+  NOT_FOUND_QUESTIONNAIRE_MESSAGE,
+  NOT_FOUND_FRIEND_MESSAGE,
+  ID_ERROR_MESSAGE
 } from './auth.constant';
 import {BalanceEntity} from '../balance/balance.entity';
 import {BalanceRepository} from '../balance/balance.repository';
@@ -48,6 +50,8 @@ import {FilesEntity} from '../files/files.entity';
 import {FilesService} from '../files/files.service';
 import {QuestionnaireRepository} from '../questionnaire/questionnaire.repository';
 import {QuestionnaireEntity} from '../questionnaire/questionnaire.entity';
+import {FriendRepository} from '../friend/friend.repository';
+import {FriendEntity} from '../friend/friend.entity';
 
 @Injectable()
 export class AuthService {
@@ -59,6 +63,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly refreshTokenService: RefreshTokenService,
     private readonly filesService: FilesService,
+    private readonly friendRepository: FriendRepository,
     @Inject(JwtConfig.KEY)private readonly jwtOptions: ConfigType<typeof JwtConfig>
   ) {}
 
@@ -246,58 +251,56 @@ export class AuthService {
     return existUser;
   }
 
-  public async getUsersByRole(query: UsersQuery): Promise<UserEntity[]> {
-    const users = await this.userRepository.findByRole(query);
+  public async getUsers(query: UsersQuery): Promise<Pagination<UserEntity>> {
+    const users = await this.userRepository.find(query);
+    const entities = await Promise.all(
+      users.entities.map(async (entity) => {
+        const {backgrounds, avatar, qualifications} = await this.getFiles(entity.role, entity.avatarId, entity.questionnaire?.qualificationIds);
 
-    const result = Promise.all(
-      users
-        .filter((user) => user !== null)
-        .map(async (user) => {
-          const {backgrounds, avatar, qualifications} = await this.getFiles(user.role, user.avatarId, user.questionnaire?.qualificationIds);
+        if (backgrounds) {
+          entity.backgrounds = backgrounds;
+        }
 
-          if (backgrounds) {
-            user.backgrounds = backgrounds;
-          }
+        if (avatar) {
+          entity.avatar = avatar;
+        }
 
-          if (avatar) {
-            user.avatar = avatar;
-          }
+        if (entity.role === Role.coach && entity.questionnaire && qualifications?.length) {
+          entity.questionnaire.qualifications = qualifications;
+        }
 
-          if (user.role === Role.coach && user.questionnaire && qualifications?.length) {
-            user.questionnaire.qualifications = qualifications;
-          }
-
-          return user;
-        })
+        return entity;
+      })
     );
+    users.entities = entities;
 
-    return result;
+    return users;
   }
 
-  public async getUserBalance(userId: string): Promise<BalanceEntity[]> {
+  public async getUserBalance(userId: string, query?: BalanceQuery): Promise<Pagination<BalanceEntity>> {
     const existUser = await this.userRepository.findById(userId);
 
     if(!existUser) {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [userId]));
     }
-    const userBalance = await this.balanceRepository.findByUserId(userId);
-    const result = await Promise.all(
-      userBalance
-        .filter((balance) => balance !== null)
-        .map(async (balance) => {
-          const video = await this.filesService.getFile(balance.training?.videoId as string);
-          const background = await this.filesService.getFile(balance.training?.backgroundId as string);
+    const userBalance = await this.balanceRepository.findByUserId(userId, query);
+    const entities = await Promise.all(
+      userBalance.entities
+        .map(async (entity) => {
+          const video = await this.filesService.getFile(entity.training?.videoId as string);
+          const background = await this.filesService.getFile(entity.training?.backgroundId as string);
 
-          if ('training' in balance && typeof balance.training === 'object') {
-            balance.training.video = video.toObject();
-            balance.training.background = background.toObject()
+          if ('training' in entity && typeof entity.training === 'object') {
+            entity.training.video = video.toObject();
+            entity.training.background = background.toObject()
           }
 
-          return balance;
+          return entity;
         })
     );
+    userBalance.entities = entities;
 
-    return result;
+    return userBalance;
   }
 
   public async updateOrCreateUserBalance(userId: string, trainingId: string, amount = DEFAULT_AMOUNT): Promise<BalanceEntity> {
@@ -349,6 +352,94 @@ export class AuthService {
     }
 
     return balance;
+  }
+
+  public async addFriend(userId: string, friendId: string): Promise<FriendEntity> {
+    if (userId === friendId) {
+      throw new ConflictException(ID_ERROR_MESSAGE);
+    }
+    const existUser = await this.userRepository.findById(userId);
+    const existUserOf = await this.userRepository.findById(friendId);
+
+    if (!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [userId]));
+    }
+
+    if (!existUserOf) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [friendId]));
+    }
+    const {backgrounds, avatar, qualifications} = await this.getFiles(existUserOf.role, existUserOf.avatarId, existUserOf.questionnaire?.qualificationIds);
+    const existFriend = await this.friendRepository.findByUserIdAndFriendId(userId, friendId);
+
+    if (existFriend) {
+      if (existFriend.friend) {
+        if (backgrounds) {
+          existFriend.friend.backgrounds = backgrounds;
+        }
+
+        if (avatar) {
+          existFriend.friend.avatar = avatar;
+        }
+
+        if (existFriend.friend.role === Role.coach && existFriend.friend.questionnaire && qualifications?.length) {
+          existFriend.friend.questionnaire.qualifications = qualifications;
+        }
+      }
+
+      return existFriend;
+    }
+    const friendEntity = new FriendEntity({
+      userId,
+      friendId
+    });
+    const newFriend = await this.friendRepository.save(friendEntity);
+    newFriend.friend = existUserOf;
+
+    if (backgrounds) {
+      newFriend.friend.backgrounds = backgrounds;
+    }
+
+    if (avatar) {
+      newFriend.friend.avatar = avatar;
+    }
+
+    if (newFriend.friend.role === Role.coach && newFriend.friend.questionnaire && qualifications?.length) {
+      newFriend.friend.questionnaire.qualifications = qualifications;
+    }
+
+    return newFriend;
+  }
+
+  public async deleteFriend(id: string): Promise<void> {
+    const existFriend = await this.friendRepository.findById(id);
+
+    if (!existFriend) {
+      throw new NotFoundException(createMessage(NOT_FOUND_FRIEND_MESSAGE, [id]));
+    }
+
+    return this.friendRepository.delete(id);
+  }
+
+  public async getFriendsByUserId(userId: string, query?: FriendsQuery): Promise<Pagination<FriendEntity>> {
+    const friends = await this.friendRepository.findByUserId(userId, query);
+    const entities = await Promise.all(
+      friends.entities.map(async (entity) => {
+        if (entity.friend) {
+          const {backgrounds, avatar, qualifications} = await this.getFiles(entity.friend.role, entity.friend.avatarId, entity.friend.questionnaire?.qualificationIds);
+          entity.friend.backgrounds = backgrounds;
+          entity.friend.avatar = avatar;
+
+          if (entity.friend.role === Role.coach && entity.friend.questionnaire && qualifications?.length) {
+            entity.friend.questionnaire.qualifications = qualifications;
+          }
+        }
+
+        return entity;
+      })
+    );
+    friends.entities = entities;
+
+    return friends;
   }
 
   public async createToken(user: User): Promise<Token> {

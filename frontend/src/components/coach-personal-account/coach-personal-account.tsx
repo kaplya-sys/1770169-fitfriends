@@ -99,7 +99,7 @@ export const CoachPersonalAccount = ({user, onChangeInput}: CoachPersonalAccount
                   <Picture
                     width={294}
                     height={360}
-                    alt={'Сертификат - Биомеханика ударов в боксе'}
+                    alt='Сертификат - Биомеханика ударов в боксе'
                     image={qualification}
                   />
                 </div>

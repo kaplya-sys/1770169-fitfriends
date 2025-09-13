@@ -6,7 +6,7 @@ import {TrainingsQuery} from '@1770169-fitfriends/query';
 import {Pagination, RangeFilters, RecommendedFindOptions, Training} from '@1770169-fitfriends/types';
 
 import {TrainingEntity} from './training.entity';
-import {DEFAULT_PAGE_COUNT, ELEMENTS_ON_PAGE} from './training.constant';
+import {DEFAULT_PAGE, ELEMENTS_ON_PAGE} from './training.constant';
 
 @Injectable()
 export class TrainingRepository extends BasePostgresRepository<TrainingEntity, Training> {
@@ -80,10 +80,12 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
         lte: query?.ratingMax !== undefined ? query.ratingMax : Prisma.skip
       },
       type: query?.type?.length ? {
-        in: query?.type
+        in: query.type
       } : Prisma.skip,
       coachId: query?.coach ? query.coach : Prisma.skip,
-      trainingTime: query?.trainingTime ? query.trainingTime : Prisma.skip
+      trainingTime: query?.trainingTime?.length ? {
+        in: query.trainingTime
+      } : Prisma.skip,
     };
     const orderBy: Prisma.TrainingOrderByWithRelationInput[] = [
       {price: query?.orderByPrice !== undefined ? query.orderByPrice : Prisma.skip},
@@ -99,7 +101,7 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
       entities: records
         .map((record) => this.createEntityFromDocument(record))
         .filter((entity) => entity !== null),
-      currentPage: query?.page || DEFAULT_PAGE_COUNT,
+      currentPage: query?.page || DEFAULT_PAGE,
       totalPages: this.calculateNumberPages(trainingCount, take),
       itemsPerPage: take,
       totalItems: trainingCount,

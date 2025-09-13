@@ -15,7 +15,8 @@ export const AppRoute = {
   Register: '/sign-up',
   Training: '/trainings/:id',
   Trainings: '/trainings',
-  Users: '/users'
+  Users: '/users',
+  UserInfo: '/users/:id/info'
 } as const;
 
 export type AppRouteType = (typeof AppRoute)[keyof typeof AppRoute];

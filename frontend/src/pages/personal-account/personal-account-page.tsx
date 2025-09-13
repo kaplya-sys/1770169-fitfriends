@@ -401,7 +401,7 @@ export const PersonalAccountPage = () => {
                   user={user}
                   onChangeInput={handleInputChange}
                 /> :
-                <UserPersonalAccount/>}
+                <UserPersonalAccount user={user}/>}
             </div>
           </div>
         </div>
