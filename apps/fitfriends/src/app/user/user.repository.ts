@@ -6,7 +6,7 @@ import {ExtendUser, Pagination, SortDirection} from '@1770169-fitfriends/types';
 import {UsersQuery} from '@1770169-fitfriends/query';
 
 import {UserEntity} from './user.entity';
-import {DEFAULT_PAGE_COUNT, ELEMENTS_ON_PAGE} from './user.constant';
+import {DEFAULT_PAGE_COUNT, ELEMENTS_ON_PAGE, MAX_READY_USERS} from './user.constant';
 
 @Injectable()
 export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUser> {
@@ -127,6 +127,23 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
       itemsPerPage: take,
       totalItems: userCount
     };
+  }
+
+  public async findByReadyUser(): Promise<UserEntity[]> {
+    const records = await this.prismaClient.user.findMany({
+      where: {
+        isReady: true
+      },
+      include: {
+        questionnaire: true,
+        station: true
+      },
+      take: MAX_READY_USERS
+    })
+
+    return records
+      .map((record) => this.createEntityFromDocument(record))
+      .filter((entity) => entity !== null);
   }
 
   public override async delete(id: UserEntity['id']): Promise<void> {

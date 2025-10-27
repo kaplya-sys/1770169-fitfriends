@@ -5,12 +5,12 @@ import {TrainingTimeType} from './training-time.type';
 
 export type CreateTrainingType = {
   title: string;
-  level: FitnessLevelType | '';
+  fitnessLevel: FitnessLevelType | '';
   type: ExerciseType | '';
   trainingTime: TrainingTimeType | '';
-  calories: string;
+  caloriesWaste: string;
   gender: GenderType | '';
-  description: string;
+  trainingDescription: string;
   price: string;
   video: File | null;
 }

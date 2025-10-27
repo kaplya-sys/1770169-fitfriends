@@ -59,9 +59,15 @@ export const SingUpPage = () => {
       dispatch(registerAction(formData));
       setUserAvatar(null);
       setIsChecked(false);
-      for (const key of Object.keys(data)) {
-        setData((prevState) => ({...prevState, [key]: ''}));
-      }
+      setData((prevState) => ({
+        ...prevState,
+        name: '',
+        email: '',
+        password: '',
+        gender: '',
+        station: '',
+        role: ''
+      }));
     } else {
       setError(newError);
     }

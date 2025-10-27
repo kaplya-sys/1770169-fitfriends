@@ -32,7 +32,6 @@ export const registerAction = createAsyncThunk<AuthenticatedUserType, FormData, 
 
     setAccessToken(user.accessToken);
     setRefreshToken(user.refreshToken);
-
     dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.Questionnaire, {id: user.id})}));
 
     return user;

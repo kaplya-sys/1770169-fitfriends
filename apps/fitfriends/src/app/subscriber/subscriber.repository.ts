@@ -24,4 +24,10 @@ export class SubscriberRepository extends BaseMongoRepository<SubscriberEntity, 
 
     return documents.map((document) => this.createEntityFromDocument(document));
   }
+
+  public async findByUserIdAndEmail(email: string, userId: string) {
+    const document = await this.model.findOne({userId, email});
+
+    return this.createEntityFromDocument(document);
+  }
 }

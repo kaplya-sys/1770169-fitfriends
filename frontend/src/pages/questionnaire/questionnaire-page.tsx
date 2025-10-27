@@ -72,22 +72,20 @@ export const QuestionnairePage = () => {
         formData.append('experience', data.experience);
         formData.append('isPersonal', String(data.isPersonal));
 
-        if (data.qualifications !== null) {
+        if (data.qualifications) {
           for (let i = 0; i < data.qualifications.length; i++) {
             formData.append('qualification', data.qualifications[i]);
           }
         }
-
         dispatch(createQuestionnaireAction(formData));
-
-        for (const key of Object.keys(data)) {
-          if (key !== 'qualifications' && key !== 'isPersonal' && key !== 'exercises') {
-            setData((prevState) => ({...prevState, [key]: ''}));
-          }
-          setData((prevState) => ({...prevState, qualifications: null}));
-          setData((prevState) => ({...prevState, isPersonal: false}));
-          setData((prevState) => ({...prevState, exercises: []}));
-        }
+        setData((prevState) => ({
+          ...prevState,
+          exercises: [],
+          qualifications: null,
+          isPersonal: false,
+          fitnessLevel: '',
+          experience: ''
+        }));
       } else {
         setError(newError);
       }
@@ -113,6 +111,14 @@ export const QuestionnairePage = () => {
       formData.append('caloriesWaste', data.caloriesWaste);
 
       dispatch(createQuestionnaireAction(formData));
+      setData((prevState) => ({
+        ...prevState,
+        exercises: [],
+        fitnessLevel: '',
+        trainingTime: '',
+        caloriesLose: '',
+        caloriesWaste: ''
+      }));
     } else {
       setError(newError);
     }
@@ -267,7 +273,7 @@ export const QuestionnairePage = () => {
                               <div className="drag-and-drop questionnaire-coach__drag-and-drop">
                                 <label>
                                   <span className="drag-and-drop__label" tabIndex={0}>
-                                    Загрузите сюда файлы формата PDF, JPG или PNG
+                                    Загрузите сюда файлы формата PDF
                                     <svg width="20" height="20" aria-hidden="true">
                                       <use xlinkHref="#icon-import"></use>
                                     </svg>
@@ -276,7 +282,7 @@ export const QuestionnairePage = () => {
                                     type="file"
                                     name="qualifications"
                                     tabIndex={-1}
-                                    accept=".pdf, .jpg, .png"
+                                    accept=".pdf"
                                     onChange={handleInputChange}
                                   />
                                 </label>

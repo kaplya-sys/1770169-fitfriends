@@ -65,7 +65,7 @@ export const TrainingCatalogPage = () => {
             <div className="gym-catalog-form">
               <h2 className="visually-hidden">Мои тренировки Фильтр</h2>
               <div className="gym-catalog-form__wrapper">
-                <BackButton className='btn-flat--underlined gym-catalog-form__back'/>
+                <BackButton className='btn-flat--underlined gym-catalog-form__btnback'/>
                 <Filter
                   className='gym-catalog-form'
                   filterName={FilterName.TrainingFilter}
@@ -82,7 +82,7 @@ export const TrainingCatalogPage = () => {
                   <div className="my-trainings">
                     <TrainingList
                       className='training-catalog'
-                      trainings={trainingsWithPagination.entities}
+                      trainings={trainings}
                     />
                     {
                       totalPages > DEFAULT_PAGE &&

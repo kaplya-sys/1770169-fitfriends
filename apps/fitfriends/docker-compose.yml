@@ -33,22 +33,6 @@ services:
       - postgresql_data:/var/lib/postgresql/data
     networks:
       - 599c27540b41-network
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_postgres
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-    ports:
-      - "${PGADMIN_PORT}:80"
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    depends_on:
-      - postgresql-fitfriends
-    networks:
-      - 599c27540b41-network
 networks:
   599c27540b41-network:
     name: 599c27540b41-network
@@ -56,4 +40,3 @@ networks:
 volumes:
   mongodb_data:
   postgresql_data:
-  pgadmin_data:

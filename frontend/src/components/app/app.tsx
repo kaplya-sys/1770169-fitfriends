@@ -36,7 +36,7 @@ export const App = () => {
   const isCoach = authenticatedUser?.role === Role.Coach;
   const isUser = authenticatedUser?.role === Role.User;
 
-  if (authorizationStatus === AuthorizationStatus.Unknown || isUserLoading) {
+  if (!authenticatedUserError && (authorizationStatus === AuthorizationStatus.Unknown || isUserLoading)) {
     return <Loader/>;
   }
 
@@ -71,12 +71,6 @@ export const App = () => {
       }
       />
       <Route path={AppRoute.Register} element={
-        /*<PrivateRoute
-          authorizationStatus={!isAuthenticated}
-          appRoute={isCoach ? getRouteWithParam(AppRoute.PersonalAccount, {id: authenticatedUser.id}) : AppRoute.Home}
-        >
-          <SingUpPage/>
-        </PrivateRoute>*/
         <SingUpPage/>
       }
       />

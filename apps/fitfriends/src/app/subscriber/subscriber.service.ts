@@ -13,10 +13,11 @@ export class SubscriberService {
   ) {}
 
   public async addSubscriber(email: string, userId: string): Promise<void> {
-    const existsSubscriber = await this.subscriberRepository.findEmail(email);
+    const existsSubscriber = await this.subscriberRepository.findByUserIdAndEmail(email, userId);
 
     if (!existsSubscriber) {
       const newSubscriber = new SubscriberEntity({email, userId});
+ 
       await this.subscriberRepository.save(newSubscriber);
     }
   }
@@ -33,7 +34,7 @@ export class SubscriberService {
 
    public async getSubscribersByUserId(id: string): Promise<SubscriberEntity[]> {
     const subscribers = await this.subscriberRepository.findManyByUserId(id);
-  
+
     return subscribers.filter((subscriber) => subscriber !== null);
   }
 }

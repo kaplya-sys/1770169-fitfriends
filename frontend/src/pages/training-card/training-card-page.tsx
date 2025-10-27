@@ -21,10 +21,11 @@ import {
   selectUser,
   selectUserBalance,
   updateTrainingAction,
-  applyUserBalanceAction
+  applyUserBalanceAction,
+  selectTrainingError
 } from '../../store';
 import {ParamsType, Role, UpdateTrainingType} from '../../libs/shared/types';
-import {getPriceWithDiscount, getPriceWithoutDiscount, validateFields} from '../../libs/shared/helpers';
+import {getPriceWithDiscount, getPriceWithoutDiscount, isErrorObject, validateFields} from '../../libs/shared/helpers';
 import {EXERCISE_NAMES, GENDER_SECOND_VARIANT_NAME, TRAINING_TIME_SECOND_NAMES} from '../../libs/shared/constants';
 
 import './training-card-page.css';
@@ -49,6 +50,7 @@ export const TrainingCardPage = () => {
   const userBalance = useAppSelector(selectUserBalance);
   const authenticatedUser = useAppSelector(selectAuthenticatedUser);
   const coach = useAppSelector(selectUser);
+  const trainingError = useAppSelector(selectTrainingError);
   const innerRef = useRef<HTMLSelectElement | null>(null);
   const dispatch = useAppDispatch();
   const isPurchased = useMemo(() => !!userBalance?.entities.find((entity) => entity.training.id === id), [id, userBalance?.entities]);
@@ -94,9 +96,21 @@ export const TrainingCardPage = () => {
     }
   }, [isFeedbackShow, isBuyShow]);
 
+  useEffect(() => {
+    if (isErrorObject(trainingError) && trainingError.statusCode === 400) {
+      for (const message of trainingError.message) {
+        const field = message.split(' ')[0];
+        setError((prevState) => ({...prevState, [field]: message}));
+      }
+    }
+  }, [trainingError]);
+
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (evt.target instanceof HTMLTextAreaElement) {
-      return setData((prevState) => ({...prevState, description: evt.target.value}));
+      setData((prevState) => ({...prevState, description: evt.target.value}));
+      setError((prevState) => ({...prevState, description: ''}));
+
+      return;
     }
 
     if (evt.target instanceof HTMLInputElement) {
@@ -108,6 +122,7 @@ export const TrainingCardPage = () => {
 
         return {...prevState, [name]: value};
       });
+      setError((prevState) => ({...prevState, [name]: ''}));
     }
   };
   const handleRemoveClick = () => {
@@ -153,13 +168,16 @@ export const TrainingCardPage = () => {
       formData.append('video', data.video);
 
       dispatch(updateTrainingAction(formData));
+      setData((prevState) => ({...prevState, video: null}));
       setIsRemoved(false);
     }
     setIsEdit((prevState) => !prevState);
   };
   const handleToggleEditClick = (evt: MouseEvent<HTMLButtonElement>) => {
     if (evt.currentTarget.textContent === 'Редактировать') {
-      return setIsEdit((prevState) => !prevState);
+      setIsEdit((prevState) => !prevState);
+
+      return;
     }
     const formData = new FormData();
     const newError = validateFields(data);
@@ -177,7 +195,6 @@ export const TrainingCardPage = () => {
         formData.append('title', data.title);
       }
       dispatch(updateTrainingAction(formData));
-      setError({});
       setIsEdit((prevState) => !prevState);
     } else {
       setError(newError);

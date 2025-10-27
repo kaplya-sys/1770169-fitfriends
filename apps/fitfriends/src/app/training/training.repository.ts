@@ -3,7 +3,7 @@ import {Injectable} from '@nestjs/common';
 import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
 import {BasePostgresRepository} from '@1770169-fitfriends/core';
 import {TrainingsQuery} from '@1770169-fitfriends/query';
-import {Pagination, RangeFilters, RecommendedFindOptions, Training} from '@1770169-fitfriends/types';
+import {Pagination, RangeFilters, RecommendedFindOptions, SortDirection, Training} from '@1770169-fitfriends/types';
 
 import {TrainingEntity} from './training.entity';
 import {DEFAULT_PAGE, ELEMENTS_ON_PAGE} from './training.constant';
@@ -89,7 +89,7 @@ export class TrainingRepository extends BasePostgresRepository<TrainingEntity, T
     };
     const orderBy: Prisma.TrainingOrderByWithRelationInput[] = [
       {price: query?.orderByPrice !== undefined ? query.orderByPrice : Prisma.skip},
-      {createdAt: query?.orderByDate !== undefined ? query.orderByDate : Prisma.skip}
+      {createdAt: query?.orderByDate !== undefined ? query.orderByDate : SortDirection.Down}
     ];
 
     const [records, trainingCount] = await Promise.all([

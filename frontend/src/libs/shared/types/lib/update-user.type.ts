@@ -9,7 +9,7 @@ export type UpdateUserType = {
   gender?: GenderType | '';
   station?: StationType | '';
   exercises?: ExerciseType[];
-  description?: string;
+  userDescription?: string;
   isReady?: boolean;
   fitnessLevel?: FitnessLevelType | '';
 }

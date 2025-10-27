@@ -26,6 +26,7 @@ export enum Route {
   Order = ':orderId',
   Subscribers = ':userId/subscribers',
   Range = 'range',
+  ReadyUsers = 'is-ready',
   Register = 'sign-up',
   RefreshToken = 'refresh-token',
   Recommended = 'recommended-trainings',

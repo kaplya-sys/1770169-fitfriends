@@ -82,7 +82,10 @@ import {
   ID_PARAM,
   TRAINING_ID_PARAM,
   DELETE_RESPONSE,
-  FILE_ID_PARAM
+  FILE_ID_PARAM,
+  TYPE_QUERY,
+  STATION_QUERY,
+  FITNESS_LEVEL_QUERY
 } from './auth.constant';
 import {DELETED_RESPONSE, INTERNAL_SERVER_RESPONSE} from '../training/training.constant';
 import {RefreshTokenService} from '../refresh-token/refresh-token.service';
@@ -218,10 +221,50 @@ export class AuthController {
     example: ROLE_QUERY.EXAMPLE,
     required: false
   })
+  @ApiQuery({
+    name: TYPE_QUERY.NAME,
+    description: TYPE_QUERY.DESCRIPTION,
+    enum: TYPE_QUERY.ENUM,
+    example: TYPE_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: STATION_QUERY.NAME,
+    description: STATION_QUERY.DESCRIPTION,
+    enum: STATION_QUERY.ENUM,
+    example: STATION_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: STATION_QUERY.NAME,
+    description: STATION_QUERY.DESCRIPTION,
+    enum: STATION_QUERY.ENUM,
+    example: STATION_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: FITNESS_LEVEL_QUERY.NAME,
+    description: FITNESS_LEVEL_QUERY.DESCRIPTION,
+    enum: FITNESS_LEVEL_QUERY.ENUM,
+    example: FITNESS_LEVEL_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: LIMIT_QUERY.NAME,
+    description: LIMIT_QUERY.DESCRIPTION,
+    example: LIMIT_QUERY.EXAMPLE,
+    required: false
+  })
+  @ApiQuery({
+    name: PAGE_QUERY.NAME,
+    description: PAGE_QUERY.DESCRIPTION,
+    example: PAGE_QUERY.EXAMPLE,
+    required: false
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: FOUND_RESPONSE,
-    type: UserRDO
+    type: UsersWithPaginationRDO
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -239,6 +282,24 @@ export class AuthController {
       ...users,
       entities: users.entities.map((user) => user.toObject())
     }, {exposeDefaultValues: false});
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: FOUND_RESPONSE,
+    type: UserRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get(Route.ReadyUsers)
+  public async getReadyUsers() {
+    const users = await this.authService.getReadyUsers();
+
+    return fillDto(UserRDO, users.map((user) => user.toObject()), {exposeDefaultValues: false});
   }
 
   @ApiQuery({

@@ -3,7 +3,7 @@ import {toast} from 'react-toastify';
 
 import {getAccessToken, removeAccessToken, setAccessToken} from './access-token.service';
 import {getRefreshToken, removeRefreshToken, setRefreshToken} from './refresh-token.service';
-import {ApiRoute, ErrorRequestType, InternalAxiosRequestConfigWithRetry, TokenType} from '../libs/shared/types';
+import {ApiRoute, InternalAxiosRequestConfigWithRetry, TokenType} from '../libs/shared/types';
 import {API_URL, REFRESH_TOKEN_ERROR, REQUEST_TIMEOUT} from './service.const';
 
 export const createApi = () => {
@@ -49,8 +49,13 @@ export const createApi = () => {
     }
 
     if (error.response?.data && error.response?.status !== 400) {
-      if (error.response.data !== null && typeof error.response.data === 'object' && 'message' in error.response.data) {
-        toast.warn(error.response?.data.message as string);
+      if (
+        error.response.data !== null &&
+        typeof error.response.data === 'object' &&
+        'message' in error.response.data &&
+        typeof error.response.data.message === 'string'
+      ) {
+        toast.warn(error.response?.data.message);
       }
     }
 

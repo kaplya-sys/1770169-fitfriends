@@ -11,6 +11,7 @@ import {
   deleteUserAvatarAction,
   getUserAction,
   selectUser,
+  selectUserError,
   updateUserAction
 } from '../../store';
 import {
@@ -36,12 +37,12 @@ import {
   UpdateUserType,
   ImageType
 } from '../../libs/shared/types';
-import {validateFields} from '../../libs/shared/helpers';
+import {isErrorObject, validateFields} from '../../libs/shared/helpers';
 
 export const PersonalAccountPage = () => {
   const [data, setData] = useState<UpdateUserType>({
     avatar: null,
-    description: '',
+    userDescription: '',
     exercises: [],
     fitnessLevel: '',
     gender: '',
@@ -55,6 +56,7 @@ export const PersonalAccountPage = () => {
   const [isLevelOpen, setIsLevelOpen] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [userAvatar, setUserAvatar] = useState<string | ImageType | null>(null);
+  const userError = useAppSelector(selectUserError);
   const {id} = useParams<ParamsType>();
   const user = useAppSelector(selectUser);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -68,7 +70,7 @@ export const PersonalAccountPage = () => {
     if (user) {
       setData({
         name: user.name,
-        description: user.description ?? '',
+        userDescription: user.description ?? '',
         isReady: user.isReady,
         exercises: user.questionnaire.exercises
       });
@@ -78,6 +80,15 @@ export const PersonalAccountPage = () => {
       }
     }
   }, [user]);
+
+  useEffect(() => {
+    if (isErrorObject(userError) && userError.statusCode === 400) {
+      for (const message of userError.message) {
+        const field = message.split(' ')[0];
+        setError((prevState) => ({...prevState, [field]: message}));
+      }
+    }
+  }, [userError]);
 
   if (!user) {
     return null;
@@ -114,8 +125,8 @@ export const PersonalAccountPage = () => {
         formData.append('name', data.name);
       }
 
-      if (data.description) {
-        formData.append('description', data.description);
+      if (data.userDescription) {
+        formData.append('description', data.userDescription);
       }
 
       if (data.gender) {
@@ -130,6 +141,10 @@ export const PersonalAccountPage = () => {
         formData.append('fitnessLevel', data.fitnessLevel);
       }
 
+      if (data.station) {
+        formData.append('station', data.station);
+      }
+
       if (data.avatar && typeof userAvatar === 'string') {
         formData.append('avatar', data.avatar);
       }
@@ -142,7 +157,10 @@ export const PersonalAccountPage = () => {
   };
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (evt.target instanceof HTMLTextAreaElement) {
-      return setData((prevState) => ({...prevState, description: evt.target.value}));
+      setData((prevState) => ({...prevState, userDescription: evt.target.value}));
+      setError((prevState) => ({...prevState, userDescription: ''}));
+
+      return;
     }
 
     if (evt.target instanceof HTMLInputElement) {
@@ -181,6 +199,7 @@ export const PersonalAccountPage = () => {
 
         return {...prevState, [name]: value};
       });
+      setError((prevState) => ({...prevState, [name]: ''}));
     }
   };
   const handleStationSelectClick = () => {
@@ -313,18 +332,18 @@ export const PersonalAccountPage = () => {
                   {(user.description || isEdit) &&
                     <div className={classNames('custom-textarea', {
                       'custom-textarea--readonly': !isEdit,
-                      'custom-textarea--error': error.description
+                      'custom-textarea--error': error.userDescription
                     }, 'user-info__textarea')}
                     >
                       <label>
                         <span className="custom-textarea__label">Описание</span>
                         <textarea
-                          name="description"
-                          value={data.description}
+                          name="userDescription"
+                          value={data.userDescription}
                           disabled={!isEdit}
                           onChange={handleInputChange}
                         />
-                        {error.description && <span className="custom-textarea__error">{error.description}</span>}
+                        {error.userDescription && <span className="custom-textarea__error">{error.userDescription}</span>}
                       </label>
                     </div>}
                 </div>

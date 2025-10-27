@@ -1,4 +1,10 @@
-import {ChangeEvent, FormEvent, useRef, useState} from 'react';
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 
 import {Layout} from '../../components/layout';
 import {CustomInput} from '../../ui/custom-input';
@@ -20,19 +26,19 @@ import {
   TrainingTimeType
 } from '../../libs/shared/types';
 import {CustomSelect} from '../../ui/custom-select';
-import {validateFields} from '../../libs/shared/helpers';
-import {useAppDispatch} from '../../hooks';
-import {createTrainingAction} from '../../store';
+import {isErrorObject, validateFields} from '../../libs/shared/helpers';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {createTrainingAction, selectTrainingError} from '../../store';
 
 export const CreateTraining = () => {
   const [data, setData] = useState<CreateTrainingType>({
     title: '',
     type: '',
-    description: '',
+    trainingDescription: '',
     trainingTime: '',
-    level: '',
+    fitnessLevel: '',
     gender: '',
-    calories: '',
+    caloriesWaste: '',
     price: '',
     video: null
   });
@@ -40,14 +46,24 @@ export const CreateTraining = () => {
   const [isTypeOpen, setIsTypeOpen] = useState<boolean>(false);
   const [isTrainingTimeOpen, setIsTrainingTimeOpen] = useState<boolean>(false);
   const [isLevelOpen, setIsLevelOpen] = useState<boolean>(false);
+  const trainingError = useAppSelector(selectTrainingError);
   const formRef = useRef<HTMLFormElement>(null);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (isErrorObject(trainingError) && trainingError.statusCode === 400) {
+      for (const message of trainingError.message) {
+        const field = message.split(' ')[0];
+        setError((prevState) => ({...prevState, [field]: message}));
+      }
+    }
+  }, [trainingError]);
 
   const handleFieldChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value} = evt.target;
     setData((prevState) => ({...prevState, [name]: value}));
+    setError((prevState) => ({...prevState, [name]: ''}));
   };
-
   const handleFileChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const {files} = evt.target;
 
@@ -55,44 +71,40 @@ export const CreateTraining = () => {
       setData((prevState) =>({...prevState, video: files[0]}));
     }
   };
-
   const handleTypeSelectClick = () => {
     setIsTypeOpen((prevState) => !prevState);
   };
-
   const handleTrainingTimeSelectClick = () => {
     setIsTrainingTimeOpen((prevState) => !prevState);
   };
-
   const handleLevelSelectClick = () => {
     setIsLevelOpen((prevState) => !prevState);
   };
-
   const handleTypeClick = (type: ExerciseType) => {
     setData((prevState) => ({...prevState, type}));
+    setError((prevState) => ({...prevState, type: ''}));
     setIsTypeOpen((prevState) => !prevState);
   };
-
   const handleTrainingTimeClick = (trainingTime: TrainingTimeType) => {
     setData((prevState) => ({...prevState, trainingTime}));
+    setError((prevState) => ({...prevState, trainingTime: ''}));
     setIsTrainingTimeOpen((prevState) => !prevState);
   };
-
-  const handleLevelClick = (level: FitnessLevelType) => {
-    setData((prevState) => ({...prevState, level}));
+  const handleLevelClick = (fitnessLevel: FitnessLevelType) => {
+    setData((prevState) => ({...prevState, fitnessLevel}));
+    setError((prevState) => ({...prevState, fitnessLevel: ''}));
     setIsLevelOpen((prevState) => !prevState);
   };
-
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('type', data.type);
-    formData.append('description', data.description);
+    formData.append('description', data.trainingDescription);
     formData.append('trainingTime', data.trainingTime);
-    formData.append('level', data.level);
+    formData.append('level', data.fitnessLevel);
     formData.append('gender', data.gender);
-    formData.append('calories', data.calories);
+    formData.append('calories', data.caloriesWaste);
     formData.append('price', data.price);
 
     if (data.video) {
@@ -102,16 +114,15 @@ export const CreateTraining = () => {
 
     if (!newError) {
       dispatch(createTrainingAction(formData));
-      setError({});
       setData((prevState) => ({
         ...prevState,
         title: '',
         type: '',
-        description: '',
+        trainingDescription: '',
         trainingTime: '',
-        level: '',
+        fitnessLevel: '',
         gender: '',
-        calories: '',
+        caloriesWaste: '',
         price: '',
         video: null
       }));
@@ -159,9 +170,9 @@ export const CreateTraining = () => {
                         <CustomInput
                           label='Сколько калорий потратим'
                           type='number'
-                          name='calories'
-                          value={data.calories}
-                          errorMessage={error.calories}
+                          name='caloriesWaste'
+                          value={data.caloriesWaste}
+                          errorMessage={error.caloriesWaste}
                           fieldText='ккал'
                           textPosition='right'
                           onInputChange={handleFieldChange}
@@ -188,9 +199,9 @@ export const CreateTraining = () => {
                         />
                         <CustomSelect
                           title='Выберите уровень тренировки'
-                          selectedValue={data.level}
+                          selectedValue={data.fitnessLevel}
                           isOpen={isLevelOpen}
-                          errorMessage={error.level}
+                          errorMessage={error.fitnessLevel}
                           option={FitnessLevel}
                           nameTransform={FITNESS_LEVEL_NAME}
                           onListBoxClick={handleLevelSelectClick}
@@ -222,9 +233,10 @@ export const CreateTraining = () => {
                     <div className="create-training__block">
                       <h2 className="create-training__legend">Описание тренировки</h2>
                       <CustomTextarea
-                        name='description'
-                        value={data.description}
+                        name='trainingDescription'
+                        value={data.trainingDescription}
                         className='create-training__textarea'
+                        errorMessage={error.trainingDescription}
                         onTextareaChange={handleFieldChange}
                       />
                     </div>

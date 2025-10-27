@@ -25,6 +25,7 @@ export const ApiRoute = {
   Order: '/orders/:id',
   Subscribers: '/subscribers/:userId/subscribers',
   RangeFilters: '/trainings/range',
+  ReadyUsers: '/users/is-ready',
   Register: '/users/sign-up',
   RefreshToken: '/users/refresh-token',
   RecommendedTrainings: '/trainings/recommended-trainings',

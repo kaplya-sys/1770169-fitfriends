@@ -324,6 +324,30 @@ export class AuthService {
     return users;
   }
 
+  public async getReadyUsers(): Promise<UserEntity[]> {
+    const users = await this.userRepository.findByReadyUser();
+
+    return Promise.all(
+      users.map(async (user) => {
+        const {backgrounds, avatar, qualifications} = await this.getFiles(user.role, user.avatarId, user.questionnaire?.qualificationIds);
+
+        if (backgrounds) {
+          user.backgrounds = backgrounds;
+        }
+
+        if (avatar) {
+          user.avatar = avatar;
+        }
+
+        if (user.role === Role.coach && user.questionnaire && qualifications?.length) {
+          user.questionnaire.qualifications = qualifications;
+        }
+
+        return user;
+      })
+    );
+  }
+
   public async getUserBalance(userId: string, query?: BalanceQuery): Promise<Pagination<BalanceEntity>> {
     const existUser = await this.userRepository.findById(userId);
 

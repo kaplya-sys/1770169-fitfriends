@@ -55,7 +55,7 @@ export class SubscriberController {
     @RequestTokenPayload() tokenPayload: TokenPayload,
     @Param('userId', UUIDValidationPipe) id: string,
   ) {
-    this.subscriberService.addSubscriber(tokenPayload.email, id);
+    await this.subscriberService.addSubscriber(tokenPayload.email, id);
   }
 
    @ApiParam({
@@ -78,7 +78,7 @@ export class SubscriberController {
   public async unsubscribe(
     @Param('id', MongoIdValidationPipe) id: string,
   ) {
-    this.subscriberService.deleteSubscriber(id);
+    await this.subscriberService.deleteSubscriber(id);
   }
 
    @ApiParam({

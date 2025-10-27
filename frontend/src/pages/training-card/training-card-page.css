@@ -18,6 +18,10 @@
   overflow: hidden;
 }
 
+.is-invalid {
+  overflow: visible;
+}
+
 .training-info__textarea textarea {
   width: 100%;
   height: 100%;

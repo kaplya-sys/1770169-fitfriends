@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import {CustomTextarea} from '../../ui/custom-textarea';
 import {TRAINING_RATE} from '../../libs/shared/constants';
 import {CreateFeedbackType} from '../../libs/shared/types';
-import {isEscape, validateFields} from '../../libs/shared/helpers';
-import {createFeedbackAction} from '../../store';
-import { useAppDispatch } from '../../hooks';
+import {isErrorObject, isEscape, validateFields} from '../../libs/shared/helpers';
+import {createFeedbackAction, selectFeedbackError} from '../../store';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 type PopupFeedbackProps = {
   isActive: boolean;
@@ -19,6 +19,7 @@ export const PopupFeedback = ({isActive, onCloseClick}: PopupFeedbackProps) => {
     content: null
   });
   const [error, setError] = useState<Partial<Record<keyof CreateFeedbackType, string>>>({});
+  const feedbackError = useAppSelector(selectFeedbackError);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -29,6 +30,15 @@ export const PopupFeedback = ({isActive, onCloseClick}: PopupFeedbackProps) => {
     return () => document.removeEventListener('keydown', handleKeyPressEsc);
   }, [isActive]);
 
+  useEffect(() => {
+    if (isErrorObject(feedbackError) && feedbackError.statusCode === 400) {
+      for (const message of feedbackError.message) {
+        const field = message.split(' ')[0];
+        setError((prevState) => ({...prevState, [field]: message}));
+      }
+    }
+  }, [feedbackError]);
+
   const handleKeyPressEsc = (evt: KeyboardEvent) => {
     if (isEscape(evt.key)) {
       onCloseClick();
@@ -37,6 +47,7 @@ export const PopupFeedback = ({isActive, onCloseClick}: PopupFeedbackProps) => {
   const handleFieldChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value} = evt.target;
     setData((prevState) => ({...prevState, [name]: value}));
+    setError((prevState) => ({...prevState, [name]: ''}));
   };
   const handleContinueClick = () => {
     const newError = validateFields(data);
@@ -44,7 +55,6 @@ export const PopupFeedback = ({isActive, onCloseClick}: PopupFeedbackProps) => {
     if (!newError) {
       dispatch(createFeedbackAction(data));
       setData((prevState) => ({...prevState, assessment: null, content: null}));
-      setError((prevState) => ({...prevState, assessment: '', content: ''}));
       onCloseClick();
     } else {
       setError(newError);

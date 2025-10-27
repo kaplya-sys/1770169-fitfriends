@@ -11,26 +11,23 @@ import {useSlider, useAppSelector, useAppDispatch} from '../../hooks';
 import {AppRoute} from '../../libs/shared/types';
 import {
   getRangeFiltersAction,
+  getReadyUsersAction,
   getRecommendedTrainingsAction,
   getTrainingsAction,
-  getUsersAction,
   selectPopularTrainings,
   selectReadyUsers,
   selectRecommendedTrainings,
-  selectSpecialTrainings,
-  selectUsers
+  selectSpecialTrainings
 } from '../../store';
 import {Picture} from '../../components/picture';
 import {getRouteWithParam} from '../../libs/shared/helpers';
-import {MAX_READY_USERS_LENGTH} from '../../libs/shared/constants';
 
 export const HomePage = () => {
   const popularTrainings = useAppSelector(selectPopularTrainings);
   const specialTrainings = useAppSelector(selectSpecialTrainings);
   const recommendedTrainings = useAppSelector(selectRecommendedTrainings);
   const readyUsers = useAppSelector(selectReadyUsers);
-  const users = useAppSelector(selectUsers);
-  const usersSlider = useSlider(users?.entities.length ?? 0, 4, 4);
+  const usersSlider = useSlider(readyUsers.length, 4, 4);
   const recommendedTrainingsSlider = useSlider(recommendedTrainings.length, 3, 3);
   const popularTrainingsSlider = useSlider(popularTrainings?.length ?? 0, 4, 4);
   const navigate = useNavigate();
@@ -40,7 +37,7 @@ export const HomePage = () => {
     dispatch(getRecommendedTrainingsAction());
     dispatch(getRangeFiltersAction());
     dispatch(getTrainingsAction({}));
-    dispatch(getUsersAction({}));
+    dispatch(getReadyUsersAction());
   }, [dispatch]);
 
   return (
@@ -128,7 +125,7 @@ export const HomePage = () => {
         <section className="look-for-company">
           <div className="container">
             {
-              users?.entities.length ?
+              readyUsers.length ?
                 <div className="look-for-company__wrapper" ref={usersSlider.sliderRef}>
                   <div className="look-for-company__title-wrapper">
                     <h2 className="look-for-company__title">Ищут компанию для тренировки</h2>
@@ -145,7 +142,7 @@ export const HomePage = () => {
                       isOutlined
                     />
                   </div>
-                  <UserList className='look-for-company' users={readyUsers.slice(0, MAX_READY_USERS_LENGTH)} isDark/>
+                  <UserList className='look-for-company' users={readyUsers} isDark/>
                 </div> :
                 <StubGum/>
             }

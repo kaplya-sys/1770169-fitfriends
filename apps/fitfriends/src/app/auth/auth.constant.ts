@@ -64,6 +64,24 @@ export const ROLE_QUERY = {
   EXAMPLE: 'user',
   ENUM: ['coach', 'user']
 }
+export const TYPE_QUERY = {
+  NAME: 'type',
+  DESCRIPTION: 'Фильтрация пользователей по типу упражнения.',
+  ENUM: ['yoga', 'running', 'boxing', 'stretching', 'crossfit', 'aerobics', 'pilates'],
+  EXAMPLE: ['yoga', 'boxing', 'crossfit'],
+}
+export const STATION_QUERY = {
+  NAME: 'station',
+  DESCRIPTION: 'Фильтрация пользователей по локации станции метро.',
+  ENUM: ['pionerskaya', 'petrogradskaya', 'udelnaya', 'zvezdnaya', 'sportivnaya'],
+  EXAMPLE: ['pionerskaya', 'petrogradskaya'],
+}
+export const FITNESS_LEVEL_QUERY = {
+  NAME: 'fitnessLevel',
+  DESCRIPTION: 'Фильтрация пользователей по уровню подготовки.',
+  ENUM: ['beginner', 'amateur', 'professional'],
+  EXAMPLE: 'amateur',
+}
 export const LIMIT_QUERY = {
   NAME: 'limit',
   DESCRIPTION: 'Количество элементов на странице.',

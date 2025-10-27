@@ -36,6 +36,7 @@ export const createQuestionnaireAction = createAsyncThunk<UserType, FormData, {
       dispatch(redirectToRoute({route: AppRoute.Home}));
       return data;
     }
+
     const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateCoachQuestionnaire, {id: user.id}), createData);
     dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.PersonalAccount, {id: user.id})}));
 
@@ -93,6 +94,22 @@ export const getUsersAction = createAsyncThunk<PaginatedResponseType<UserType>, 
 }>('users/getUsers', async ({query}, {rejectWithValue, extra: api}) => {
   try {
     const {data} = await api.get<PaginatedResponseType<UserType>>(ApiRoute.Users, {params: query});
+
+    return data;
+  } catch (error: unknown) {
+    if (isAxiosError(error) && error.response) {
+      return rejectWithValue(error.response.data as ErrorRequestType);
+    }
+    return rejectWithValue(error instanceof Error ? error.message : REQUEST_ERROR_MESSAGE);
+  }
+});
+
+export const getReadyUsersAction = createAsyncThunk<UserType[], void, {
+  extra: AxiosInstance;
+  rejectValue: ErrorRequestType | string;
+}>('users/getReadyUsers', async (_, {rejectWithValue, extra: api}) => {
+  try {
+    const {data} = await api.get<UserType[]>(ApiRoute.ReadyUsers);
 
     return data;
   } catch (error: unknown) {
