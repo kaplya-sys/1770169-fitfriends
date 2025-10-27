@@ -1,4 +1,5 @@
-import {useNavigate} from 'react-router-dom';
+import {useEffect} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 
 import {Header} from '../../components/header';
 import {SpecialOffers} from '../../components/special-offers/special-offers';
@@ -6,24 +7,41 @@ import {StubGum} from '../../components/stub-gym';
 import {UserList} from '../../components/user-list/user-list';
 import {TrainingList} from '../../components/training-list';
 import {SliderControls} from '../../components/slider-controls';
-import {useSlider, useAppSelector} from '../../hooks';
+import {useSlider, useAppSelector, useAppDispatch} from '../../hooks';
 import {AppRoute} from '../../libs/shared/types';
 import {
+  getRangeFiltersAction,
+  getRecommendedTrainingsAction,
+  getTrainingsAction,
+  getUsersAction,
   selectPopularTrainings,
+  selectReadyUsers,
   selectRecommendedTrainings,
   selectSpecialTrainings,
   selectUsers
 } from '../../store';
+import {Picture} from '../../components/picture';
+import {getRouteWithParam} from '../../libs/shared/helpers';
+import {MAX_READY_USERS_LENGTH} from '../../libs/shared/constants';
 
 export const HomePage = () => {
   const popularTrainings = useAppSelector(selectPopularTrainings);
   const specialTrainings = useAppSelector(selectSpecialTrainings);
   const recommendedTrainings = useAppSelector(selectRecommendedTrainings);
+  const readyUsers = useAppSelector(selectReadyUsers);
   const users = useAppSelector(selectUsers);
-  const usersSlider = useSlider(!!users?.entities);
-  const recommendedTrainingsSlider = useSlider(!!recommendedTrainings.length);
-  const popularTrainingsSlider = useSlider(!!popularTrainings?.length);
+  const usersSlider = useSlider(users?.entities.length ?? 0, 4, 4);
+  const recommendedTrainingsSlider = useSlider(recommendedTrainings.length, 3, 3);
+  const popularTrainingsSlider = useSlider(popularTrainings?.length ?? 0, 4, 4);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getRecommendedTrainingsAction());
+    dispatch(getRangeFiltersAction());
+    dispatch(getTrainingsAction({}));
+    dispatch(getUsersAction({}));
+  }, [dispatch]);
 
   return (
     <div className="wrapper">
@@ -43,7 +61,35 @@ export const HomePage = () => {
                       nextRef={recommendedTrainingsSlider.buttonNextRef}
                     />
                   </div>
-                  <TrainingList className='special-for-you' trainings={recommendedTrainings} isWithSlider/>
+                  <ul className="special-for-you__list">
+                    {
+                      recommendedTrainings.map((recommendedTraining) => (
+                        <li className="special-for-you__item" key={recommendedTraining.id}>
+                          <div className="thumbnail-preview">
+                            <div className="thumbnail-preview__image">
+                              <Picture
+                                width={452}
+                                height={191}
+                                alt={recommendedTraining.title}
+                                image={recommendedTraining.background}
+                              />
+                            </div>
+                            <div className="thumbnail-preview__inner">
+                              <h3 className="thumbnail-preview__title">crossfit</h3>
+                              <div className="thumbnail-preview__button-wrapper">
+                                <Link
+                                  className="btn btn--small thumbnail-preview__button"
+                                  to={getRouteWithParam(AppRoute.Training, {id: recommendedTraining.id})}
+                                >
+                                  <span>Подробнее</span>
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      ))
+                    }
+                  </ul>
                 </div> :
                 <StubGum/>
             }
@@ -73,7 +119,7 @@ export const HomePage = () => {
                       nextRef={popularTrainingsSlider.buttonNextRef}
                     />
                   </div>
-                  <TrainingList className='popular-trainings' trainings={popularTrainings} isWithSlider/>
+                  <TrainingList className='popular-trainings' trainings={popularTrainings}/>
                 </div> :
                 <StubGum/>
             }
@@ -99,7 +145,7 @@ export const HomePage = () => {
                       isOutlined
                     />
                   </div>
-                  <UserList className='look-for-company' users={users.entities} isWithSlider/>
+                  <UserList className='look-for-company' users={readyUsers.slice(0, MAX_READY_USERS_LENGTH)} isDark/>
                 </div> :
                 <StubGum/>
             }

@@ -42,16 +42,9 @@ export const addFriendAction = createAsyncThunk<FriendType, RequestOptionsType, 
 export const getFriendsByUserAction = createAsyncThunk<PaginatedResponseType<FriendType>, RequestOptionsType, {
   extra: AxiosInstance;
   rejectValue: ErrorRequestType | string;
-  state: RootState;
-}>('friends/getFriendsByUser', async ({query}, {rejectWithValue, extra: api, getState}) => {
+}>('friends/getFriendsByUser', async ({query}, {rejectWithValue, extra: api}) => {
   try {
-    const state = getState();
-    const user = state[NameSpace.Auth].authenticatedUser;
-
-    if (!user) {
-      throw new Error(AUTH_ERROR_MESSAGE);
-    }
-    const {data} = await api.get<PaginatedResponseType<FriendType>>(getRouteWithParam(ApiRoute.UserFriends, {id: user.id}), {params: query});
+    const {data} = await api.get<PaginatedResponseType<FriendType>>(ApiRoute.UserFriends, {params: query});
 
     return data;
   } catch (error: unknown) {

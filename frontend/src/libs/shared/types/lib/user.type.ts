@@ -1,7 +1,7 @@
 import {ImageType} from './image.type';
 import {GenderType} from './gender.type';
 import {RoleType} from './role.type';
-import {LocationType} from './location.type';
+import {MetroStationType} from './metro-station.type';
 import {QuestionnaireType} from './questionnaire.type';
 
 export type UserType = {
@@ -9,7 +9,7 @@ export type UserType = {
   name: string;
   email: string;
   gender: GenderType;
-  location: LocationType;
+  station: MetroStationType;
   role: RoleType;
   backgrounds: ImageType[];
   createdAt: Date;

@@ -1,13 +1,9 @@
-import {useEffect} from 'react';
 import {Route, Routes} from 'react-router-dom';
 
-import {useAppDispatch, useAppSelector} from '../../hooks';
+import {useAppSelector} from '../../hooks';
 import {
-  getRangeFiltersAction,
-  getRecommendedTrainingsAction,
-  getTrainingsAction,
-  getUsersAction,
   selectAuthenticatedUser,
+  selectAuthenticatedUserError,
   selectAuthorizationStatus,
   selectUAuthenticatedUserIsLoading
 } from '../../store';
@@ -26,27 +22,19 @@ import {CreateTraining} from '../../pages/create-training/create-training';
 import {Loader} from '../loader';
 import {MyTrainingsPage} from '../../pages/my-trainings';
 import {MyFriendsPage} from '../../pages/my-friends';
+import {MyPurchasesPage} from '../../pages/my-purchases';
 import {UserInfoPage} from '../../pages/user-info/user-info-page';
 import {UsersPage} from '../../pages/users';
-
+import {getRouteWithParam} from '../../libs/shared/helpers';
 
 export const App = () => {
   const authorizationStatus = useAppSelector(selectAuthorizationStatus);
   const authenticatedUser = useAppSelector(selectAuthenticatedUser);
+  const authenticatedUserError = useAppSelector(selectAuthenticatedUserError);
   const isUserLoading = useAppSelector(selectUAuthenticatedUserIsLoading);
   const isAuthenticated = authorizationStatus === AuthorizationStatus.Auth;
   const isCoach = authenticatedUser?.role === Role.Coach;
   const isUser = authenticatedUser?.role === Role.User;
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(getRecommendedTrainingsAction());
-      dispatch(getRangeFiltersAction());
-      dispatch(getTrainingsAction({}));
-      dispatch(getUsersAction({}));
-    }
-  }, [authenticatedUser, dispatch]);
 
   if (authorizationStatus === AuthorizationStatus.Unknown || isUserLoading) {
     return <Loader/>;
@@ -54,15 +42,50 @@ export const App = () => {
 
   return (
     <Routes>
-      <Route path={AppRoute.Intro} element={<IntroPage/>}></Route>
-      <Route path={AppRoute.Login} element={<SingInPage/>}/>
-      <Route path={AppRoute.Register} element={<SingUpPage/>}/>
       <Route path={AppRoute.Home} element={
         <PrivateRoute
+          authorizationStatus={isAuthenticated}
           roleStatus={isUser}
           appRoute={AppRoute.Intro}
         >
           <HomePage/>
+        </PrivateRoute>
+      }
+      />
+      <Route path={AppRoute.Intro} element={
+        <PrivateRoute
+          authorizationStatus={!isAuthenticated}
+          appRoute={isCoach ? getRouteWithParam(AppRoute.PersonalAccount, {id: authenticatedUser.id}) : AppRoute.Home}
+        >
+          <IntroPage/>
+        </PrivateRoute>
+      }
+      />
+      <Route path={AppRoute.Login} element={
+        <PrivateRoute
+          authorizationStatus={!isAuthenticated}
+          appRoute={isCoach ? getRouteWithParam(AppRoute.PersonalAccount, {id: authenticatedUser.id}) : AppRoute.Home}
+        >
+          <SingInPage/>
+        </PrivateRoute>
+      }
+      />
+      <Route path={AppRoute.Register} element={
+        /*<PrivateRoute
+          authorizationStatus={!isAuthenticated}
+          appRoute={isCoach ? getRouteWithParam(AppRoute.PersonalAccount, {id: authenticatedUser.id}) : AppRoute.Home}
+        >
+          <SingUpPage/>
+        </PrivateRoute>*/
+        <SingUpPage/>
+      }
+      />
+      <Route path={AppRoute.Questionnaire} element={
+        <PrivateRoute
+          authorizationStatus={isAuthenticated}
+          appRoute={AppRoute.Intro}
+        >
+          <QuestionnairePage/>
         </PrivateRoute>
       }
       />
@@ -105,21 +128,21 @@ export const App = () => {
         </PrivateRoute>
       }
       />
+      <Route path={AppRoute.MyPurchases} element={
+        <PrivateRoute
+          authorizationStatus={isAuthenticated}
+          appRoute={AppRoute.Intro}
+        >
+          <MyPurchasesPage/>
+        </PrivateRoute>
+      }
+      />
       <Route path={AppRoute.UserInfo} element={
         <PrivateRoute
           authorizationStatus={isAuthenticated}
           appRoute={AppRoute.Intro}
         >
           <UserInfoPage/>
-        </PrivateRoute>
-      }
-      />
-      <Route path={AppRoute.Questionnaire} element={
-        <PrivateRoute
-          authorizationStatus={isAuthenticated}
-          appRoute={AppRoute.Intro}
-        >
-          <QuestionnairePage/>
         </PrivateRoute>
       }
       />
@@ -131,12 +154,36 @@ export const App = () => {
           <PersonalAccountPage/>
         </PrivateRoute>
       }
-      >
-        <Route path={AppRoute.MyOrders} element={<MyOrdersPage/>}/>
-      </Route>
-      <Route path={AppRoute.Trainings} element={<TrainingCatalogPage/>}/>
-      <Route path={AppRoute.Training} element={<TrainingCardPage/>}/>
-      <Route path={AppRoute.Users} element={<UsersPage/>}/>
+      />
+      <Route path={AppRoute.Trainings} element={
+        <PrivateRoute
+          authorizationStatus={isAuthenticated}
+          roleStatus={isUser}
+          appRoute={isAuthenticated && isCoach ? getRouteWithParam(AppRoute.PersonalAccount, {id: authenticatedUser.id}) : AppRoute.Intro}
+        >
+          <TrainingCatalogPage/>
+        </PrivateRoute>
+      }
+      />
+      <Route path={AppRoute.Training} element={
+        <PrivateRoute
+          authorizationStatus={isAuthenticated}
+          appRoute={AppRoute.Intro}
+        >
+          <TrainingCardPage/>
+        </PrivateRoute>
+      }
+      />
+      <Route path={AppRoute.Users} element={
+        <PrivateRoute
+          authorizationStatus={isAuthenticated}
+          appRoute={AppRoute.Intro}
+          roleStatus={isUser}
+        >
+          <UsersPage/>
+        </PrivateRoute>
+      }
+      />
     </Routes>
   );
 };

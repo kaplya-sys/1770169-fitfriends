@@ -1,6 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-import {createQuestionnaireAction, getUserAction, updateUserAction} from '../api-actions/user.api-actions';
+import {
+  createQuestionnaireAction,
+  getUserAction,
+  updateQualificationFileAction,
+  updateUserAction
+} from '../api-actions/user.api-actions';
 import {ErrorRequestType, NameSpace, UserType} from '../../libs/shared/types';
 
 type InitialState = {
@@ -56,6 +61,18 @@ export const userSlice = createSlice({
         state.error = null;
       })
       .addCase(getUserAction.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateQualificationFileAction.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateQualificationFileAction.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(updateQualificationFileAction.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });

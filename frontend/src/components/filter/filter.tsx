@@ -7,7 +7,7 @@ import {
   FilterName,
   FilterNameType,
   FitnessLevel,
-  Location,
+  Station,
   QueryType,
   RangeType,
   Role,
@@ -19,8 +19,8 @@ import {
   DEFAULT_ELEMENTS_VIEW,
   EXERCISE_NAMES,
   FITNESS_LEVEL_NAME,
-  LOCATION_NAME,
   ROLE_NAME,
+  STATION_NAME,
   TRAINING_TIME_NAMES_WITH_LABEL
 } from '../../libs/shared/constants';
 import {RatingFilter} from '../rating-filter';
@@ -44,10 +44,10 @@ export const Filter = ({
   caloryRange = {min: 0, max: 0}
 }: FilterPropsType) => {
   const [localFilters, setLocalFilters] = useState(filters);
-  const [showMoreLocation, setShowMoreLocation] = useState<boolean>(false);
+  const [showMoreStation, setShowMoreStation] = useState<boolean>(false);
   const [showMoreExercise, setShowMoreExercise] = useState<boolean>(false);
   const debouncedFilters = useDebounce(localFilters);
-  const locations = Object.values(Location);
+  const stations = Object.values(Station);
   const exercises = Object.values(Exercise);
 
   useEffect(() => {
@@ -97,8 +97,8 @@ export const Filter = ({
     const {name, value} = evt.target;
     setLocalFilters((prevState) => ({...prevState, [name]: value}));
   };
-  const handleShowMoreLocationClick = () => {
-    setShowMoreLocation((prevState) => !prevState);
+  const handleShowMoreStationClick = () => {
+    setShowMoreStation((prevState) => !prevState);
   };
   const handleShowMoreExerciseClick = () => {
     setShowMoreExercise((prevState) => !prevState);
@@ -170,15 +170,15 @@ export const Filter = ({
               <h4 className={`${className}__block-title`}>Локация, станция метро</h4>
               <ul className={`${className}__check-list`}>
                 {
-                  locations.slice(0, showMoreLocation ? undefined : DEFAULT_ELEMENTS_VIEW).map((location) => (
-                    <li className={`${className}__check-list-item`} key={location}>
+                  stations.slice(0, showMoreStation ? undefined : DEFAULT_ELEMENTS_VIEW).map((station) => (
+                    <li className={`${className}__check-list-item`} key={station}>
                       <div className="custom-toggle custom-toggle--checkbox">
                         <label>
                           <input
                             type="checkbox"
-                            value={location}
-                            name="location"
-                            checked={filters.location?.includes(location)}
+                            value={station}
+                            name="station"
+                            checked={filters.station?.includes(station)}
                             onChange={handleFilterListChange}
                           />
                           <span className="custom-toggle__icon">
@@ -186,7 +186,7 @@ export const Filter = ({
                               <use xlinkHref="#arrow-check"></use>
                             </svg>
                           </span>
-                          <span className="custom-toggle__label">{LOCATION_NAME[location]}</span>
+                          <span className="custom-toggle__label">{STATION_NAME[station]}</span>
                         </label>
                       </div>
                     </li>
@@ -194,14 +194,14 @@ export const Filter = ({
                 }
               </ul>
               {
-                locations.length > DEFAULT_ELEMENTS_VIEW &&
+                stations.length > DEFAULT_ELEMENTS_VIEW &&
                   <button
                     className={`btn-show-more ${className}__btn-show`}
                     type="button"
-                    onClick={handleShowMoreLocationClick}
+                    onClick={handleShowMoreStationClick}
                   >
-                    <span>{showMoreLocation ? 'Скрыть' : 'Посмотреть все'}</span>
-                    <svg className="btn-show-more__icon" style={showMoreLocation ? {rotate: '180deg'} : {rotate: '0deg'}} width="10" height="4" aria-hidden="true">
+                    <span>{showMoreStation ? 'Скрыть' : 'Посмотреть все'}</span>
+                    <svg className="btn-show-more__icon" style={showMoreStation ? {rotate: '180deg'} : {rotate: '0deg'}} width="10" height="4" aria-hidden="true">
                       <use xlinkHref="#arrow-down"></use>
                     </svg>
                   </button>

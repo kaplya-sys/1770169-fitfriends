@@ -41,7 +41,7 @@ export const CustomTextarea = ({
         onChange={onTextareaChange}
       />
       {fieldText && <span className="custom-textarea__text">{fieldText}</span>}
-      {errorMessage && <span className="custom-textarea__error">{errorMessage}</span>}
+      <span className="custom-textarea__error">{errorMessage}</span>
     </label>
   </div>
 );

@@ -8,14 +8,14 @@ import {
   Length
 } from 'class-validator';
 
-import {Exercise, FitnessLevel, Gender, Location} from '@1770169-fitfriends/models';
+import {Exercise, FitnessLevel, Gender, Station} from '@1770169-fitfriends/models';
 import {UpdateUser} from '@1770169-fitfriends/types';
 
 import {
   EXERCISE_PROPERTY,
   FITNESS_LEVEL_PROPERTY,
   GENDER_PROPERTY,
-  LOCATION_PROPERTY,
+  STATION_PROPERTY,
   NAME_PROPERTY,
   READY_PROPERTY,
   USER_DESCRIPTION_PROPERTY
@@ -45,13 +45,13 @@ export class UpdateUserDTO implements UpdateUser {
   public gender?: Gender;
 
   @ApiProperty({
-    description: LOCATION_PROPERTY.DESCRIPTION,
-    example: LOCATION_PROPERTY.EXAMPLE,
-    enum: LOCATION_PROPERTY.ENUM
+    description: STATION_PROPERTY.DESCRIPTION,
+    example: STATION_PROPERTY.EXAMPLE,
+    enum: STATION_PROPERTY.ENUM
   })
   @IsString()
   @IsOptional()
-  public location?: Location;
+  public station?: Station;
 
   @ApiProperty({
     description: EXERCISE_PROPERTY.DESCRIPTION,

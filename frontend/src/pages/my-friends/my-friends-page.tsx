@@ -5,10 +5,19 @@ import {Layout} from '../../components/layout';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {FriendsList} from '../../components/friend-list';
 import {ShowMore} from '../../components/show-more';
-import {FriendType, ParamsType} from '../../libs/shared/types';
+import {FriendType, ParamsType, UserApplicationStatus, UserApplicationStatusType} from '../../libs/shared/types';
 import {StubGum} from '../../components/stub-gym';
 import {BackButton} from '../../components/back-button';
-import {getFriendsByUserAction, selectFriends, selectMyFriends} from '../../store';
+import {
+  createUserApplicationAction,
+  getFriendsByUserAction,
+  getUserApplicationsAction,
+  selectAuthenticatedUser,
+  selectFriends,
+  selectMyFriends,
+  selectUserApplications,
+  updateUserApplicationAction
+} from '../../store';
 import {DEFAULT_PAGE} from '../../libs/shared/constants';
 
 export const MyFriendsPage = () => {
@@ -18,10 +27,13 @@ export const MyFriendsPage = () => {
   const dispatch = useAppDispatch();
   const friendsWithPagination = useAppSelector(selectFriends);
   const myFriends = useAppSelector(selectMyFriends);
+  const userApplications = useAppSelector(selectUserApplications);
+  const authenticatedUser = useAppSelector(selectAuthenticatedUser);
 
   useEffect(() => {
     setFriends([]);
     dispatch(getFriendsByUserAction({}));
+    dispatch(getUserApplicationsAction());
   }, [id, dispatch]);
 
   useEffect(() => {
@@ -44,8 +56,14 @@ export const MyFriendsPage = () => {
       setPage((prevState) => prevState + DEFAULT_PAGE);
     }
   };
+  const handleAcceptOrRejectClick = (applicationId: string, status: UserApplicationStatusType) => {
+    dispatch(updateUserApplicationAction({applicationId, status}));
+  };
+  const handleInviteClick = (userId: string) => {
+    dispatch(createUserApplicationAction({userId, status: UserApplicationStatus.Pending}));
+  };
 
-  if (!friendsWithPagination) {
+  if (!friendsWithPagination || !authenticatedUser) {
     return null;
   }
   const {currentPage, totalPages, entities} = friendsWithPagination;
@@ -74,8 +92,10 @@ export const MyFriendsPage = () => {
               <>
                 <FriendsList
                   users={myFriends}
-                  joinTrainingStatus={false}
-                  personalTrainingStatus={false}
+                  authenticatedUser={authenticatedUser}
+                  userApplications={userApplications}
+                  onInviteClick={handleInviteClick}
+                  onAcceptOrRejectClick={handleAcceptOrRejectClick}
                 />
                 {totalPages > DEFAULT_PAGE &&
                   <ShowMore

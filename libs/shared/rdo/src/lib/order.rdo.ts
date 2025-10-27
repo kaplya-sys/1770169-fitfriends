@@ -7,6 +7,7 @@ import {TrainingRDO} from './training.rdo';
 import {
   COUNT_PROPERTY,
   EXERCISE_PROPERTY,
+  ID_PROPERTY,
   ORDER_AMOUNT_PROPERTY,
   PAYMENT_PROPERTY,
   TRAINING_PRICE_PROPERTY,
@@ -14,6 +15,13 @@ import {
 } from './rdo.constant';
 
 export class OrderRDO {
+  @ApiProperty({
+    description: ID_PROPERTY.DESCRIPTION,
+    example: ID_PROPERTY.EXAMPLE
+  })
+  @Expose()
+  public id!: string;
+
   @ApiProperty({
     description: EXERCISE_PROPERTY.DESCRIPTION,
     example: EXERCISE_PROPERTY.EXAMPLE

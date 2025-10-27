@@ -42,7 +42,12 @@ export class FriendRepository extends BasePostgresRepository<FriendEntity, Frien
       },
       data: prismaObject,
       include: {
-        friend: true
+        friend: {
+          include: {
+            station: true,
+            questionnaire: true
+          }
+        }
       }
     });
 
@@ -64,7 +69,12 @@ export class FriendRepository extends BasePostgresRepository<FriendEntity, Frien
         friendId
       },
       include: {
-        friend: true
+        friend: {
+          include: {
+            station: true,
+            questionnaire: true
+          }
+        }
       }
     });
 
@@ -77,7 +87,12 @@ export class FriendRepository extends BasePostgresRepository<FriendEntity, Frien
         id
       },
       include: {
-        friend: true
+        friend: {
+          include: {
+            station: true,
+            questionnaire: true
+          }
+        }
       }
     });
 
@@ -90,10 +105,25 @@ export class FriendRepository extends BasePostgresRepository<FriendEntity, Frien
       Prisma.skip;
     const take = ELEMENTS_ON_PAGE;
     const where: Prisma.FriendWhereInput = {
-      userId,
-      friendId: query?.friendId !== undefined ? query.friendId : Prisma.skip
+      OR: [
+        {userId},
+        {friendId: userId}
+      ]
     };
-    const include: Prisma.FriendInclude = {friend: true};
+    const include: Prisma.FriendInclude = {
+      friend: {
+        include: {
+          station: true,
+          questionnaire: true
+        }
+      },
+      user: {
+        include: {
+          station: true,
+          questionnaire: true
+        }
+      }
+    };
 
     const [records, friendCount] = await Promise.all([
       this.prismaClient.friend.findMany({where, include, take, skip}),

@@ -13,10 +13,10 @@ import {DEFAULT_PAGE} from '../../libs/shared/constants';
 
 export const UsersPage = () => {
   const [users, setUsers] = useState<UserType[]>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(DEFAULT_PAGE);
   const [filters, setFilters] = useState<QueryType>({
     fitnessLevel: null,
-    location: [],
+    station: [],
     type: [],
     role: null
   });
@@ -60,7 +60,7 @@ export const UsersPage = () => {
             <div className="user-catalog-form">
               <h2 className="visually-hidden">Каталог пользователя</h2>
               <div className="user-catalog-form__wrapper">
-                <BackButton className='btn-flat--underlined user-catalog-form__back'/>
+                <BackButton className='btn-flat--underlined user-catalog-form__btnback'/>
                 <Filter
                   className='user-catalog-form'
                   filterName={FilterName.UserFilter}

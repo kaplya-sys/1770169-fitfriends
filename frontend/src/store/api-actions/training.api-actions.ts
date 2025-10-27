@@ -8,8 +8,7 @@ import {
   PaginatedResponseType,
   RangeFiltersType,
   RequestOptionsType,
-  TrainingType,
-  UpdateTrainingType
+  TrainingType
 } from '../../libs/shared/types';
 import {REQUEST_ERROR_MESSAGE, TRAINING_ERROR_MESSAGE} from './api-actions.constant';
 import {getRouteWithParam} from '../../libs/shared/helpers';
@@ -79,11 +78,11 @@ export const createTrainingAction = createAsyncThunk<TrainingType, FormData, {
   }
 });
 
-export const updateTrainingAction = createAsyncThunk<TrainingType, UpdateTrainingType, {
+export const updateTrainingAction = createAsyncThunk<TrainingType, FormData, {
   extra: AxiosInstance;
   rejectValue: ErrorRequestType | string;
   state: RootState;
-}>('training/updateTraining', async (updateData, {rejectWithValue, extra: api, getState}) => {
+}>('training/updateTraining', async (formData, {rejectWithValue, extra: api, getState}) => {
   try {
     const state = getState();
     const training = state[NameSpace.Training].training;
@@ -91,7 +90,7 @@ export const updateTrainingAction = createAsyncThunk<TrainingType, UpdateTrainin
     if (!training) {
       throw new Error(TRAINING_ERROR_MESSAGE);
     }
-    const {data} = await api.patch<TrainingType>(getRouteWithParam(ApiRoute.EditTraining, {id: training.id}), updateData);
+    const {data} = await api.patch<TrainingType>(getRouteWithParam(ApiRoute.EditTraining, {id: training.id}), formData);
 
     return data;
   } catch (error: unknown) {

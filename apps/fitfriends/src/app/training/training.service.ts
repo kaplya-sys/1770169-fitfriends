@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException
@@ -28,19 +29,30 @@ import {
   NOT_FOUND_BY_ID_MESSAGE,
   SPECIAL_TRAINING_COUNT,
   TRAINING_ERROR_MESSAGE,
-  UPDATE_TRAINING_ERROR_MESSAGE
+  TRAINING_URL,
+  UPDATE_TRAINING_ERROR_MESSAGE,
+  USER_URL
 } from './training.constant';
 import {FeedbackEntity} from '../feedback/feedback.entity';
 import {FeedbackRepository} from '../feedback/feedback.repository';
 import {AuthService} from '../auth/auth.service';
+import {MailService} from '../mail/mail.service';
+import {SubscriberService} from '../subscriber/subscriber.service';
+
+import {AppConfig} from '@1770169-fitfriends/config';
+import {ConfigType} from '@nestjs/config';
 
 @Injectable()
 export class TrainingService {
   constructor (
+    @Inject(AppConfig.KEY)
+    public readonly appOptions: ConfigType<typeof AppConfig>,
     private readonly trainingRepository: TrainingRepository,
     private readonly filesService: FilesService,
     private readonly authService: AuthService,
-    private readonly feedbackRepository: FeedbackRepository
+    private readonly feedbackRepository: FeedbackRepository,
+    private readonly mailService: MailService,
+    private readonly subscriberService: SubscriberService
   ) {}
 
   public async createTraining({sub, name, role}: TokenPayload, dto: CreateTrainingDTO, file: RequestFiles): Promise<TrainingEntity> {
@@ -63,11 +75,17 @@ export class TrainingService {
     const newTraining = await this.trainingRepository.save(trainingEntity);
     newTraining.background = background?.toObject();
     newTraining.video = newFiles[0].toObject();
-
+    const subscribers = await this.subscriberService.getSubscribersByUserId(sub);
+    subscribers.forEach((subscriber) => this.mailService.sendNotifyNewTraining(
+      subscriber.email,
+      newTraining,
+      createMessage(TRAINING_URL, [`${this.appOptions.host}:${this.appOptions.port}`, newTraining.id]),
+      createMessage(USER_URL, [`${this.appOptions.host}:${this.appOptions.port}`, sub])
+    ));
     return newTraining;
   }
 
-  public async updateTraining(id: string, dto: UpdateTrainingDTO): Promise<TrainingEntity> {
+  public async updateTraining(id: string, dto: UpdateTrainingDTO, files?: RequestFiles): Promise<TrainingEntity> {
     const existTraining = await this.trainingRepository.findById(id);
 
     if(!existTraining) {
@@ -75,6 +93,13 @@ export class TrainingService {
     }
 
     let hasChanges = false;
+
+    if (files?.video) {
+      const newFiles = await this.filesService.updateFile(existTraining.videoId, files);
+      existTraining.videoId = newFiles[0].id as string;
+
+      hasChanges = true;
+    }
 
     for (const [key, value] of Object.entries(dto)) {
       if (value !== undefined && isKeyOfEntity(key, TrainingEntity) && existTraining[key] !== value) {
@@ -220,6 +245,11 @@ export class TrainingService {
     if (!average._avg.assessment) {
       throw new InternalServerErrorException(AVERAGE_ERROR_MESSAGE);
     }
+
+    if (newFeedback.author?.avatarId) {
+      const avatar = await this.filesService.getFile(newFeedback.author.avatarId as string);
+      newFeedback.author.avatar = avatar.toObject();
+    }
     existTraining.rating = Math.round(average._avg.assessment);
     await this.trainingRepository.update(id, existTraining);
 
@@ -232,7 +262,7 @@ export class TrainingService {
       feedbacks
         .filter((feedback) => feedback !== null)
         .map(async (feedback) => {
-          if (feedback.author) {
+          if (feedback.author?.avatarId) {
             const avatar = await this.filesService.getFile(feedback.author.avatarId as string);
             feedback.author.avatar = avatar.toObject();
           }

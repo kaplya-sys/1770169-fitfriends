@@ -1,4 +1,4 @@
-import {Exercise, FitnessLevel, Gender, Location} from '@1770169-fitfriends/models';
+import {Exercise, FitnessLevel, Gender, Station} from '@1770169-fitfriends/models';
 
 export interface UpdateUser {
   name?: string;
@@ -6,6 +6,6 @@ export interface UpdateUser {
   gender?: Gender;
   description?: string;
   isReady?: boolean;
-  location?: Location;
+  station?: Station;
   fitnessLevel?: FitnessLevel;
 };

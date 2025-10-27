@@ -1,5 +1,5 @@
 import {GenderType} from './gender.type';
-import {LocationType} from './location.type';
+import {StationType} from './station.type';
 import {RoleType} from './role.type';
 
 export type CreateUserType = {
@@ -7,7 +7,7 @@ export type CreateUserType = {
   email: string;
   password: string;
   gender: GenderType | '';
-  location: LocationType | '';
+  station: StationType | '';
   role: RoleType | '';
   avatar?: File;
   birthday?: string;

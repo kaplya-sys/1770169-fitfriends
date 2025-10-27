@@ -1,6 +1,6 @@
 import {ExerciseType} from './exercise.type';
 import {FitnessLevelType} from './fitness-level.type';
-import {LocationType} from './location.type';
+import {StationType} from './station.type';
 import {RoleType} from './role.type';
 import {SortDirectionType} from './sort-direction.enum';
 import {TrainingTimeType} from './training-time.type';
@@ -8,7 +8,7 @@ import {TrainingTimeType} from './training-time.type';
 export type QueryType = {
   page?: number;
   limit?: number;
-  location?: LocationType[];
+  station?: StationType[];
   fitnessLevel?: FitnessLevelType | null;
   priceMin?: number | null;
   priceMax?: number | null;

@@ -1,4 +1,3 @@
-import { PaginatedResponseType } from './../../libs/shared/types/lib/paginated-response.type';
 import {isAxiosError, AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
@@ -10,7 +9,8 @@ import {
   UserType,
   NameSpace,
   AppRoute,
-  RequestOptionsType
+  RequestOptionsType,
+  PaginatedResponseType
 } from '../../libs/shared/types';
 import {AUTH_ERROR_MESSAGE, REQUEST_ERROR_MESSAGE} from './api-actions.constant';
 import {getRouteWithParam} from '../../libs/shared/helpers';
@@ -34,7 +34,6 @@ export const createQuestionnaireAction = createAsyncThunk<UserType, FormData, {
     if (user.role === Role.User) {
       const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateUserQuestionnaire, {id: user.id}), createData);
       dispatch(redirectToRoute({route: AppRoute.Home}));
-
       return data;
     }
     const {data} = await api.post<UserType>(getRouteWithParam(ApiRoute.CreateCoachQuestionnaire, {id: user.id}), createData);
@@ -117,7 +116,7 @@ export const deleteUserAvatarAction = createAsyncThunk<void, void, {
     if (!user) {
       throw new Error(AUTH_ERROR_MESSAGE);
     }
-    await api.patch(getRouteWithParam(ApiRoute.DeleteUserAvatar, {id: user.id}));
+    await api.delete(getRouteWithParam(ApiRoute.DeleteUserAvatar, {id: user.id}));
     dispatch(deleteUserAvatar());
   } catch (error: unknown) {
     if (isAxiosError(error) && error.response) {
@@ -144,6 +143,36 @@ export const deleteUserAction = createAsyncThunk<void, void, {
     removeAccessToken();
     removeRefreshToken();
     dispatch(redirectToRoute({route: AppRoute.Intro}));
+  } catch (error: unknown) {
+    if (isAxiosError(error) && error.response) {
+      return rejectWithValue(error.response.data as ErrorRequestType);
+    }
+    return rejectWithValue(error instanceof Error ? error.message : REQUEST_ERROR_MESSAGE);
+  }
+});
+
+export const deleteQualificationFileAction = createAsyncThunk<void, RequestOptionsType, {
+  extra: AxiosInstance;
+  rejectValue: ErrorRequestType | string;
+}>('user/deleteQualificationFile', async ({id}, {rejectWithValue, extra: api}) => {
+  try {
+    await api.delete(getRouteWithParam(ApiRoute.DeleteQualificationFile, {id}));
+  } catch (error: unknown) {
+    if (isAxiosError(error) && error.response) {
+      return rejectWithValue(error.response.data as ErrorRequestType);
+    }
+    return rejectWithValue(error instanceof Error ? error.message : REQUEST_ERROR_MESSAGE);
+  }
+});
+
+export const updateQualificationFileAction = createAsyncThunk<UserType, RequestOptionsType, {
+  extra: AxiosInstance;
+  rejectValue: ErrorRequestType | string;
+}>('user/updateQualificationFile', async ({id, formData}, {rejectWithValue, extra: api}) => {
+  try {
+    const {data} = await api.patch<UserType>(getRouteWithParam(ApiRoute.UpdateQualificationFile, {id}), formData);
+
+    return data;
   } catch (error: unknown) {
     if (isAxiosError(error) && error.response) {
       return rejectWithValue(error.response.data as ErrorRequestType);

@@ -3,7 +3,7 @@ export const UPDATE_TRAINING_ERROR_MESSAGE = 'Не удалось обновит
 export const FEEDBACK_ERROR_MESSAGE = 'Отзывы к тренировке могут публиковать только пользователи с ролью "Пользователь"';
 export const TRAINING_ERROR_MESSAGE = 'Создать тренировку могут только пользователи с ролью "Тренер"';
 export const AVERAGE_ERROR_MESSAGE = 'Не удалось получить среднее значение из-за ошибки сервера.';
-export const ELEMENTS_ON_PAGE = 7;
+export const ELEMENTS_ON_PAGE = 6;
 export const MAX_UPLOAD_FILES = 1;
 export const DEFAULT_PAGE = 1;
 export const SPECIAL_TRAINING_COUNT = 9;
@@ -11,6 +11,8 @@ export const ROUTE_PREFIX = 'trainings';
 export const TAG = 'Trainings';
 export const BACKGROUND_SUBDIRECTORY = 'training';
 export const DATA_TYPE = 'multipart/form-data';
+export const TRAINING_URL = 'http://%host%/trainings/%trainingId%';
+export const USER_URL = 'http://%host%/users/%userId%/info';
 
 export const CREATED_RESPONSE = 'Объект успешно создан.';
 export const UPDATED_RESPONSE = 'Объект успешно обновлен.';

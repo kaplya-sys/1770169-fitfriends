@@ -1,13 +1,13 @@
-import {ApiProperty} from "@nestjs/swagger";
-import {Expose, Type} from "class-transformer";
+import {ApiProperty} from '@nestjs/swagger';
+import {Expose, Type} from 'class-transformer';
 
 import {
   AVATAR_PROPERTY,
   EMAIL_PROPERTY,
   ID_PROPERTY,
   NAME_PROPERTY
-} from "./rdo.constant";
-import {ImageRDO} from "./image.rdo";
+} from './rdo.constant';
+import {ImageRDO} from './image.rdo';
 
 export class CustomUserRDO {
   @ApiProperty({

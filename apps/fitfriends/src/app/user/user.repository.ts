@@ -2,7 +2,7 @@ import {Injectable} from '@nestjs/common';
 
 import {BasePostgresRepository} from '@1770169-fitfriends/core';
 import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
-import {ExtendUser, Pagination} from '@1770169-fitfriends/types';
+import {ExtendUser, Pagination, SortDirection} from '@1770169-fitfriends/types';
 import {UsersQuery} from '@1770169-fitfriends/query';
 
 import {UserEntity} from './user.entity';
@@ -42,7 +42,8 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
       },
       data: prismaObject,
       include: {
-        questionnaire: true
+        questionnaire: true,
+        station: true
       }
     })
 
@@ -55,7 +56,8 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
         id
       },
       include: {
-        questionnaire: true
+        questionnaire: true,
+        station: true
       }
     });
 
@@ -72,7 +74,8 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
         email
       },
       include: {
-        questionnaire: true
+        questionnaire: true,
+        station: true
       }
     })
 
@@ -89,9 +92,11 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
       Prisma.skip;
     const take = ELEMENTS_ON_PAGE;
     const where: Prisma.UserWhereInput = {
-      location: query?.location?.length ? {
-        in: query.location
-      } : Prisma.skip,
+      station: {
+        station: query?.station?.length ? {
+          in: query.station
+        } : Prisma.skip
+      },
       role: query?.role !== undefined ? query.role : Prisma.skip,
       questionnaire: {
         fitnessLevel: query?.fitnessLevel !== undefined ? query.fitnessLevel : Prisma.skip,
@@ -100,10 +105,16 @@ export class UserRepository extends BasePostgresRepository<UserEntity, ExtendUse
         } : Prisma.skip
       }
     };
-    const include: Prisma.UserInclude = {questionnaire: true}
+    const include: Prisma.UserInclude = {
+      questionnaire: true,
+      station: true
+    }
+    const orderBy: Prisma.UserOrderByWithRelationInput[] = [
+      {createdAt: SortDirection.Down}
+    ];
 
     const [records, userCount] = await Promise.all([
-      this.prismaClient.user.findMany({where, include, take, skip}),
+      this.prismaClient.user.findMany({where, include, orderBy, take, skip}),
       this.getUserCount(where)
     ]);
 

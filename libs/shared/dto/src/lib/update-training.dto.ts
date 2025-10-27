@@ -1,5 +1,6 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {
+  IsBoolean,
   IsInt,
   IsOptional,
   IsString,
@@ -10,7 +11,7 @@ import {Transform} from 'class-transformer';
 
 import {UpdateTraining} from '@1770169-fitfriends/types';
 
-import {DESCRIPTION_PROPERTY, PRICE_PROPERTY, TITLE_PROPERTY} from './dto.const';
+import {DESCRIPTION_PROPERTY, PRICE_PROPERTY, SPECIAL_OFFER_PROPERTY, TITLE_PROPERTY} from './dto.const';
 
 export class UpdateTrainingDTO implements UpdateTraining {
   @ApiProperty({
@@ -37,7 +38,6 @@ export class UpdateTrainingDTO implements UpdateTraining {
   @IsOptional()
   public description?: string;
 
-
   @ApiProperty({
     description: PRICE_PROPERTY.DESCRIPTION,
     example: PRICE_PROPERTY.EXAMPLE,
@@ -49,4 +49,14 @@ export class UpdateTrainingDTO implements UpdateTraining {
   @Transform(({value}) => parseInt(value, 10))
   @IsOptional()
   public price?: number;
+
+  @ApiProperty({
+    description: SPECIAL_OFFER_PROPERTY.DESCRIPTION,
+    example: SPECIAL_OFFER_PROPERTY.EXAMPLE,
+    type: Boolean
+  })
+  @Transform(({value}) => value === 'true' || value === true)
+  @IsBoolean()
+  @IsOptional()
+  public specialOffer?: boolean;
 }

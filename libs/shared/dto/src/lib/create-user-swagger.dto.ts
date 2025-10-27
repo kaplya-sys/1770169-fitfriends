@@ -1,7 +1,7 @@
-import {ApiProperty} from "@nestjs/swagger";
+import {ApiProperty} from '@nestjs/swagger';
 
-import {CreateUserDTO} from "./create-user.dto";
-import {AVATAR_PROPERTY} from "./dto.const";
+import {CreateUserDTO} from './create-user.dto';
+import {AVATAR_PROPERTY} from './dto.const';
 
 export class CreateUserSwaggerDTO extends CreateUserDTO {
   @ApiProperty({

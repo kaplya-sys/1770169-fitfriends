@@ -11,13 +11,15 @@ import {
 } from '../../libs/shared/types';
 import {getRouteWithParam} from '../../libs/shared/helpers';
 import {REQUEST_ERROR_MESSAGE, TRAINING_ERROR_MESSAGE} from './api-actions.constant';
-import {RootState} from '../store';
+import {AppDispatch, RootState} from '../store';
+import {addFeedback} from '../feedbacks/feedbacks.slice';
 
 export const createFeedbackAction = createAsyncThunk<FeedbackType, CreateFeedbackType, {
+  dispatch: AppDispatch;
   extra: AxiosInstance;
   rejectValue: ErrorRequestType | string;
   state: RootState;
-}>('feedback/createFeedback', async (createData, {rejectWithValue, extra: api, getState}) => {
+}>('feedback/createFeedback', async (createData, {dispatch, rejectWithValue, extra: api, getState}) => {
   try {
     const state = getState();
     const training = state[NameSpace.Training].training;
@@ -26,6 +28,7 @@ export const createFeedbackAction = createAsyncThunk<FeedbackType, CreateFeedbac
       throw new Error(TRAINING_ERROR_MESSAGE);
     }
     const {data} = await api.post<FeedbackType>(getRouteWithParam(ApiRoute.CreateTrainingFeedback, {id: training.id}), createData);
+    dispatch(addFeedback(data));
 
     return data;
   } catch (error: unknown) {

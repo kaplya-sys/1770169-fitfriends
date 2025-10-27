@@ -41,7 +41,10 @@ import {
   QUESTIONNAIRE_EXISTS_MESSAGE,
   NOT_FOUND_QUESTIONNAIRE_MESSAGE,
   NOT_FOUND_FRIEND_MESSAGE,
-  ID_ERROR_MESSAGE
+  ID_ERROR_MESSAGE,
+  STATION_NO_EXISTS_MESSAGE,
+  NOT_FOUND_STATION_BY_ID_MESSAGE,
+  USER_APPLICATION_MESSAGE
 } from './auth.constant';
 import {BalanceEntity} from '../balance/balance.entity';
 import {BalanceRepository} from '../balance/balance.repository';
@@ -52,6 +55,9 @@ import {QuestionnaireRepository} from '../questionnaire/questionnaire.repository
 import {QuestionnaireEntity} from '../questionnaire/questionnaire.entity';
 import {FriendRepository} from '../friend/friend.repository';
 import {FriendEntity} from '../friend/friend.entity';
+import {MetroStationRepository} from '../metro-station/metro-station.repository';
+import {MetroStationEntity} from '../metro-station/metro-station.entity';
+import {NotificationService} from '../notification/notification.service';
 
 @Injectable()
 export class AuthService {
@@ -64,6 +70,8 @@ export class AuthService {
     private readonly refreshTokenService: RefreshTokenService,
     private readonly filesService: FilesService,
     private readonly friendRepository: FriendRepository,
+    private readonly metroStationRepository: MetroStationRepository,
+    private readonly notificationService: NotificationService,
     @Inject(JwtConfig.KEY)private readonly jwtOptions: ConfigType<typeof JwtConfig>
   ) {}
 
@@ -73,7 +81,11 @@ export class AuthService {
     if (existUser) {
       throw new NotFoundException(createMessage(USER_EXISTS_MESSAGE, [dto.email]));
     }
+    const station = await this.metroStationRepository.findByStation(dto.station);
 
+    if (!station) {
+      throw new NotFoundException(createMessage(STATION_NO_EXISTS_MESSAGE, [dto.station]));
+    }
     let backgrounds = await this.filesService.getByFieldName(FieldName.Background);
 
     if (!backgrounds.length) {
@@ -82,7 +94,16 @@ export class AuthService {
     const backgroundIds = backgrounds
       .filter((background): background is FilesEntity => background !== null && background.subDirectory.includes(dto.role))
       .map((background) => background.id as string);
-    const userEntity = await new UserEntity({...dto, backgroundIds}).setPassword(dto.password);
+    const userEntity = await new UserEntity({
+        name: dto.name,
+        email: dto.email,
+        password: dto.password,
+        gender: dto.gender,
+        birthday: dto.birthday,
+        role: dto.role,
+        backgroundIds,
+        stationId: station.id as string
+    }).setPassword(dto.password);
 
     if (files && files.avatar?.length) {
       const newFiles = await this.filesService.saveFiles(files);
@@ -131,13 +152,19 @@ export class AuthService {
     if (!existUser) {
       throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [id]));
     }
+    const existStation = await this.metroStationRepository.findById(existUser.stationId);
+
+    if (!existStation) {
+      throw new NotFoundException(createMessage(NOT_FOUND_STATION_BY_ID_MESSAGE, [existUser.stationId]));
+    }
     const existQuestionnaire = await this.questionnaireRepository.findById(existUser.questionnaire?.id);
 
     if (!existQuestionnaire) {
-      throw new NotFoundException(createMessage(NOT_FOUND_QUESTIONNAIRE_MESSAGE, [id]));
+      throw new NotFoundException(createMessage(NOT_FOUND_QUESTIONNAIRE_MESSAGE, [existUser.questionnaire?.id]));
     }
-    let hasUpdates = false;
-    let hasQuestionnaireUpdates = false;
+    let hasChanges = false;
+    let hasQuestionnaireChanges = false;
+    let hasStationChanges = false;
 
     if (files?.avatar) {
       if (existUser.avatarId) {
@@ -147,29 +174,47 @@ export class AuthService {
         const newFiles = await this.filesService.saveFiles(files);
         existUser.avatarId = newFiles[0].id;
       }
-      hasUpdates = true;
+      hasChanges = true;
     }
+
+    if (files?.qualification) {
+      const newFiles = await this.filesService.saveFiles(files);
+      const qualificationIds = newFiles.map((newFile) => newFile.id as string);
+      existQuestionnaire.qualificationIds = existQuestionnaire.qualificationIds?.concat(qualificationIds);
+
+      hasQuestionnaireChanges = true;
+    }
+
 
     for (const [key, value] of Object.entries(dto)) {
       if (value !== undefined) {
         if (isKeyOfEntity(key, UserEntity) && existUser[key] !== value) {
           existUser[key] = value as never;
-          hasUpdates = true;
+          hasChanges = true;
         }
 
         if (isKeyOfEntity(key, QuestionnaireEntity) && existQuestionnaire[key] !== value) {
           existQuestionnaire[key] = value as never;
-          hasQuestionnaireUpdates = true;
+          hasQuestionnaireChanges = true;
+        }
+
+        if (isKeyOfEntity(key, MetroStationEntity) && existStation[key] !== value) {
+          existStation[key] = value as never;
+          hasStationChanges = true;
         }
       }
     }
 
-    if (hasQuestionnaireUpdates) {
+    if (hasQuestionnaireChanges) {
       await this.questionnaireRepository.update(existQuestionnaire?.id, existQuestionnaire);
     }
-    const {backgrounds, avatar, qualifications} = await this.getFiles(existUser.role, existUser.avatarId, existUser.questionnaire?.qualificationIds);
 
-    if (!hasUpdates) {
+    if (hasStationChanges) {
+      await this.metroStationRepository.update(existStation?.id, existStation);
+    }
+    const {backgrounds, avatar, qualifications} = await this.getFiles(existUser.role, existUser.avatarId, existQuestionnaire.qualificationIds);
+
+    if (!hasChanges) {
       if (backgrounds) {
         existUser.backgrounds = backgrounds;
       }
@@ -181,6 +226,8 @@ export class AuthService {
       if (existUser.role === Role.coach && existUser.questionnaire && qualifications?.length) {
         existUser.questionnaire.qualifications = qualifications;
       }
+
+      return existUser;
     }
     const updatedUser = await this.userRepository.update(id, existUser);
 
@@ -287,10 +334,9 @@ export class AuthService {
     const entities = await Promise.all(
       userBalance.entities
         .map(async (entity) => {
-          const video = await this.filesService.getFile(entity.training?.videoId as string);
-          const background = await this.filesService.getFile(entity.training?.backgroundId as string);
-
-          if ('training' in entity && typeof entity.training === 'object') {
+          if (entity.training) {
+            const video = await this.filesService.getFile(entity.training.videoId);
+            const background = await this.filesService.getFile(entity.training.backgroundId);
             entity.training.video = video.toObject();
             entity.training.background = background.toObject()
           }
@@ -351,6 +397,13 @@ export class AuthService {
       throw new InternalServerErrorException(UPDATE_USER_BALANCE_ERROR_MESSAGE);
     }
 
+    if (balance.training) {
+      const video = await this.filesService.getFile(balance.training.videoId);
+      const background = await this.filesService.getFile(balance.training.backgroundId);
+      balance.training.video = video.toObject();
+      balance.training.background = background.toObject()
+    }
+
     return balance;
   }
 
@@ -394,6 +447,7 @@ export class AuthService {
     });
     const newFriend = await this.friendRepository.save(friendEntity);
     newFriend.friend = existUserOf;
+    await this.notificationService.createNotification(friendId, createMessage(USER_APPLICATION_MESSAGE, [existUser.name]));
 
     if (backgrounds) {
       newFriend.friend.backgrounds = backgrounds;
@@ -417,7 +471,7 @@ export class AuthService {
       throw new NotFoundException(createMessage(NOT_FOUND_FRIEND_MESSAGE, [id]));
     }
 
-    return this.friendRepository.delete(id);
+    await this.friendRepository.delete(id);
   }
 
   public async getFriendsByUserId(userId: string, query?: FriendsQuery): Promise<Pagination<FriendEntity>> {
@@ -490,6 +544,55 @@ export class AuthService {
     await this.filesService.deleteFile(existUser.avatarId);
     existUser.avatarId = null;
     await this.userRepository.update(id, existUser);
+  }
+
+  public async deleteQualificationFile(fileId: string, userId: string): Promise<void> {
+    const existUser = await this.userRepository.findById(userId);
+
+    if (!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [userId]));
+    }
+    const existQuestionnaire = await this.questionnaireRepository.findById(existUser.questionnaire?.id);
+
+    if (!existQuestionnaire) {
+      throw new NotFoundException(createMessage(NOT_FOUND_QUESTIONNAIRE_MESSAGE, [existUser.questionnaire?.id]));
+    }
+
+    await this.filesService.deleteFile(fileId);
+    existQuestionnaire.qualificationIds = existQuestionnaire.qualificationIds?.filter((qualificationId) => qualificationId !== fileId);
+    await this.questionnaireRepository.update(existQuestionnaire?.id, existQuestionnaire);
+  }
+
+  public async updateQualificationFile(fileId: string, userId: string, files: RequestFiles): Promise<UserEntity> {
+    const existUser = await this.userRepository.findById(userId);
+
+    if (!existUser) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_ID_MESSAGE, [userId]));
+    }
+    const existQuestionnaire = await this.questionnaireRepository.findById(existUser.questionnaire?.id);
+
+    if (!existQuestionnaire) {
+      throw new NotFoundException(createMessage(NOT_FOUND_QUESTIONNAIRE_MESSAGE, [existUser.questionnaire?.id]));
+    }
+    const index = existQuestionnaire.qualificationIds?.findIndex((qualificationId) => qualificationId === fileId);
+
+    if (index === undefined || index === -1) {
+      return existUser;
+    }
+    const newFiles = await this.filesService.updateFile(fileId, files);
+    existQuestionnaire.qualificationIds?.splice(index, 1, newFiles[0].id as string);
+    const updatedQuestionnaire = await this.questionnaireRepository.update(existQuestionnaire?.id, existQuestionnaire);
+
+    if (!updatedQuestionnaire) {
+      throw new InternalServerErrorException(UPDATE_USER_ERROR_MESSAGE);
+    }
+    const {backgrounds, avatar, qualifications} = await this.getFiles(existUser.role, existUser.avatarId, updatedQuestionnaire.qualificationIds);
+    updatedQuestionnaire.qualifications = qualifications;
+    existUser.backgrounds = backgrounds;
+    existUser.avatar = avatar;
+    existUser.questionnaire = updatedQuestionnaire;
+
+    return existUser;
   }
 
   private async getFiles(userRole: Role, avatarId: string | null | undefined, qualificationIds?: string[] | null | undefined) {

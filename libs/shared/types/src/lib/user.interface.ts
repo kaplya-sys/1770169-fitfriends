@@ -1,7 +1,8 @@
-import {Gender, Location, Role} from '@1770169-fitfriends/models';
+import {Gender, Role} from '@1770169-fitfriends/models';
 
 import {Questionnaire} from './questionnaire.interface';
 import {FileUpload} from './file-upload.interface';
+import {MetroStation} from './metro-station';
 
 export interface User {
   id?: string;
@@ -12,7 +13,8 @@ export interface User {
   gender: Gender;
   birthday?: null | Date;
   description?: null | string;
-  location: Location;
+  stationId: string;
+  station?: MetroStation;
   role: Role;
   backgroundIds: string[];
   backgrounds?: FileUpload[];

@@ -1,17 +1,24 @@
 import {Link} from 'react-router-dom';
+import classNames from 'classnames';
 
-import {AppRoute, UserType} from '../../libs/shared/types';
+import {AppRoute, Role, UserType} from '../../libs/shared/types';
 import {getRouteWithParam} from '../../libs/shared/helpers';
 import {Picture} from '../picture';
 
 type UserCardProps = {
   className: string;
   user: UserType;
+  isDark?: boolean;
 }
 
-export const UserCard = ({className, user}: UserCardProps) => (
+export const UserCard = ({className, user, isDark = false}: UserCardProps) => (
   <li className={className}>
-    <div className="thumbnail-user thumbnail-user--role-user thumbnail-user--dark">
+    <div className={classNames('thumbnail-user', {
+      'thumbnail-user--role-user': user.role === Role.User,
+      'thumbnail-user--role-coach': user.role === Role.Coach,
+      'thumbnail-user--dark': isDark
+    })}
+    >
       <div className="thumbnail-user__image">
         {user.avatar ?
           <Picture
@@ -35,7 +42,7 @@ export const UserCard = ({className, user}: UserCardProps) => (
           <svg width="14" height="16" aria-hidden="true">
             <use xlinkHref="#icon-location"></use>
           </svg>
-          <address className="thumbnail-user__location-address">{user.location}</address>
+          <address className="thumbnail-user__location-address">{user.station.station}</address>
         </div>
       </div>
       <ul className="thumbnail-user__hashtags-list">
@@ -49,7 +56,10 @@ export const UserCard = ({className, user}: UserCardProps) => (
           ))}
       </ul>
       <Link
-        className="btn btn--outlined btn--dark-bg btn--medium thumbnail-user__button"
+        className={classNames('btn btn--medium thumbnail-user__button', {
+          'btn--dark-bg': user.role === Role.Coach || isDark,
+          'btn--outlined': isDark
+        })}
         to={getRouteWithParam(AppRoute.UserInfo, {id: user.id})}
       >
         Подробнее

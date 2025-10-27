@@ -1,7 +1,7 @@
 import {IsArray, IsEnum, IsNumber, IsOptional, Max} from 'class-validator';
 import {Transform} from 'class-transformer';
 
-import {Exercise, FitnessLevel, Location, Role} from '@1770169-fitfriends/models';
+import {Exercise, FitnessLevel, Role, Station} from '@1770169-fitfriends/models';
 import {Query} from '@1770169-fitfriends/types';
 import {DEFAULT_PAGE, MAX_ENTITY_COUNT} from './query.constant';
 
@@ -16,9 +16,9 @@ export class UsersQuery implements Query {
   public type?: Exercise[];
 
   @IsArray()
-  @IsEnum(Location, {each: true})
+  @IsEnum(Station, {each: true})
   @IsOptional()
-  public location?: Location[];
+  public station?: Station[];
 
   @IsEnum(FitnessLevel)
   @IsOptional()

@@ -1,0 +1,322 @@
+@host = http://localhost:5000/api
+@access_token =
+@userId =
+@trainingId =
+@friendId =
+@friendRecordId =
+@user_avatar_name =
+@user_avatar_path =
+@certificate_name =
+@certificate_path =
+@certificateId =
+
+# Create a user.
+
+POST {{host}}/users/sign-up HTTP/1.1
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="avatar"; filename="{{user_avatar_name}}"
+Content-Type: image/png
+
+< {{user_avatar_path}}
+--MyBoundary
+Content-Disposition: form-data; name="name"
+
+Александр
+--MyBoundary
+Content-Disposition: form-data; name="email"
+
+alex@gmail.com
+--MyBoundary
+Content-Disposition: form-data; name="password"
+
+123456
+--MyBoundary
+Content-Disposition: form-data; name="station"
+
+pionerskaya
+--MyBoundary
+Content-Disposition: form-data; name="gender"
+
+male
+--MyBoundary
+Content-Disposition: form-data; name="role"
+
+user
+--MyBoundary-
+
+###
+# Create a coach.
+
+POST {{host}}/users/sign-up HTTP/1.1
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="name"
+
+Виктория
+--MyBoundary
+Content-Disposition: form-data; name="email"
+
+vika@hotmail.com
+--MyBoundary
+Content-Disposition: form-data; name="password"
+
+123456
+--MyBoundary
+Content-Disposition: form-data; name="birthday"
+
+2011-04-18T00:00:00.000Z
+--MyBoundary
+Content-Disposition: form-data; name="station"
+
+petrogradskaya
+--MyBoundary
+Content-Disposition: form-data; name="gender"
+
+female
+--MyBoundary
+Content-Disposition: form-data; name="role"
+
+coach
+--MyBoundary-
+
+###
+# Login.
+
+POST {{host}}/users/sign-in HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "vika@hotmail.com",
+  "password": "123456"
+}
+
+###
+# Logout.
+
+POST {{host}}/users/logout HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Create a questionnaire for the user.
+
+POST {{host}}/users/{{userId}}/create-user-questionnaire HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "fitnessLevel": "amateur",
+  "trainingTime": "long",
+  "exercises": ["crossfit", "running", "stretching"],
+  "caloriesLose": "4000",
+  "caloriesWaste": "1200"
+}
+
+###
+# Create a questionnaire for the coach.
+
+POST {{host}}/users/{{userId}}/create-coach-questionnaire HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="qualification"; filename="{{certificate_name}}"
+Content-Type: application/pdf
+
+< {{certificate_path}}
+--MyBoundary
+Content-Disposition: form-data; name="fitnessLevel"
+
+professional
+--MyBoundary
+Content-Disposition: form-data; name="exercises"
+
+crossfit
+--MyBoundary
+Content-Disposition: form-data; name="exercises"
+
+aerobics
+--MyBoundary
+Content-Disposition: form-data; name="experience"
+
+Умение составлять и корректировать тренировочные планы в зависимости от индивидуальных запросов и физических возможностей клиентов
+--MyBoundary
+Content-Disposition: form-data; name="isPersonal"
+
+true
+--MyBoundary-
+
+###
+# Refresh the token.
+
+POST {{host}}/users/refresh-token HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Check the token.
+
+POST {{host}}/users/check-token HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get a user by user ID.
+
+GET {{host}}/users/{{userId}} HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Update the user.
+
+PATCH {{host}}/users/{{userId}}/edit HTTP/1.1
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="description"
+
+Я предлагаю индивидуальные тренировки, которые будут адаптированы под ваши потребности и уровень физической подготовки
+--MyBoundary
+Content-Disposition: form-data; name="station"
+
+udelnaya
+--MyBoundary-
+
+###
+# Delete the user.
+
+DELETE {{host}}/users/{{userId}}/delete HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get users.
+
+GET {{host}}/users HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get users by query (get users by role).
+
+GET {{host}}/users?role=coach HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get users by query (get users by training type).
+
+GET {{host}}/users?type=yoga&type=running&type=aerobics HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get users by query (get users by station name).
+
+GET {{host}}/users?station=petrogradskaya&station=zvezdnaya HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get users by query (get users by fitness level).
+
+GET {{host}}/users?fitnessLevel=amateur HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get users with query (number of orders per page).
+
+GET {{host}}/users?limit=4 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get users with query (page to display).
+
+GET {{host}}/users?page=2 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get the user balance by user ID.
+
+GET {{host}}/users/{{userId}}/balance HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Use the training by ID from user balance.
+
+POST {{host}}/users/{{userId}}/balance/use/{{trainingId}} HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Add a friend.
+
+POST {{host}}/users/{{userId}}/add-friend/{{friendId}} HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Delete the friend.
+
+DELETE {{host}}/users/{{userId}}/delete-friend/{{friendRecordId}} HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get the user friends by user ID.
+
+GET {{host}}/users/{{userId}}/friends HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get the user friends by user ID with query(number of orders per page).
+
+GET {{host}}/users/{{userId}}/friends?limit=4 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get the user friends by user ID with query(page to display).
+
+GET {{host}}/users/{{userId}}/friends?page=2 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Delete the user avatar.
+
+DELETE {{host}}/users/{{userId}}/delete-avatar HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Delete the coach certificate.
+
+DELETE {{host}}/users/qualifications/{{certificateId}}/delete HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Update the coach certificate.
+
+PATCH {{host}}/users/qualifications/{{certificateId}}/update HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="qualification"; filename="{{certificate_name}}"
+Content-Type: application/pdf
+
+< {{certificate_path}}
+--MyBoundary-
+
+###

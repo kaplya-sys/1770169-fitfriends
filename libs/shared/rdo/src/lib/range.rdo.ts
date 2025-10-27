@@ -1,7 +1,7 @@
-import {ApiProperty} from "@nestjs/swagger";
-import {Expose} from "class-transformer";
+import {ApiProperty} from '@nestjs/swagger';
+import {Expose} from 'class-transformer';
 
-import {MAX_PROPERTY, MIN_PROPERTY} from "./rdo.constant";
+import {MAX_PROPERTY, MIN_PROPERTY} from './rdo.constant';
 
 export class RangeRDO {
   @ApiProperty({

@@ -1,5 +1,7 @@
 export type UpdateTrainingType = {
   title?: string;
   description?: string;
-  price?: string;
+  price?: number;
+  specialOffer?: boolean;
+  video?: File | null;
 }

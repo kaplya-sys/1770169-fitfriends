@@ -1,0 +1,199 @@
+@host = http://localhost:5000/api
+@access_token =
+@userId =
+@trainingId =
+@video_name =
+@video_path =
+
+# Create a training.
+
+POST {{host}}/trainings/create HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="video"; filename="{{video_name}}"
+Content-Type: video/mp4
+
+< {{video_path}}
+--MyBoundary
+Content-Disposition: form-data; name="title"
+
+boxing
+--MyBoundary
+Content-Disposition: form-data; name="description"
+
+Упражнения укрепляют мышечный корсет, делают суставы более гибкими, улучшают осанку и координацию.
+--MyBoundary
+Content-Disposition: form-data; name="type"
+
+boxing
+--MyBoundary
+Content-Disposition: form-data; name="price"
+
+800
+--MyBoundary
+Content-Disposition: form-data; name="level"
+
+professional
+--MyBoundary
+Content-Disposition: form-data; name="trainingTime"
+
+long
+--MyBoundary
+Content-Disposition: form-data; name="calories"
+
+1100
+--MyBoundary
+Content-Disposition: form-data; name="gender"
+
+male
+--MyBoundary--
+
+###
+# Get the training by training ID.
+
+GET {{host}}/trainings/{{trainingId}} HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings.
+
+GET {{host}}/trainings HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings by query (get trainings by coach ID).
+
+GET {{host}}/trainings?coach={{userId}} HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings by query (filter by calories).
+
+GET {{host}}/trainings?caloriesMin=1000&caloriesMax=3000 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings by query (filter by price).
+
+GET {{host}}/trainings?priceMin=600&priceMax=2000 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings by query (filter by rating).
+
+GET {{host}}/trainings?ratingMin=2&ratingMax=4 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings by query (filter by type).
+
+GET {{host}}/trainings?type=boxing&type=stretching&type=aerobics HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings by query (filter by training time).
+
+GET {{host}}/trainings?trainingTime=medium&trainingTime=extraLong HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings by query (sort by created date, asc or desc).
+
+GET {{host}}/trainings?orderByDate=desc HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings by query (sort by price, asc or desc).
+
+GET {{host}}/trainings?orderByPrice=asc HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings by query (number of orders per page).
+
+GET {{host}}/trainings?limit=4 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get trainings by query (page to display).
+
+GET {{host}}/trainings?page=2 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get recommended trainings.
+
+GET {{host}}/trainings/recommended-trainings HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get a range of values for price and calories.
+
+GET {{host}}/trainings/range HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Update the training.
+
+PATCH {{host}}/trainings/{{trainingId}}/edit HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="video"; filename="{{video_name}}"
+Content-Type: video/mp4
+
+< {{video_path}}
+--MyBoundary
+Content-Disposition: form-data; name="title"
+
+The power of boxing
+--MyBoundary
+Content-Disposition: form-data; name="price"
+
+950
+--MyBoundary--
+
+###
+# Delete the training.
+
+DELETE {{host}}/trainings/{{trainingId}}/delete HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Create feedback for the training.
+
+POST {{host}}/trainings/{{trainingId}}/create-feedback HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "assessment": 5,
+  "content": "Регулярно выполняю эту тренировку дома и вижу результат! Спина стала прямее, появилось больше сил и гибкость тоже стала лучше, хотя упражнения довольно простые."
+}
+
+###
+# Get feedbacks for the training.
+
+GET {{host}}/trainings/{{trainingId}}/feedbacks HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###

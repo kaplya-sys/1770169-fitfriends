@@ -127,3 +127,7 @@ export function isKeyOfEntity<
   >(key: string, entity: EntityConstructor<P, T>): key is keyof T & string {
     return entity.isOwnKey(key);
 }
+
+export function parseBoolean(value: string | undefined): boolean {
+  return value === 'true';
+};

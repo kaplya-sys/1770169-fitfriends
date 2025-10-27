@@ -1,7 +1,13 @@
 import {genSaltSync, hashSync, compareSync} from 'bcrypt';
 
-import {Entity, ExtendUser, FileUpload, Questionnaire} from '@1770169-fitfriends/types';
-import {Location, Gender, Role, Prisma} from '@1770169-fitfriends/models';
+import {
+  Entity,
+  ExtendUser,
+  FileUpload,
+  MetroStation,
+  Questionnaire
+} from '@1770169-fitfriends/types';
+import {Gender, Role, Prisma} from '@1770169-fitfriends/models';
 
 import {SALT_ROUNDS} from './user.constant';
 
@@ -15,7 +21,8 @@ export class UserEntity implements ExtendUser, Entity<string> {
   public gender!: Gender;
   public birthday?: null | Date;
   public description?: null | string;
-  public location!: Location;
+  public stationId!: string;
+  public station?: MetroStation;
   public role!: Role;
   public backgroundIds!: string[];
   public backgrounds?: FileUpload[];
@@ -38,7 +45,8 @@ export class UserEntity implements ExtendUser, Entity<string> {
     this.gender = user.gender;
     this.birthday = user.birthday;
     this.description = user.description;
-    this.location = user.location;
+    this.stationId = user.stationId;
+    this.station = user.station;
     this.role = user.role;
     this.backgroundIds = user.backgroundIds;
     this.backgrounds = user.backgrounds;
@@ -60,7 +68,8 @@ export class UserEntity implements ExtendUser, Entity<string> {
       gender: this.gender,
       birthday: this.birthday,
       description: this.description,
-      location: this.location,
+      stationId: this.stationId,
+      station: this.station,
       role: this.role,
       backgroundIds: this.backgroundIds,
       backgrounds: this.backgrounds,
@@ -76,7 +85,7 @@ export class UserEntity implements ExtendUser, Entity<string> {
       email: this.email,
       password: this.password,
       gender: this.gender,
-      location: this.location,
+      stationId: this.stationId,
       role: this.role,
       backgroundIds: this.backgroundIds,
       avatarId: this.avatarId !== undefined ? this.avatarId : Prisma.skip,
@@ -110,7 +119,8 @@ export class UserEntity implements ExtendUser, Entity<string> {
       'email',
       'gender',
       'isReady',
-      'location',
+      'stationId',
+      'station',
       'name',
       'password',
       'questionnaire',

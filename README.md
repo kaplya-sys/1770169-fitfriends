@@ -4,20 +4,49 @@
 
 ✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
 
 ## Run tasks
+
+To run docker compose, use:
+
+```sh
+docker compose --file ./apps/fitfriends/docker-compose.yml --env-file ./apps/fitfriends/.env up -d
+```
+
+To run generate prisma schema, use:
+
+```sh
+npx nx run fitfriends:db:generate
+```
+
+To run migrate database, use:
+
+```sh
+npx nx run fitfriends:db:migrate
+```
+
+To run generate mock data, use:
+
+```sh
+npx nx run fitfriends:db:fill
+```
 
 To run the dev server for your app, use:
 
 ```sh
-npx nx serve fitfriends
+npx nx run fitfriends:serve
+```
+
+To run the dev frontend for your app, use:
+
+```sh
+npx nx run frontend:serve
 ```
 
 To create a production bundle:
 
 ```sh
-npx nx build fitfriends
+npx nx run fitfriends:build
 ```
 
 To see all available targets to run for a project, run:

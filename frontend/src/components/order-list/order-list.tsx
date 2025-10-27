@@ -11,9 +11,9 @@ export const OrderList = ({orders, className}: OrderListPropsType) => (
     {
       orders.map((order) => (
         <TrainingCard
+          key={order.id}
           training={order.training}
           className={className}
-          key={order.id}
           orderInfo={{
             count: order.count,
             amount: order.amount

@@ -10,13 +10,13 @@ import {
 import {Transform} from 'class-transformer';
 
 import {CreateUser} from '@1770169-fitfriends/types';
-import {Gender, Location, Role} from '@1770169-fitfriends/models';
+import {Gender, Role, Station} from '@1770169-fitfriends/models';
 
 import {
   BIRTHDAY_PROPERTY,
   EMAIL_PROPERTY,
   GENDER_PROPERTY,
-  LOCATION_PROPERTY,
+  STATION_PROPERTY,
   NAME_PROPERTY,
   PASSWORD_PROPERTY,
   ROLE_PROPERTY
@@ -75,13 +75,13 @@ export class CreateUserDTO implements CreateUser {
   public gender!: Gender;
 
   @ApiProperty({
-    description: LOCATION_PROPERTY.DESCRIPTION,
-    example: LOCATION_PROPERTY.EXAMPLE,
-    enum: LOCATION_PROPERTY.ENUM
+    description: STATION_PROPERTY.DESCRIPTION,
+    example: STATION_PROPERTY.EXAMPLE,
+    enum: STATION_PROPERTY.ENUM
   })
   @IsString()
   @IsNotEmpty()
-  public location!: Location;
+  public station!: Station;
 
   @ApiProperty({
     description: BIRTHDAY_PROPERTY.DESCRIPTION,

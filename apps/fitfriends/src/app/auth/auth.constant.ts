@@ -1,10 +1,12 @@
-export const USER_EXISTS_MESSAGE = 'Пользователь с таким адресом электронной почты: %email% уже зарегистрирован в системе.';
-export const NOT_FOUND_BY_EMAIL_MESSAGE = 'Пользователь с таким адресом электронной почты: %email% не найден в системе.';
-export const NOT_FOUND_BY_ID_MESSAGE = 'Пользователь с таким идентификатором: %id% не найден в системе.';
-export const NOT_FOUND_QUESTIONNAIRE_MESSAGE = 'Анкета с таким идентификатором: %id% не найден в системе.';
-export const NOT_FOUND_FRIEND_MESSAGE = 'Запись с таким идентификатором: %id% не найден в системе.';
+export const USER_EXISTS_MESSAGE = 'Пользователь с данным адресом электронной почты: %email% уже зарегистрирован в системе.';
+export const STATION_NO_EXISTS_MESSAGE = 'Станция метро: %station% не найдена в системе.';
+export const NOT_FOUND_STATION_BY_ID_MESSAGE = 'Станция метро с данным идентификатором: %id% не найдена в системе.';
+export const NOT_FOUND_BY_EMAIL_MESSAGE = 'Пользователь с данным адресом электронной почты: %email% не найден в системе.';
+export const NOT_FOUND_BY_ID_MESSAGE = 'Пользователь с данным идентификатором: %id% не найден в системе.';
+export const NOT_FOUND_QUESTIONNAIRE_MESSAGE = 'Анкета с данным идентификатором: %id% не найден в системе.';
+export const NOT_FOUND_FRIEND_MESSAGE = 'Запись с данным идентификатором: %id% не найден в системе.';
 export const QUESTIONNAIRE_EXISTS_MESSAGE = 'У пользователь с идентификатором: %id% уже заполнена анкета.';
-export const NOT_FOUND_BALANCE_BY_ID_MESSAGE = 'Баланс пользователя с таким идентификатором тренировки: %id% не найден в системе.';
+export const NOT_FOUND_BALANCE_BY_ID_MESSAGE = 'Баланс пользователя с данным идентификатором тренировки: %id% не найден в системе.';
 export const UPDATE_USER_ERROR_MESSAGE = 'Не удалось обновить пользователя из-за ошибки сервера.';
 export const UPDATE_USER_BALANCE_ERROR_MESSAGE = 'Не удалось обновить баланс пользователя из-за ошибки сервера.';
 export const ID_ERROR_MESSAGE = 'Не верный идентификатор.';
@@ -16,10 +18,12 @@ export const TAG = 'Users';
 export const MAX_UPLOAD_FILES = 1;
 export const DEFAULT_AMOUNT = 1;
 export const DATA_TYPE = 'multipart/form-data';
+export const USER_APPLICATION_MESSAGE = '%user% добавил(а) вас в друзья';
 
 export const CREATED_RESPONSE = 'Объект успешно создан.';
 export const UPDATED_RESPONSE = 'Объект успешно обновлен.';
 export const FOUND_RESPONSE = 'Объект успешно найден.';
+export const DELETE_RESPONSE = 'Объект успешно удален.';
 export const AUTHORIZED_RESPONSE = 'Успешная авторизация пользователя.';
 export const REFRESH_TOKEN_RESPONSE = 'Успешное обновление токена.';
 export const CHECK_TOKEN_RESPONSE = 'Успешная проверка пользователя.';
@@ -31,7 +35,7 @@ export const UNAUTHORIZED = 'Ошибка авторизации пользов�
 
 export const ID_PARAM = {
   NAME: 'id',
-  DESCRIPTION: 'UUID идентификатор пользователя.',
+  DESCRIPTION: 'UUID идентификатор.',
   EXAMPLE: '123e4567-e89b-12d3-a456-426614174000',
 }
 export const USER_ID_PARAM = {
@@ -39,9 +43,19 @@ export const USER_ID_PARAM = {
   DESCRIPTION: 'UUID идентификатор пользователя.',
   EXAMPLE: '123e4567-e89b-12d3-a456-426614174000',
 }
+export const FILE_ID_PARAM = {
+  NAME: 'fileId',
+  DESCRIPTION: 'Mongo ObjectId идентификатор.',
+  EXAMPLE: '64a7086e40e1f7c9a3f9d875',
+}
 export const FRIEND_ID_PARAM = {
   NAME: 'friendId',
   DESCRIPTION: 'UUID идентификатор пользователя.',
+  EXAMPLE: '123e4567-e89b-12d3-a456-426614174000',
+}
+export const TRAINING_ID_PARAM = {
+  NAME: 'trainingId',
+  DESCRIPTION: 'UUID идентификатор тренировки.',
   EXAMPLE: '123e4567-e89b-12d3-a456-426614174000',
 }
 export const ROLE_QUERY = {
@@ -64,9 +78,4 @@ export const ACTIVE_QUERY = {
   NAME: 'active',
   DESCRIPTION: 'Флаг указывающий только на доступные тренировки.',
   EXAMPLE: true,
-}
-export const FRIEND_ID_QUERY = {
-  NAME: 'friendId',
-  DESCRIPTION: 'UUID идентификатор пользователя.',
-  EXAMPLE: '123e4567-e89b-12d3-a456-426614174000',
 }

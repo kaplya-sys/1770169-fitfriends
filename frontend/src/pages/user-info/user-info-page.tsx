@@ -1,49 +1,90 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import classNames from 'classnames';
 
-import {ParamsType, Role} from '../../libs/shared/types';
+import {ParamsType, Role, UserApplicationStatus} from '../../libs/shared/types';
 import {EXERCISE_NAMES, STATIC_BASE_PATH} from '../../libs/shared/constants';
 import {BackButton} from '../../components/back-button';
 import {TrainingList} from '../../components/training-list';
 import {PopupUserMap} from '../../components/popup-user-map';
+import {PopupQualifications} from '../../components/popup-qualifications';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {useSlider} from '../../hooks';
 import {
   addFriendAction,
+  addSubscriberAction,
+  createUserApplicationAction,
   deleteFriendAction,
+  deleteSubscriberAction,
   getFriendsByUserAction,
+  getSubscribersAction,
   getTrainingsAction,
   getUserAction,
+  getUserApplicationsAction,
   selectAuthenticatedUser,
   selectFriends,
+  selectSubscribers,
   selectTrainings,
   selectUser,
+  selectUserApplications,
   selectUserBackgrounds
 } from '../../store';
 import './user-info-page.css';
 
 export const UserInfoPage = () => {
   const [isUseMapShow, setIsUseMapShow] = useState<boolean>(false);
-  const [isSubscribe, setIsSubscribe] = useState<boolean>(false);
+  const [isQualificationsShow, setIsQualificationsShow] = useState<boolean>(false);
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
+  const [subscribeId, setSubscribeId] = useState<string>('');
+  const innerRef = useRef<HTMLDivElement | null>(null);
   const {id} = useParams<ParamsType>();
   const user = useAppSelector(selectUser);
+  const subscribers = useAppSelector(selectSubscribers);
   const authenticatedUser = useAppSelector(selectAuthenticatedUser);
   const friends = useAppSelector(selectFriends);
   const backgrounds = useAppSelector(selectUserBackgrounds);
   const trainings = useAppSelector(selectTrainings);
+  const userApplications = useAppSelector(selectUserApplications);
+  const {sliderRef, buttonNextRef, buttonPrevRef} = useSlider(trainings?.entities.length || 0, 4, 4);
+  const friend = useMemo(() => friends?.entities.find((entity) => entity.friend.id === id), [id, friends?.entities]);
+  const outgoingApplication = useMemo(() => userApplications.find((userApplication) => userApplication.userId === user?.id), [userApplications, user]);
   const dispatch = useAppDispatch();
-  const {sliderRef, buttonNextRef, buttonPrevRef} = useSlider(!!trainings?.entities.length);
-  const friend = useMemo(() => friends?.entities.find((entity) => entity.friend.id === id), [friends, id]);
 
   useEffect(() => {
+    setIsSubscribed(false);
+    setSubscribeId('');
     dispatch(getUserAction({id}));
     dispatch(getFriendsByUserAction({}));
+    dispatch(getSubscribersAction({id}));
+    dispatch(getUserApplicationsAction());
+  }, [id, dispatch]);
 
-    if (user?.role === Role.Coach) {
+  useEffect(() => {
+    if (user && user.role === Role.Coach) {
       dispatch(getTrainingsAction({query: {coach: id}}));
     }
-  }, [id, dispatch]);
+  }, [user, dispatch, id]);
+
+  useEffect(() => {
+    const subscribe = subscribers.find((subscriber) => subscriber.email === authenticatedUser?.email);
+
+    if (subscribe) {
+      setIsSubscribed(true);
+      setSubscribeId(subscribe.id);
+    }
+  }, [authenticatedUser, subscribers]);
+
+  useEffect(() => {
+    if (innerRef.current) {
+      if (isUseMapShow || isQualificationsShow) {
+        document.body.style.overflow = 'hidden';
+        innerRef.current.inert = true;
+      } else {
+        document.body.removeAttribute('style');
+        innerRef.current.inert = false;
+      }
+    }
+  }, [isUseMapShow, isQualificationsShow]);
 
   const handleAddOrDeleteFriendClick = () => {
     if (friend) {
@@ -55,8 +96,21 @@ export const UserInfoPage = () => {
   const handleUserMapClick = () => {
     setIsUseMapShow((prevState) => !prevState);
   };
+  const handleQualificationsClick = () => {
+    setIsQualificationsShow((prevState) => !prevState);
+  };
   const handleSubscribeChange = () => {
-    setIsSubscribe((prevState) => !prevState);
+    if (isSubscribed) {
+      dispatch(deleteSubscriberAction({id: subscribeId}));
+    } else {
+      dispatch(addSubscriberAction({id: user?.id}));
+    }
+    setIsSubscribed((prevState) => !prevState);
+  };
+  const handleInviteClick = () => {
+    if (user && user.role === Role.Coach) {
+      dispatch(createUserApplicationAction({userId: user.id, status: UserApplicationStatus.Pending}));
+    }
   };
 
   if (!user) {
@@ -65,7 +119,7 @@ export const UserInfoPage = () => {
 
   return (
     <>
-      <div className="inner-page inner-page--no-sidebar">
+      <div className="inner-page inner-page--no-sidebar" ref={innerRef}>
         <div className="container">
           <div className="inner-page__wrapper">
             <BackButton className='btn-flat inner-page__back'/>
@@ -84,7 +138,7 @@ export const UserInfoPage = () => {
                             <svg className="user-card-coach__icon-location" width="12" height="14" aria-hidden="true">
                               <use xlinkHref="#icon-location"></use>
                             </svg>
-                            <span>{user.location}</span>
+                            <span>{user.station.station}</span>
                           </a>
                         </div>
                         <div className={classNames('user-card__status', {'user-card__status--noReady': !user.isReady})}>
@@ -141,7 +195,7 @@ export const UserInfoPage = () => {
                               <svg className="user-card-coach__icon-location" width="12" height="14" aria-hidden="true">
                                 <use xlinkHref="#icon-location"></use>
                               </svg>
-                              <span>{user.location}</span>
+                              <span>{user.station.station}</span>
                             </a>
                           </div>
                           <div className="user-card-coach__status-container">
@@ -156,7 +210,11 @@ export const UserInfoPage = () => {
                             </div>
                           </div>
                           <div className="user-card-coach__text">{user.description}</div>
-                          <button className="btn-flat user-card-coach__sertificate" type="button">
+                          <button
+                            className="btn-flat user-card-coach__sertificate"
+                            type="button"
+                            onClick={handleQualificationsClick}
+                          >
                             <svg width="12" height="13" aria-hidden="true">
                               <use xlinkHref="#icon-teacher"></use>
                             </svg>
@@ -214,29 +272,42 @@ export const UserInfoPage = () => {
                             </button>
                           </div>
                         </div>
-                        <TrainingList className='user-card-coach__training' trainings={trainings?.entities || []} isWithSlider/>
-                        <form className="user-card-coach__training-form">
-                          <button className="btn user-card-coach__btn-training" type="button">Хочу персональную тренировку</button>
-                          <div className="user-card-coach__training-check">
-                            <div className="custom-toggle custom-toggle--checkbox">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  value="user-agreement-1"
-                                  name="user-agreement"
-                                  checked={isSubscribe}
-                                  onChange={handleSubscribeChange}
-                                />
-                                <span className="custom-toggle__icon">
-                                  <svg width="9" height="6" aria-hidden="true">
-                                    <use xlinkHref="#arrow-check"></use>
-                                  </svg>
-                                </span>
-                                <span className="custom-toggle__label">Получать уведомление на почту о новой тренировке</span>
-                              </label>
-                            </div>
-                          </div>
-                        </form>
+                        <TrainingList className='user-card-coach__training' trainings={trainings?.entities || []}/>
+                        {
+                          authenticatedUser?.role === Role.User &&
+                            <form className="user-card-coach__training-form">
+                              {
+                                (friend && user.isReady && user.questionnaire.isPersonal) &&
+                                <button
+                                  className="btn user-card-coach__btn-training"
+                                  type="button"
+                                  disabled={!!outgoingApplication}
+                                  onClick={handleInviteClick}
+                                >
+                                  Хочу персональную тренировку
+                                </button>
+                              }
+                              <div className="user-card-coach__training-check">
+                                <div className="custom-toggle custom-toggle--checkbox">
+                                  <label>
+                                    <input
+                                      type="checkbox"
+                                      value="user-agreement-1"
+                                      name="user-agreement"
+                                      checked={isSubscribed}
+                                      onChange={handleSubscribeChange}
+                                    />
+                                    <span className="custom-toggle__icon">
+                                      <svg width="9" height="6" aria-hidden="true">
+                                        <use xlinkHref="#arrow-check"></use>
+                                      </svg>
+                                    </span>
+                                    <span className="custom-toggle__label">Получать уведомление на почту о новой тренировке</span>
+                                  </label>
+                                </div>
+                              </div>
+                            </form>
+                        }
                       </div>
                     </div>
                   </section>
@@ -249,6 +320,11 @@ export const UserInfoPage = () => {
         user={user}
         isActive={isUseMapShow}
         onCloseClick={handleUserMapClick}
+      />
+      <PopupQualifications
+        qualifications={user.questionnaire.qualifications || []}
+        isActive={isQualificationsShow}
+        onCloseClick={handleQualificationsClick}
       />
     </>
   );

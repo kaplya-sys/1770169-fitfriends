@@ -12,6 +12,7 @@ export class FilesEntity implements FileUpload, Entity<string> {
   public imageWebp?: FileInfo;
   public imageWebp2x?: FileInfo;
   public video?: FileInfo;
+  public document?: FileInfo;
   public createdAt?: Date;
 
   constructor(file: FileUpload) {
@@ -31,6 +32,7 @@ export class FilesEntity implements FileUpload, Entity<string> {
       imageWebp: this.imageWebp,
       imageWebp2x: this.imageWebp2x,
       video: this.video,
+      document: this.document,
       createdAt: this.createdAt
     }
   }
@@ -47,6 +49,7 @@ export class FilesEntity implements FileUpload, Entity<string> {
     this.imageWebp = file.imageWebp;
     this.imageWebp2x = file.imageWebp2x;
     this.video = file.video;
+    this.document = file.document;
     this.createdAt = file.createdAt;
 
     return this;

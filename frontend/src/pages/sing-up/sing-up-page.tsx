@@ -1,14 +1,15 @@
-import {ChangeEvent, FormEvent, useState} from 'react';
+import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 
-import {LocationSelect} from '../../components/location-select';
+import {StationSelect} from '../../components/station-select';
 import {Logo} from '../../components/logo/logo';
 import {RoleSelection} from '../../components/role-selection';
 import {CustomInput} from '../../ui/custom-input';
-import {useAppDispatch} from '../../hooks';
-import {registerAction} from '../../store';
-import {CreateUserType, Gender, LocationType} from '../../libs/shared/types';
-import {validateFields} from '../../libs/shared/helpers';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {registerAction, selectAuthenticatedUserError} from '../../store';
+import {CreateUserType, Gender, StationType} from '../../libs/shared/types';
+import {isErrorObject, validateFields} from '../../libs/shared/helpers';
 import {GENDER_NAME} from '../../libs/shared/constants';
+import classNames from 'classnames';
 
 export const SingUpPage = () => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -18,18 +19,29 @@ export const SingUpPage = () => {
     email: '',
     password: '',
     gender: '',
-    location: '',
+    station: '',
     role: ''
   });
   const [error, setError] = useState<Partial<Record<keyof CreateUserType, string>>>({});
+  const [userAvatar, setUserAvatar] = useState<string | null>(null);
+  const authenticatedUserError = useAppSelector(selectAuthenticatedUserError);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (isErrorObject(authenticatedUserError) && authenticatedUserError.statusCode === 400) {
+      for (const message of authenticatedUserError.message) {
+        const field = message.split(' ')[0];
+        setError((prevState) => ({...prevState, [field]: message}));
+      }
+    }
+  }, [authenticatedUserError]);
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('email', data.email);
-    formData.append('location', data.location);
+    formData.append('station', data.station);
     formData.append('password', data.password);
     formData.append('gender', data.gender);
     formData.append('role', data.role);
@@ -41,11 +53,15 @@ export const SingUpPage = () => {
     if (data.avatar) {
       formData.append('avatar', data.avatar);
     }
-
     const newError = validateFields(data);
 
     if (!newError) {
       dispatch(registerAction(formData));
+      setUserAvatar(null);
+      setIsChecked(false);
+      for (const key of Object.keys(data)) {
+        setData((prevState) => ({...prevState, [key]: ''}));
+      }
     } else {
       setError(newError);
     }
@@ -54,27 +70,28 @@ export const SingUpPage = () => {
   const handleListBoxClick = () => {
     setIsOpen((prevState) => !prevState);
   };
-
-  const handleLocationClick = (location: LocationType) => {
-    setData((prevState) => ({...prevState, location}));
-    setError((prevState) => ({...prevState, location: ''}));
+  const handleStationClick = (station: StationType) => {
+    setData((prevState) => ({...prevState, station}));
+    setError((prevState) => ({...prevState, station: ''}));
     setIsOpen((prevState) => !prevState);
   };
-
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const {value, name} = evt.target;
     setData((prevState) => ({...prevState, [name]: value}));
     setError((prevState) => ({...prevState, [name]: ''}));
   };
-
   const handleFileChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const file = evt.target.files?.[0];
 
     if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUserAvatar(reader.result as string);
+      };
+      reader.readAsDataURL(file);
       setData((prevState) => ({...prevState, avatar: file}));
     }
   };
-
   const handleUserAgreementChange = () => {
     setIsChecked((prevState) => !prevState);
   };
@@ -101,10 +118,23 @@ export const SingUpPage = () => {
                             accept="image/png, image/jpeg"
                             onChange={handleFileChange}
                           />
-                          <span className="input-load-avatar__btn">
-                            <svg width="20" height="20" aria-hidden="true">
-                              <use xlinkHref="#icon-import"></use>
-                            </svg>
+                          <span className={classNames({
+                            'input-load-avatar__avatar': userAvatar,
+                            'input-load-avatar__btn': !userAvatar,
+                          })}
+                          >
+                            {
+                              userAvatar ?
+                                <img
+                                  src={userAvatar}
+                                  width="98"
+                                  height="98"
+                                  alt="User avatar"
+                                /> :
+                                <svg width="20" height="20" aria-hidden="true">
+                                  <use xlinkHref="#icon-import"></use>
+                                </svg>
+                            }
                           </span>
                         </label>
                       </div>
@@ -139,13 +169,13 @@ export const SingUpPage = () => {
                         value={data.birthday ?? ''}
                         onInputChange={handleInputChange}
                       />
-                      <LocationSelect
-                        selectedValue={data.location}
+                      <StationSelect
+                        selectedValue={data.station}
                         isOpen={isOpen}
                         isReadonly={false}
-                        errorMessage={error.location}
+                        errorMessage={error.station}
                         onListBoxClick={handleListBoxClick}
-                        onListOptionClick={handleLocationClick}
+                        onListOptionClick={handleStationClick}
                       />
                       <CustomInput
                         label='Пароль'

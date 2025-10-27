@@ -15,6 +15,8 @@ import {FilesModule} from '../files/files.module';
 import {QuestionnaireModule} from '../questionnaire/questionnaire.module';
 import {BalanceModule} from '../balance/balance.module';
 import {FriendModule} from '../friend/friend.module';
+import {MetroStationModule} from '../metro-station/metro-station.module';
+import {NotificationModule} from '../notification/notification.module';
 
 
 @Module({
@@ -25,6 +27,8 @@ import {FriendModule} from '../friend/friend.module';
     FriendModule,
     QuestionnaireModule,
     RefreshTokenModule,
+    MetroStationModule,
+    NotificationModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: getJwtOptions

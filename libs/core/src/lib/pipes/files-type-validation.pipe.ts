@@ -1,6 +1,17 @@
-import {ArgumentMetadata, Injectable, PipeTransform} from '@nestjs/common';
+import {
+  ArgumentMetadata,
+  Injectable,
+  PipeTransform,
+  UnsupportedMediaTypeException
+} from '@nestjs/common';
 
-import {FieldName, ImageFormat, ParamType, VideoFormat} from '@1770169-fitfriends/types';
+import {
+  DocumentFormat,
+  FieldName,
+  ImageFormat,
+  ParamType,
+  VideoFormat
+} from '@1770169-fitfriends/types';
 
 import {FORMAT_ERROR, METADATA_CUSTOM_ERROR} from './pipes.constant';
 
@@ -14,12 +25,13 @@ export class FilesTypeValidationPipe implements PipeTransform {
     if (value !== null && typeof value === 'object') {
       const videoFormats = Object.values(VideoFormat) as string[];
       const imageFormats = Object.values(ImageFormat) as string[];
+      const documentFormats = Object.values(DocumentFormat) as string[];
 
       Object.values(FieldName).forEach((field) => {
         if (field in value) {
           (value as Record<FieldName, Express.Multer.File[]>)[field].forEach((file) => {
-            if (![...imageFormats, ...videoFormats].includes(file.mimetype)) {
-              throw new Error(FORMAT_ERROR);
+            if (![...imageFormats, ...videoFormats, ...documentFormats].includes(file.mimetype)) {
+              throw new UnsupportedMediaTypeException(FORMAT_ERROR);
             }
           });
         }

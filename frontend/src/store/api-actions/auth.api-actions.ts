@@ -1,4 +1,3 @@
-import { getRouteWithParam } from './../../libs/shared/helpers/lib/common.helpers';
 import {isAxiosError, AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
@@ -19,7 +18,9 @@ import {
   ErrorRequestType,
   Role
 } from '../../libs/shared/types';
+import {getRouteWithParam} from '../../libs/shared/helpers';
 import {AUTH_ERROR_MESSAGE, REQUEST_ERROR_MESSAGE} from './api-actions.constant';
+import {resetAuth} from '../auth/auth.slice';
 
 export const registerAction = createAsyncThunk<AuthenticatedUserType, FormData, {
   dispatch: AppDispatch;
@@ -31,6 +32,7 @@ export const registerAction = createAsyncThunk<AuthenticatedUserType, FormData, 
 
     setAccessToken(user.accessToken);
     setRefreshToken(user.refreshToken);
+
     dispatch(redirectToRoute({route: getRouteWithParam(AppRoute.Questionnaire, {id: user.id})}));
 
     return user;
@@ -89,32 +91,19 @@ export const checkAuthAction = createAsyncThunk<AuthenticatedUserType, void, {
 
 export const logoutUserAction = createAsyncThunk<void, void, {
   dispatch: AppDispatch;
-}>('user/logoutUser', (_, {dispatch}) => {
-  removeAccessToken();
-  removeRefreshToken();
-  dispatch(redirectToRoute({route: AppRoute.Intro}));
-});
-
-/*export const logoutAction = createAsyncThunk<void, void, {
-  dispatch: AppDispatch;
   extra: AxiosInstance;
-  state: RootState;
   rejectValue: ErrorRequestType | string;
-}>('user/logout', async (_, {dispatch, rejectWithValue, extra: api, getState}) => {
+}>('user/logoutUser', async (_, {dispatch, rejectWithValue, extra: api}) => {
   try {
-    const state = getState();
-    const user = state[NameSpace.User].user;
-
-    if (!user) {
-      throw new Error(AUTH_ERROR_MESSAGE);
-    }
-    await api.delete(getRouteWithParam('/users/:id/logout', {id: user.id}));
+    await api.post(ApiRoute.Logout);
     removeAccessToken();
     removeRefreshToken();
+    dispatch(resetAuth());
+    dispatch(redirectToRoute({route: AppRoute.Intro}));
   } catch (error: unknown) {
     if (isAxiosError(error) && error.response) {
       return rejectWithValue(error.response.data as ErrorRequestType);
     }
     return rejectWithValue(error instanceof Error ? error.message : REQUEST_ERROR_MESSAGE);
   }
-});*/
+});

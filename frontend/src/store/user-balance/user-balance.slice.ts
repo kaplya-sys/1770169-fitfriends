@@ -18,7 +18,14 @@ const initialState: InitialState = {
 export const userBalanceSlice = createSlice({
   name: NameSpace.Balance,
   initialState,
-  reducers: {},
+  reducers: {
+    useUserBalance: (state, {payload}: {payload: UserBalanceType}) => {
+      if (state.userBalance) {
+        const index = state.userBalance.entities.findIndex((entity) => entity.id === payload.id);
+        state.userBalance.entities[index] = payload;
+      }
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(getUserBalanceAction.pending, (state) => {
@@ -35,3 +42,5 @@ export const userBalanceSlice = createSlice({
       });
   },
 });
+
+export const {useUserBalance} = userBalanceSlice.actions;

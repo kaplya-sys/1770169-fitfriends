@@ -41,6 +41,14 @@ export class RefreshTokenRepository extends BasePostgresRepository<RefreshTokenE
     });
   }
 
+  public async findByUserId(userId: string) {
+    return this.prismaClient.refreshSessions.findFirst({
+      where: {
+        userId
+      }
+    });
+  }
+
   public async deleteExpiredTokens() {
     return this.prismaClient.refreshSessions.deleteMany({
       where: {

@@ -1,4 +1,4 @@
-import {ChangeEvent, FormEvent, useState} from 'react';
+import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 
 import {
   CreateQuestionnaireType,
@@ -14,10 +14,10 @@ import {
   FITNESS_LEVEL_NAME,
   TRAINING_TIME_NAMES
 } from '../../libs/shared/constants';
-import {validateFields} from '../../libs/shared/helpers';
+import {isErrorObject, validateFields} from '../../libs/shared/helpers';
 import {Logo} from '../../components/logo';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {createQuestionnaireAction, selectAuthenticatedUser} from '../../store';
+import {createQuestionnaireAction, selectAuthenticatedUser, selectUserError} from '../../store';
 import {CustomInput} from '../../ui/custom-input';
 import {CustomTextarea} from '../../ui/custom-textarea';
 
@@ -35,6 +35,16 @@ export const QuestionnairePage = () => {
   const [error, setError] = useState<Partial<Record<keyof CreateQuestionnaireType, string>>>({});
   const dispatch = useAppDispatch();
   const authenticatedUser = useAppSelector(selectAuthenticatedUser);
+  const userError = useAppSelector(selectUserError);
+
+  useEffect(() => {
+    if (isErrorObject(userError) && userError.statusCode === 400) {
+      for (const message of userError.message) {
+        const field = message.split(' ')[0];
+        setError((prevState) => ({...prevState, [field]: message}));
+      }
+    }
+  }, [userError]);
 
   if (!authenticatedUser) {
     return null;
@@ -69,6 +79,15 @@ export const QuestionnairePage = () => {
         }
 
         dispatch(createQuestionnaireAction(formData));
+
+        for (const key of Object.keys(data)) {
+          if (key !== 'qualifications' && key !== 'isPersonal' && key !== 'exercises') {
+            setData((prevState) => ({...prevState, [key]: ''}));
+          }
+          setData((prevState) => ({...prevState, qualifications: null}));
+          setData((prevState) => ({...prevState, isPersonal: false}));
+          setData((prevState) => ({...prevState, exercises: []}));
+        }
       } else {
         setError(newError);
       }
@@ -98,10 +117,12 @@ export const QuestionnairePage = () => {
       setError(newError);
     }
   };
-
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (evt.target instanceof HTMLTextAreaElement) {
-      return setData((prevState) => ({...prevState, experience: evt.target.value}));
+      setData((prevState) => ({...prevState, experience: evt.target.value}));
+      setError((prevState) => ({...prevState, experience: ''}));
+
+      return;
     }
 
     if (evt.target instanceof HTMLInputElement) {
@@ -131,6 +152,7 @@ export const QuestionnairePage = () => {
 
         return {...prevState, [name]: value};
       });
+      setError((prevState) => ({...prevState, [name]: ''}));
     }
   };
 
@@ -255,7 +277,6 @@ export const QuestionnairePage = () => {
                                     name="qualifications"
                                     tabIndex={-1}
                                     accept=".pdf, .jpg, .png"
-                                    multiple
                                     onChange={handleInputChange}
                                   />
                                 </label>

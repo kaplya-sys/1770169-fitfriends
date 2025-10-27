@@ -1,10 +1,10 @@
-import {ChangeEvent, useState} from 'react';
+import {ChangeEvent, useEffect, useState} from 'react';
 import classNames from 'classnames';
 
 import {CustomTextarea} from '../../ui/custom-textarea';
 import {TRAINING_RATE} from '../../libs/shared/constants';
 import {CreateFeedbackType} from '../../libs/shared/types';
-import {validateFields} from '../../libs/shared/helpers';
+import {isEscape, validateFields} from '../../libs/shared/helpers';
 import {createFeedbackAction} from '../../store';
 import { useAppDispatch } from '../../hooks';
 
@@ -21,6 +21,19 @@ export const PopupFeedback = ({isActive, onCloseClick}: PopupFeedbackProps) => {
   const [error, setError] = useState<Partial<Record<keyof CreateFeedbackType, string>>>({});
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (isActive) {
+      document.addEventListener('keydown', handleKeyPressEsc);
+    }
+
+    return () => document.removeEventListener('keydown', handleKeyPressEsc);
+  }, [isActive]);
+
+  const handleKeyPressEsc = (evt: KeyboardEvent) => {
+    if (isEscape(evt.key)) {
+      onCloseClick();
+    }
+  };
   const handleFieldChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value} = evt.target;
     setData((prevState) => ({...prevState, [name]: value}));
@@ -37,9 +50,13 @@ export const PopupFeedback = ({isActive, onCloseClick}: PopupFeedbackProps) => {
       setError(newError);
     }
   };
+  const handleCloseClick = () => {
+    setData((prevState) => ({...prevState, assessment: null, content: null}));
+    onCloseClick();
+  };
 
   return (
-    <div className={classNames('wrapper modal modal--buy', {'is-active': isActive})}>
+    <div className={classNames('wrapper modal modal--feedback', {'is-active': isActive})}>
       <main>
         <div className="popup-form popup-form--feedback">
           <section className="popup">
@@ -50,7 +67,7 @@ export const PopupFeedback = ({isActive, onCloseClick}: PopupFeedbackProps) => {
                   className="btn-icon btn-icon--outlined btn-icon--big"
                   type="button"
                   aria-label="close"
-                  onClick={onCloseClick}
+                  onClick={handleCloseClick}
                 >
                   <svg width="20" height="20" aria-hidden="true">
                     <use xlinkHref="#icon-cross"></use>

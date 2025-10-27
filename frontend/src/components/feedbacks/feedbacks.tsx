@@ -1,12 +1,14 @@
-import {FeedbackType} from '../../libs/shared/types';
+import {FeedbackType, Role, RoleType} from '../../libs/shared/types';
 import {Picture} from '../picture';
 
 type FeedbacksProps = {
   feedbacks: FeedbackType[];
+  userRole: RoleType;
+  isPurchased: boolean;
   onFeedbackClick: () => void;
 }
 
-export const Feedbacks = ({feedbacks, onFeedbackClick}: FeedbacksProps) => (
+export const Feedbacks = ({feedbacks, userRole, isPurchased, onFeedbackClick}: FeedbacksProps) => (
   <>
     <h2 className="reviews-side-bar__title">Отзывы</h2>
     <ul className="reviews-side-bar__list">
@@ -40,6 +42,7 @@ export const Feedbacks = ({feedbacks, onFeedbackClick}: FeedbacksProps) => (
     <button
       className="btn btn--medium reviews-side-bar__button"
       type="button"
+      disabled={userRole === Role.Coach || !isPurchased}
       onClick={onFeedbackClick}
     >
       Оставить отзыв

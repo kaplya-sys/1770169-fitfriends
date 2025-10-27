@@ -1,5 +1,9 @@
 export type PromoType = {
     trainingId: string;
     promoText: string;
-    newPrice: number;
+    oldPrice?: number;
+    image: {
+      file: string;
+      file2x: string;
+    };
 }

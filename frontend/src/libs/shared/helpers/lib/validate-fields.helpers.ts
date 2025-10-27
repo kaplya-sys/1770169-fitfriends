@@ -12,14 +12,16 @@ import {
   CALORIES_FIELD_ERROR,
   EXERCISE_MAX_LENGTH_ERROR,
   EXERCISE_MAX_LENGTH,
-  AttributeName
+  AttributeName,
+  CaloriesRange,
+  ContentLength
 } from '../../constants';
 import {
   Exercise,
   ExerciseType,
   FitnessLevel,
   Gender,
-  Location,
+  Station,
   Role,
   TrainingTime,
   ValidatorType
@@ -120,12 +122,13 @@ const validator: ValidatorType = {
   type: (value) => validateValueType(value, Exercise),
   gender: (value) => validateValueType(value, Gender),
   role: (value) => validateValueType(value, Role),
-  location: (value) => validateValueType(value, Location),
+  station: (value) => validateValueType(value, Station),
   fitnessLevel: (value) => validateValueType(value, FitnessLevel),
   trainingTime: (value) => validateValueType(value, TrainingTime),
-  caloriesLose: (value) => validateCalories(value, NameLength.Min, NameLength.Max),
-  caloriesWaste: (value) => validateCalories(value, NameLength.Min, NameLength.Max),
-  experience: (value) => validateValue(value, ExperienceLength.Min, ExperienceLength.Max)
+  caloriesLose: (value) => validateCalories(value, CaloriesRange.Min, CaloriesRange.Max),
+  caloriesWaste: (value) => validateCalories(value, CaloriesRange.Min, CaloriesRange.Max),
+  experience: (value) => validateValue(value, ExperienceLength.Min, ExperienceLength.Max),
+  content: (value) => validateValue(value, ContentLength.Min, ContentLength.Max)
 };
 
 export const validateFields = <T extends object>(fields: T): Partial<Record<keyof T, string>> | null => {

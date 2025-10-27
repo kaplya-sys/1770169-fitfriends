@@ -1,8 +1,8 @@
-export const ELEMENTS_ON_PAGE = 50;
+export const ELEMENTS_ON_PAGE = 4;
 export const DEFAULT_PAGE_COUNT = 1;
 export const ROUTE_PREFIX = 'orders';
 export const TAG = 'Orders';
-export const NOT_FOUND_BY_ID_MESSAGE ='Заказ с идентификатором: %id% не найдена.';
+export const NOT_FOUND_BY_ID_MESSAGE ='Заказ с данным идентификатором: %id% не найден в системе.';
 
 export const BAD_REQUEST_RESPONSE = 'Некорректные данные.';
 export const CREATED_RESPONSE = 'Объект успешно создан.';

@@ -1,4 +1,4 @@
-import {Gender, Location, Role} from '@1770169-fitfriends/models';
+import {Gender, Role, Station} from '@1770169-fitfriends/models';
 
 export interface CreateUser {
   name: string;
@@ -6,6 +6,6 @@ export interface CreateUser {
   password: string;
   gender: Gender;
   birthday?: Date;
-  location: Location;
+  station: Station;
   role: Role;
 };

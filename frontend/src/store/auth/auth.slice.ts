@@ -26,7 +26,12 @@ const initialState: InitialState = {
 export const authSlice = createSlice({
   name: NameSpace.Auth,
   initialState,
-  reducers: {},
+  reducers: {
+    resetAuth: (state) => {
+      state.authenticatedUser = null;
+      state.authorizationStatus = AuthorizationStatus.NoAuth;
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(registerAction.pending, (state) => {
@@ -68,3 +73,5 @@ export const authSlice = createSlice({
       });
   },
 });
+
+export const {resetAuth} = authSlice.actions;

@@ -28,7 +28,7 @@ export const MyOrdersPage = () => {
 
   useEffect(() => {
     if (ordersWithPagination) {
-      if (ordersWithPagination.currentPage === 1) {
+      if (ordersWithPagination.currentPage === DEFAULT_PAGE) {
         setOrders(ordersWithPagination.entities);
       } else {
         setOrders((prevState) => ({...prevState, orders: prevState.concat(ordersWithPagination.entities)}));

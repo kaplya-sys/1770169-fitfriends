@@ -17,6 +17,10 @@ export const DescriptionLength = {
   Min: 10,
   Max: 140
 } as const;
+export const ContentLength = {
+  Min: 100,
+  Max: 1024
+} as const;
 export const ExperienceLength = {
   Min: 10,
   Max: 140

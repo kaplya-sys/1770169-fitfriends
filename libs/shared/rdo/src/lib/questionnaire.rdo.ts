@@ -1,7 +1,9 @@
-import {Expose, Type} from "class-transformer";
-import {ApiProperty} from "@nestjs/swagger";
+import {ApiProperty} from '@nestjs/swagger';
+import {Expose, Type} from 'class-transformer';
 
-import {Exercise, FitnessLevel, TrainingTime} from "@1770169-fitfriends/models";
+import {Exercise, FitnessLevel, TrainingTime} from '@1770169-fitfriends/models';
+
+import {QualificationRDO} from './qualification.rdo';
 
 import {
   CALORIES_LOSE_PROPERTY,
@@ -12,8 +14,7 @@ import {
   PERSONAL_TRAINING_PROPERTY,
   QUALIFICATIONS_PROPERTY,
   TRAINING_TIME_PROPERTY
-} from "./rdo.constant";
-import {ImageRDO} from "./image.rdo";
+} from './rdo.constant';
 
 export class QuestionnaireRdo {
   @ApiProperty({
@@ -46,12 +47,12 @@ export class QuestionnaireRdo {
 
   @ApiProperty({
     description: QUALIFICATIONS_PROPERTY.DESCRIPTION,
-    type: ImageRDO,
+    type: QualificationRDO,
     isArray: true
   })
-  @Type(() => ImageRDO)
+  @Type(() => QualificationRDO)
   @Expose()
-  public qualifications!: ImageRDO[];
+  public qualifications!: QualificationRDO[];
 
   @ApiProperty({
     description: TRAINING_TIME_PROPERTY.DESCRIPTION,

@@ -8,13 +8,121 @@ import {
   Gender,
   Role,
   Exercise,
-  Location,
+  Station,
   PaymentMethod
 } from '../src';
 
 const videos = [
   {
     _id: new Types.ObjectId('68a30a546cb39008b0015aa4'),
+    catalog: 'video',
+    subDirectory: 'video',
+    originalName: 'test-video.mp4',
+    size: 0,
+    mimetype: lookup('test-video.mp4'),
+    video: {
+      hashName: 'test-video.mp4',
+      path: 'video/test-video.mp4'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68d0160abc54e7c1b40cb9b3'),
+    catalog: 'video',
+    subDirectory: 'video',
+    originalName: 'test-video.mp4',
+    size: 0,
+    mimetype: lookup('test-video.mp4'),
+    video: {
+      hashName: 'test-video.mp4',
+      path: 'video/test-video.mp4'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68d0160abc54e7c1b40cb9b4'),
+    catalog: 'video',
+    subDirectory: 'video',
+    originalName: 'test-video.mp4',
+    size: 0,
+    mimetype: lookup('test-video.mp4'),
+    video: {
+      hashName: 'test-video.mp4',
+      path: 'video/test-video.mp4'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68d0160abc54e7c1b40cb9b5'),
+    catalog: 'video',
+    subDirectory: 'video',
+    originalName: 'test-video.mp4',
+    size: 0,
+    mimetype: lookup('test-video.mp4'),
+    video: {
+      hashName: 'test-video.mp4',
+      path: 'video/test-video.mp4'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68d0160abc54e7c1b40cb9b6'),
+    catalog: 'video',
+    subDirectory: 'video',
+    originalName: 'test-video.mp4',
+    size: 0,
+    mimetype: lookup('test-video.mp4'),
+    video: {
+      hashName: 'test-video.mp4',
+      path: 'video/test-video.mp4'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68d0160abc54e7c1b40cb9b7'),
+    catalog: 'video',
+    subDirectory: 'video',
+    originalName: 'test-video.mp4',
+    size: 0,
+    mimetype: lookup('test-video.mp4'),
+    video: {
+      hashName: 'test-video.mp4',
+      path: 'video/test-video.mp4'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68d0160abc54e7c1b40cb9b8'),
+    catalog: 'video',
+    subDirectory: 'video',
+    originalName: 'test-video.mp4',
+    size: 0,
+    mimetype: lookup('test-video.mp4'),
+    video: {
+      hashName: 'test-video.mp4',
+      path: 'video/test-video.mp4'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68d0160abc54e7c1b40cb9b9'),
+    catalog: 'video',
+    subDirectory: 'video',
+    originalName: 'test-video.mp4',
+    size: 0,
+    mimetype: lookup('test-video.mp4'),
+    video: {
+      hashName: 'test-video.mp4',
+      path: 'video/test-video.mp4'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68d0160abc54e7c1b40cb9ba'),
+    catalog: 'video',
+    subDirectory: 'video',
+    originalName: 'test-video.mp4',
+    size: 0,
+    mimetype: lookup('test-video.mp4'),
+    video: {
+      hashName: 'test-video.mp4',
+      path: 'video/test-video.mp4'
+    }
+  },
+  {
+    _id: new Types.ObjectId('68d0160abc54e7c1b40cb9bb'),
     catalog: 'video',
     subDirectory: 'video',
     originalName: 'test-video.mp4',
@@ -32,48 +140,24 @@ const qualifications = [
     _id: new Types.ObjectId('68a30a546cb39008b0015aa5'),
     catalog: 'qualification',
     subDirectory: 'qualification',
-    originalName: 'certificate-1.jpg',
+    originalName: 'certificate-1.pdf',
     size: 0,
-    mimetype: lookup('certificate-1.jpg'),
-    image: {
-      hashName: 'certificate-1.jpg',
-      path: 'qualification/certificate-1.jpg'
-    },
-    image2x: {
-      hashName: 'certificate-1@2x.jpg',
-      path: 'qualification/certificate-1@2x.jpg'
-    },
-    imageWebp: {
-      hashName: 'certificate-1.webp',
-      path: 'qualification/certificate-1.webp'
-    },
-    imageWebp2x: {
-      hashName: 'certificate-1@2x.webp',
-      path: 'qualification/certificate-1@2x.webp'
+    mimetype: lookup('certificate-1.pdf'),
+    document: {
+      hashName: 'certificate-1.pdf',
+      path: 'qualification/certificate-1.pdf'
     }
   },
   {
     _id: new Types.ObjectId('68a30a546cb39008b0015aa6'),
     catalog: 'qualification',
     subDirectory: 'qualification',
-    originalName: 'certificate-2.jpg',
+    originalName: 'certificate-2.pdf',
     size: 0,
-    mimetype: lookup('certificate-2.jpg'),
-    image: {
-      hashName: 'certificate-2.jpg',
-      path: 'qualification/certificate-2.jpg'
-    },
-    image2x: {
-      hashName: 'certificate-2@2x.jpg',
-      path: 'qualification/certificate-2@2x.jpg'
-    },
-    imageWebp: {
-      hashName: 'certificate-2.webp',
-      path: 'qualification/certificate-2.webp'
-    },
-    imageWebp2x: {
-      hashName: 'certificate-2@2x.webp',
-      path: 'qualification/certificate-2@2x.webp'
+    mimetype: lookup('certificate-2.pdf'),
+    document: {
+      hashName: 'certificate-2.pdf',
+      path: 'qualification/certificate-2.pdf'
     }
   }
 ];
@@ -474,14 +558,14 @@ const trainingBackgrounds = [
 const feedbacks = [
   {
     id: 'f2d8bb21-85aa-4c6d-8581-420a4cec900c',
-    assessment: 4,
+    assessment: 5,
     content: 'Пришел в CrossFit после тренажерного зала, где стало скучно. Здесь скучно не бывает никогда! Каждая тренировка – это новое функциональное испытание: работа с канатами, гирями, подтягивания, бурпи. Выкладываешься на все 100%. Коллектив очень supportive, все друг друга подбадривают, что помогает не сдаться. За полгода получил тело, о котором раньше только мечтал: сильное, выносливое и рельефное. Предупреждение: вызывает сильную зависимость!',
     authorId: '110a0aeb-dbfb-4f27-8179-513185b00836',
     trainingId: '15f3d584-4525-4595-b9b6-a8295f90bb85'
   },
   {
     id: '3403700a-78cf-4a97-b75c-287190770a7f',
-    assessment: 3,
+    assessment: 5,
     content: 'Регулярно выполняю эту тренировку дома и вижу результат! Спина стала прямее, появилось больше сил и гибкость тоже стала лучше, хотя упражнения довольно простые.',
     authorId: '110a0aeb-dbfb-4f27-8179-513185b00836',
     trainingId: '15f3d584-4525-4595-b9b6-a8295f90bb85'
@@ -514,11 +598,11 @@ const trainings = [
     calories: 3500,
     gender: Gender.male,
     description: "Интенсивная тренировка на все группы мышц с высокой нагрузкой.",
-    price: 2500,
+    price: 2250,
     specialOffer: true,
     coachName: 'Виктория',
     backgroundId: '68a30a546cb39008b0015aa8',
-    videoId: '68a30a546cb39008b0015aa4',
+    videoId: '68d0160abc54e7c1b40cb9b3',
     coachId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
   },
   {
@@ -534,7 +618,7 @@ const trainings = [
     specialOffer: false,
     coachName: 'Виктория',
     backgroundId: '68a30a546cb39008b0015aa9',
-    videoId: '68a30a546cb39008b0015aa4',
+    videoId: '68d0160abc54e7c1b40cb9b4',
     coachId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
   },
   {
@@ -546,11 +630,11 @@ const trainings = [
     calories: 1500,
     gender: Gender.female,
     description: "Укрепление мышц кора, улучшение осанки и гибкости.",
-    price: 1800,
+    price: 1620,
     specialOffer: true,
     coachName: 'Виктория',
     backgroundId: '68a30a546cb39008b0015aaa',
-    videoId: '68a30a546cb39008b0015aa4',
+    videoId: '68d0160abc54e7c1b40cb9b5',
     coachId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
   },
   {
@@ -566,7 +650,7 @@ const trainings = [
     specialOffer: false,
     coachName: 'Виктория',
     backgroundId: '68a30a546cb39008b0015aab',
-    videoId: '68a30a546cb39008b0015aa4',
+    videoId: '68d0160abc54e7c1b40cb9b6',
     coachId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
   },
   {
@@ -582,7 +666,7 @@ const trainings = [
     specialOffer: false,
     coachName: 'Виктория',
     backgroundId: '68a30a546cb39008b0015aac',
-    videoId: '68a30a546cb39008b0015aa4',
+    videoId: '68d0160abc54e7c1b40cb9b7',
     coachId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
   },
   {
@@ -594,11 +678,11 @@ const trainings = [
     calories: 2000,
     gender: Gender.female,
     description: "Динамичная тренировка под музыку для улучшения тонуса.",
-    price: 1600,
+    price: 1440,
     specialOffer: true,
     coachName: 'Виктория',
     backgroundId: '68a30a546cb39008b0015aad',
-    videoId: '68a30a546cb39008b0015aa4',
+    videoId: '68d0160abc54e7c1b40cb9b8',
     coachId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
   },
   {
@@ -614,7 +698,7 @@ const trainings = [
     specialOffer: false,
     coachName: 'Виктория',
     backgroundId: '68a30a546cb39008b0015aae',
-    videoId: '68a30a546cb39008b0015aa4',
+    videoId: '68d0160abc54e7c1b40cb9b9',
     coachId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
   },
   {
@@ -626,12 +710,12 @@ const trainings = [
     calories: 1000,
     gender: Gender.whatever,
     description: "Высокоинтенсивные упражнения для сжигания калорий.",
-    price: 2200,
+    price: 1980,
     specialOffer: true,
     rating: Math.round(feedbacks.map((feedback) => feedback.assessment).reduce((acc, value, _, array) => acc + value / array.length, 0)),
     coachName: 'Виктория',
     backgroundId: '68a30a546cb39008b0015aaf',
-    videoId: '68a30a546cb39008b0015aa4',
+    videoId: '68d0160abc54e7c1b40cb9ba',
     coachId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
   },
   {
@@ -647,10 +731,43 @@ const trainings = [
     specialOffer: false,
     coachName: 'Виктория',
     backgroundId: '68a30a546cb39008b0015ab0',
-    videoId: '68a30a546cb39008b0015aa4',
+    videoId: '68d0160abc54e7c1b40cb9bb',
     coachId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
   }
 ];
+
+const metroStations = [
+  {
+    id: 'a6252f41-ef7d-4323-bde4-2c5cb9252fa3',
+    latitude: 59.966399,
+    longitude: 30.311511,
+    station: Station.petrogradskaya
+  },
+  {
+    id: '1bf1efea-86a0-4679-b70b-d108f3634e8b',
+    latitude: 60.002863,
+    longitude: 30.296682,
+    station: Station.pionerskaya
+  },
+  {
+    id: 'd41b9936-fedf-4278-bd3c-03708906204d',
+    latitude: 59.950190,
+    longitude: 30.288335,
+    station: Station.sportivnaya
+  },
+  {
+    id: '2b205c64-c155-4bd7-b31a-078a35fdabc6',
+    latitude: 60.016896,
+    longitude: 30.316290,
+    station: Station.udelnaya
+  },
+  {
+    id: 'ceee95b0-7e31-4a76-95a6-77acdefecfb5',
+    latitude: 59.833283,
+    longitude: 30.349262,
+    station: Station.zvezdnaya
+  }
+]
 
 const users = [
   {
@@ -660,7 +777,7 @@ const users = [
     password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
     birthday: '2015-06-18T00:00:00.000Z',
     gender: Gender.male,
-    location: Location.petrogradskaya,
+    stationId: 'a6252f41-ef7d-4323-bde4-2c5cb9252fa3',
     role: Role.user,
     backgroundIds: ['68a6ad6bdee8982852ce77ee', '68a6ad6bdee8982852ce77ef']
   },
@@ -670,7 +787,7 @@ const users = [
     email: 'vika@mail.ru',
     password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
     gender: Gender.female,
-    location: Location.zvezdnaya,
+    stationId: 'ceee95b0-7e31-4a76-95a6-77acdefecfb5',
     role: Role.coach,
     backgroundIds: ['68a6ad6bdee8982852ce77f0', '68a6ad6bdee8982852ce77f1']
   },
@@ -681,7 +798,7 @@ const users = [
     password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
     birthday: '2013-08-18T00:00:00.000Z',
     gender: Gender.male,
-    location: Location.udelnaya,
+    stationId: '2b205c64-c155-4bd7-b31a-078a35fdabc6',
     role: Role.user,
     backgroundIds: ['68a6ad6bdee8982852ce77ee', '68a6ad6bdee8982852ce77ef']
   },
@@ -691,7 +808,7 @@ const users = [
     email: 'solano_sherrie84@mail.ru',
     password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
     gender: Gender.female,
-    location: Location.pionerskaya,
+    stationId: '1bf1efea-86a0-4679-b70b-d108f3634e8b',
     role: Role.coach,
     backgroundIds: ['68a6ad6bdee8982852ce77f0', '68a6ad6bdee8982852ce77f1']
   },
@@ -702,7 +819,7 @@ const users = [
     password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
     birthday: '2012-02-18T00:00:00.000Z',
     gender: Gender.male,
-    location: Location.sportivnaya,
+    stationId: 'd41b9936-fedf-4278-bd3c-03708906204d',
     role: Role.user,
     backgroundIds: ['68a6ad6bdee8982852ce77ee', '68a6ad6bdee8982852ce77ef']
   },
@@ -712,7 +829,7 @@ const users = [
     email: 'hurley-dakota67@yandex.ru',
     password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
     gender: Gender.female,
-    location: Location.zvezdnaya,
+    stationId: 'ceee95b0-7e31-4a76-95a6-77acdefecfb5',
     role: Role.user,
     backgroundIds: ['68a6ad6bdee8982852ce77f0', '68a6ad6bdee8982852ce77f1']
   },
@@ -723,7 +840,7 @@ const users = [
     password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
     birthday: '2011-04-18T00:00:00.000Z',
     gender: Gender.male,
-    location: Location.pionerskaya,
+    stationId: '1bf1efea-86a0-4679-b70b-d108f3634e8b',
     role: Role.user,
     backgroundIds: ['68a6ad6bdee8982852ce77ee', '68a6ad6bdee8982852ce77ef']
   },
@@ -733,7 +850,7 @@ const users = [
     email: 'ponce_stevan37@list.ru',
     password: '$2b$10$WzCJFgeNKS7Gk6nRtvd2WOfzFpz9/i4yc5ky6HeW2JeUbjekwxM26',
     gender: Gender.female,
-    location: Location.udelnaya,
+    stationId: '2b205c64-c155-4bd7-b31a-078a35fdabc6',
     role: Role.user,
     backgroundIds: ['68a6ad6bdee8982852ce77f0', '68a6ad6bdee8982852ce77f1']
   },
@@ -801,7 +918,7 @@ const coachQuestionnaires = [
     id: '1e887d43-df4a-4350-a2d3-e4e250835676',
     fitnessLevel: FitnessLevel.professional,
     exercises: [Exercise.running, Exercise.crossfit, Exercise.aerobics],
-    qualificationIds: ['68a30a546cb39008b0015aa5', '68a30a546cb39008b0015aa6'],
+    qualificationIds: ['68a30a546cb39008b0015aa6'],
     experience: 'Умение составлять и корректировать тренировочные планы в зависимости от индивидуальных запросов и физических возможностей клиентов.',
     isPersonal: true,
     userId: '5efb3f8b-efb0-4b11-ab65-9e916b23831c'
@@ -810,7 +927,7 @@ const coachQuestionnaires = [
     id: '45484449-fb1a-4e7f-ab54-fa35e3a3f506',
     fitnessLevel: FitnessLevel.beginner,
     exercises: [Exercise.yoga, Exercise.stretching, Exercise.boxing],
-    qualificationIds: ['68a30a546cb39008b0015aa5', '68a30a546cb39008b0015aa6'],
+    qualificationIds: ['68a30a546cb39008b0015aa5'],
     experience: 'Умение составлять и корректировать тренировочные планы в зависимости от индивидуальных запросов и физических возможностей клиентов.',
     isPersonal: false,
     userId: 'd9eeda2a-088f-4d06-8c33-7bd610c70257'
@@ -841,6 +958,12 @@ const orders = [
 ];
 
 async function seed(prismaClient: PrismaClient) {
+  for(const metroStation of metroStations) {
+    await prismaClient.metroStation.create({
+      data: metroStation
+    })
+  }
+
   for(const user of users) {
     await prismaClient.user.create({
       data: user
@@ -917,6 +1040,10 @@ async function seedFiles() {
       required: false
     },
     video: {
+      type: Object,
+      required: false
+    },
+    document: {
       type: Object,
       required: false
     }

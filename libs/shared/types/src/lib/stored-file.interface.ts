@@ -8,4 +8,5 @@ export interface StoredFile {
   imageWebp?: FileInfo;
   imageWebp2x?: FileInfo;
   video?: FileInfo;
+  document?: FileInfo;
 };

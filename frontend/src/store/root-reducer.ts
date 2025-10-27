@@ -14,6 +14,9 @@ import {orderSlice} from './order/order.slice';
 import {rangeSlice} from './range/range.slice';
 import {ordersSlice} from './orders/orders.slice';
 import {friendsSlice} from './friends/friends.slice';
+import {subscribersSlice} from './subscribers/subscribers.slice';
+import {notificationsSlice} from './notifications/notifications.slice';
+import {userApplicationsSlice} from './user-applications/user-applications.slice';
 
 export const rootReducer = combineReducers({
   [NameSpace.Auth]: authSlice.reducer,
@@ -21,6 +24,7 @@ export const rootReducer = combineReducers({
   [NameSpace.Feedback]: feedbackSlice.reducer,
   [NameSpace.Feedbacks]: feedbacksSlice.reducer,
   [NameSpace.Friends]: friendsSlice.reducer,
+  [NameSpace.Notifications]: notificationsSlice.reducer,
   [NameSpace.Order]: orderSlice.reducer,
   [NameSpace.Orders]: ordersSlice.reducer,
   [NameSpace.RecommendedTrainings]: recommendedTrainingsSlice.reducer,
@@ -28,5 +32,7 @@ export const rootReducer = combineReducers({
   [NameSpace.Users]: usersSlice.reducer,
   [NameSpace.Training]: trainingSlice.reducer,
   [NameSpace.Trainings]: trainingsSlice.reducer,
-  [NameSpace.RangeFilters]: rangeSlice.reducer
+  [NameSpace.RangeFilters]: rangeSlice.reducer,
+  [NameSpace.Subscribers]: subscribersSlice.reducer,
+  [NameSpace.UserApplications]: userApplicationsSlice.reducer
 });

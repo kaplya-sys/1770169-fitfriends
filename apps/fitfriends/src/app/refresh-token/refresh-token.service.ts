@@ -1,13 +1,14 @@
 import dayjs from 'dayjs';
 import {ConfigType} from '@nestjs/config';
-import {Inject, Injectable} from '@nestjs/common';
+import {Inject, Injectable, NotFoundException} from '@nestjs/common';
 
 import {JwtConfig} from '@1770169-fitfriends/config';
-import {parseTime} from '@1770169-fitfriends/helpers';
+import {createMessage, parseTime} from '@1770169-fitfriends/helpers';
 import {RefreshTokenPayload} from '@1770169-fitfriends/types';
 
 import {RefreshTokenRepository} from './refresh-token.repository';
 import {RefreshTokenEntity} from './refresh-token.entity';
+import {NOT_FOUND_BY_USER_MESSAGE} from './refresh-token.constant';
 
 @Injectable()
 export class RefreshTokenService {
@@ -42,5 +43,15 @@ export class RefreshTokenService {
 
   public async deleteExpiredRefreshTokens() {
     return this.refreshTokenRepository.deleteExpiredTokens();
+  }
+
+  public async deleteRefreshSessionByUserId(userId: string) {
+    const existToken = await this.refreshTokenRepository.findByUserId(userId);
+
+    if (!existToken) {
+      throw new NotFoundException(createMessage(NOT_FOUND_BY_USER_MESSAGE, [userId]));
+    }
+
+    return this.deleteRefreshSession(existToken.tokenId);
   }
 }

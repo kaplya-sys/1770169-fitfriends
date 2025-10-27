@@ -52,7 +52,7 @@ export const CustomInput = ({
         />
         {fieldText && <span className="custom-input__text">{fieldText}</span>}
       </span>
-      {errorMessage && <span className="custom-input__error">{errorMessage}</span>}
+      <span className="custom-input__error">{errorMessage}</span>
     </label>
   </div>
 );

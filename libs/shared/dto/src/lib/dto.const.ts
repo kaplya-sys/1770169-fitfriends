@@ -1,5 +1,5 @@
 export const EMAIL_PROPERTY = {
-  DESCRIPTION: 'Уникальный адрес электронной почты для аутентификация пользователя.',
+  DESCRIPTION: 'Уникальный адрес электронной почты пользователя.',
   EXAMPLE: 'user@mail.ru'
 }
 export const NAME_PROPERTY = {
@@ -45,7 +45,7 @@ export const VIDEO_PROPERTY = {
   EXAMPLE: '<Buffer 00 00 00 18 66 74 79 70 6d 70 ... 110393330 more bytes>',
   FORMAT: 'binary'
 }
-export const LOCATION_PROPERTY = {
+export const STATION_PROPERTY = {
   DESCRIPTION: 'Станция метро: "petrogradskaya", "pionerskaya", "sportivnaya", "udelnaya" или "zvezdnaya".',
   EXAMPLE: 'petrogradskaya',
   ENUM: ['petrogradskaya', 'pionerskaya', 'sportivnaya', 'udelnaya', 'zvezdnaya']
@@ -98,6 +98,10 @@ export const READY_PROPERTY = {
   DESCRIPTION: 'Готовность к тренировкам.',
   EXAMPLE: true
 }
+export const SPECIAL_OFFER_PROPERTY = {
+  DESCRIPTION: 'Признак специального предложения.',
+  EXAMPLE: true
+}
 export const TITLE_PROPERTY = {
   DESCRIPTION: 'Наименование тренировки.',
   EXAMPLE: 'full body stretch',
@@ -141,4 +145,13 @@ export const PAYMENT_PROPERTY = {
   DESCRIPTION: 'Вариант оплаты заказа.',
   ENUM: ['visa', 'mir', 'umoney'],
   EXAMPLE: ['mir']
+}
+export const APPLICATION_STATUS_PROPERTY = {
+  DESCRIPTION: 'Статус заявки на персональную/совместную тренировку.',
+  ENUM: ['pending', 'rejected', 'accepted'],
+  EXAMPLE: ['pending']
+}
+export const USER_ID_PROPERTY = {
+  DESCRIPTION: 'Уникальный идентификатор пользователя в системе.',
+  EXAMPLE: '17177772-33ba-42d8-a4ca-27758d30608e'
 }

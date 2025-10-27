@@ -1,7 +1,6 @@
 import {Exercise, PaymentMethod} from '@1770169-fitfriends/models';
 import {Entity, Order, Training} from '@1770169-fitfriends/types';
 
-
 export class OrderEntity implements Order, Entity<string> {
   public id?: string;
   public exercise!: Exercise;

@@ -1,8 +1,8 @@
-import {Expose, Type} from "class-transformer";
-import {ApiProperty} from "@nestjs/swagger";
+import {Expose, Type} from 'class-transformer';
+import {ApiProperty} from '@nestjs/swagger';
 
-import {TrainingRDO} from "./training.rdo";
-import {AMOUNT_PROPERTY, ID_PROPERTY, TRAINING_PROPERTY} from "./rdo.constant";
+import {TrainingRDO} from './training.rdo';
+import {AMOUNT_PROPERTY, ID_PROPERTY, TRAINING_PROPERTY} from './rdo.constant';
 
 export class BalanceRDO {
   @ApiProperty({

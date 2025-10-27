@@ -7,6 +7,7 @@ import {
   Gender,
   Exercise
 } from '@1770169-fitfriends/models';
+import {FileUpload} from '@1770169-fitfriends/types';
 
 import {
   BACKGROUND_PROPERTY,
@@ -110,7 +111,7 @@ export class TrainingRDO {
     description: TRAINING_VIDEO_PROPERTY.DESCRIPTION,
     example: TRAINING_VIDEO_PROPERTY.EXAMPLE
   })
-  @Transform(({value}) => value.video.path)
+  @Transform(({value}: {value: FileUpload}) => value.video?.path)
   @Expose()
   public video!: string;
 
@@ -134,4 +135,7 @@ export class TrainingRDO {
   })
   @Expose()
   public createdAt!: Date;
+
+  @Expose()
+  public coachId!: string;
 }

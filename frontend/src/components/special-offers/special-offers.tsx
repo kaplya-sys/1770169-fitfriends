@@ -2,7 +2,7 @@ import {useState} from 'react';
 import classNames from 'classnames';
 
 import {PromoTraining} from '../../libs/shared/types';
-import {STATIC_BASE_PATH} from '../../libs/shared/constants';
+import {StubGum} from '../stub-gym';
 
 type SpecialOffersProps = {
   specialOffers: PromoTraining[];
@@ -27,8 +27,8 @@ export const SpecialOffers = ({specialOffers}: SpecialOffersProps) => {
                   <div className="promo-slider__overlay"></div>
                   <div className="promo-slider__image">
                     <img
-                      src={`${STATIC_BASE_PATH}/${specialOffer.background.image}`}
-                      srcSet={`${STATIC_BASE_PATH}/${specialOffer.background.image2x} 2x`}
+                      src={specialOffer.image.file}
+                      srcSet={`${specialOffer.image.file2x} 2x`}
                       width="1040"
                       height="469"
                       alt={specialOffer.title}
@@ -60,15 +60,16 @@ export const SpecialOffers = ({specialOffers}: SpecialOffersProps) => {
                       ))}
                     </div>
                     <div className="promo-slider__price-container">
-                      <p className="promo-slider__price">{`${specialOffer.newPrice} ₽`}</p>
+                      <p className="promo-slider__price">{`${specialOffer.price} ₽`}</p>
                       <p className="promo-slider__sup">за занятие</p>
-                      <p className="promo-slider__old-price">{`${specialOffer.price} ₽`}</p>
+                      <p className="promo-slider__old-price">{`${specialOffer.oldPrice} ₽`}</p>
                     </div>
                   </div>
                 </aside>
               </li>
             ))}
           </ul>
+          <StubGum/>
         </div>
       </div>
     </section>

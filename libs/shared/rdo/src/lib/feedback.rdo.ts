@@ -1,5 +1,5 @@
-import {ApiProperty} from "@nestjs/swagger";
-import {Expose, Type} from "class-transformer";
+import {ApiProperty} from '@nestjs/swagger';
+import {Expose, Type} from 'class-transformer';
 
 import {
   ASSESSMENT_PROPERTY,
@@ -7,8 +7,8 @@ import {
   CONTENT_PROPERTY,
   FEEDBACK_DATE_PROPERTY,
   ID_PROPERTY
-} from "./rdo.constant";
-import {CustomUserRDO} from "./custom-user.rdo";
+} from './rdo.constant';
+import {CustomUserRDO} from './custom-user.rdo';
 
 export class FeedbackRDO {
   @ApiProperty({

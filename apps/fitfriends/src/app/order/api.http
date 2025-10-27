@@ -1,0 +1,70 @@
+@host = http://localhost:5000/api
+@access_token =
+@trainingId =
+@orderId =
+@userId =
+
+# Create a order by training ID.
+
+POST {{host}}/orders/trainings/{{trainingId}}/create-order HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "exercise": "boxing",
+  "price": 800,
+  "count": 2,
+  "amount": 1600,
+  "payment": "mir"
+}
+
+###
+# Get order by order ID.
+
+GET {{host}}/orders/{{orderId}} HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get orders.
+
+GET {{host}}/orders HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get orders by query (get orders by user ID).
+
+GET {{host}}/orders?userId={{userId}} HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get orders by query (sort by amount, 'asc' or 'desc').
+
+GET {{host}}/orders?orderByAmount=asc HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get orders by query (sort by count, 'asc' or 'desc').
+
+GET {{host}}/orders?orderByCount=asc HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get orders by query (number of orders per page).
+
+GET {{host}}/orders?limit=3 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get orders by query (page to display).
+
+GET {{host}}/orders?page=2 HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###

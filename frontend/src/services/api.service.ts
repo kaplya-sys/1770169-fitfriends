@@ -1,8 +1,9 @@
 import axios, {AxiosError, InternalAxiosRequestConfig} from 'axios';
+import {toast} from 'react-toastify';
 
 import {getAccessToken, removeAccessToken, setAccessToken} from './access-token.service';
 import {getRefreshToken, removeRefreshToken, setRefreshToken} from './refresh-token.service';
-import {ApiRoute, InternalAxiosRequestConfigWithRetry, TokenType} from '../libs/shared/types';
+import {ApiRoute, ErrorRequestType, InternalAxiosRequestConfigWithRetry, TokenType} from '../libs/shared/types';
 import {API_URL, REFRESH_TOKEN_ERROR, REQUEST_TIMEOUT} from './service.const';
 
 export const createApi = () => {
@@ -44,6 +45,12 @@ export const createApi = () => {
         removeRefreshToken();
 
         return Promise.reject(refreshError);
+      }
+    }
+
+    if (error.response?.data && error.response?.status !== 400) {
+      if (error.response.data !== null && typeof error.response.data === 'object' && 'message' in error.response.data) {
+        toast.warn(error.response?.data.message as string);
       }
     }
 

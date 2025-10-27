@@ -1,0 +1,46 @@
+@host = http://localhost:5000/api
+@access_token =
+@applicationId =
+@userId =
+
+# Invite a application.
+
+POST {{host}}/applications/invite HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "status": "pending"
+}
+
+###
+# Change the application by the application ID to rejected.
+
+PATCH {{host}}/applications/{{applicationId}}/change-status HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "status": "rejected"
+}
+
+###
+# Change the application by the application ID to accepted.
+
+PATCH {{host}}/applications/{{applicationId}}/change-status HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "status": "accepted"
+}
+
+###
+# Get applications.
+
+GET {{host}}/api/applications HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###

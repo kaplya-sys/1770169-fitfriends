@@ -62,6 +62,11 @@ export class FilesModel extends Document<ObjectId> implements FileUpload {
     type: Object
   })
   public video?: FileInfo;
+
+  @Prop({
+    type: Object
+  })
+  public document?: FileInfo;
 }
 
 export const FilesSchema = SchemaFactory.createForClass(FilesModel);

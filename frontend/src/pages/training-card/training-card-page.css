@@ -1,0 +1,40 @@
+.training-info__textarea.is-invalid textarea {
+  border: 1px solid #ff3e49;
+}
+
+.training-info__textarea.is-invalid textarea:hover,
+.training-info__textarea.is-invalid textarea:focus {
+  border: 1px solid #ff3e49;
+}
+
+.training-info__textarea.is-invalid .training-info__error {
+  opacity: 1;
+}
+
+.training-info__textarea {
+  position: relative;
+  width: 100%;
+  min-height: 89px;
+  overflow: hidden;
+}
+
+.training-info__textarea textarea {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 15px 19px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  border: 1px solid rgba(149, 149, 149, 0.1);
+  border-radius: 8px;
+  background-color: rgba(247, 247, 247, 0.02);
+  color: #ffffff;
+  outline: 0;
+  -webkit-transition: border 0.3s ease, -webkit-box-shadow 0.3s ease;
+  transition: border 0.3s ease, -webkit-box-shadow 0.3s ease;
+  -o-transition: border 0.3s ease, box-shadow 0.3s ease;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  transition: border 0.3s ease, box-shadow 0.3s ease, -webkit-box-shadow 0.3s ease;
+  overflow: hidden;
+}

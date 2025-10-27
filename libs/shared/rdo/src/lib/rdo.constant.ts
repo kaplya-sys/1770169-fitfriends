@@ -1,5 +1,5 @@
 export const ID_PROPERTY = {
-  DESCRIPTION: 'Уникальный идентификационный UUID в системе.',
+  DESCRIPTION: 'Уникальный идентификатор в системе.',
   EXAMPLE: '17177772-33ba-42d8-a4ca-27758d30608e'
 }
 export const EMAIL_PROPERTY = {
@@ -37,6 +37,9 @@ export const QUESTIONNAIRE_PROPERTY = {
 export const FRIEND_PROPERTY = {
   DESCRIPTION: 'Добавленный в друзья пользователь.'
 }
+export const USER_PROPERTY = {
+  DESCRIPTION: 'Инициатор добавления в друзья пользователя.'
+}
 export const EXPERIENCE_PROPERTY = {
   DESCRIPTION: 'Информация об опыте работы тренера.',
   EXAMPLE: 'Я считаю, что настоящий опыт заключается не в количестве потраченных лет, а в достижении результатов.'
@@ -49,29 +52,44 @@ export const IS_PERSONAL_TRAINING_PROPERTY = {
   DESCRIPTION: 'Статус о индивидуальной тренировки.',
   EXAMPLE: true
 }
+export const PATH_PROPERTY = {
+  DESCRIPTION: 'Путь к документу.',
+  EXAMPLE: 'qualification/2025/January/e0986884-f994-4899-a852-716757fb4b60.pdf'
+}
 export const IMAGE_PROPERTY = {
-  DESCRIPTION: 'Полный путь к изображению.',
-  EXAMPLE: 'uploads/file/2025/January/e0986884-f994-4899-a852-716757fb4b60.jpeg'
+  DESCRIPTION: 'Путь к изображению.',
+  EXAMPLE: 'avatar/2025/January/e0986884-f994-4899-a852-716757fb4b60.jpeg'
 }
 export const IMAGE_2X_PROPERTY = {
-  DESCRIPTION: 'Полный путь к изображению с повышенной плотностью.',
-  EXAMPLE: 'uploads/file/2025/January/e0986884-f994-4899-a852-716757fb4b60@2x.jpeg'
+  DESCRIPTION: 'Путь к изображению с повышенной плотностью.',
+  EXAMPLE: 'avatar/2025/January/e0986884-f994-4899-a852-716757fb4b60@2x.jpeg'
 }
 export const IMAGE_WEBP_PROPERTY = {
-  DESCRIPTION: 'Полный путь к web изображению.',
-  EXAMPLE: 'uploads/file/2025/January/e0986884-f994-4899-a852-716757fb4b60.web'
+  DESCRIPTION: 'Путь к web изображению.',
+  EXAMPLE: 'avatar/2025/January/e0986884-f994-4899-a852-716757fb4b60.web'
 }
 export const IMAGE_WEBP_2X_PROPERTY = {
-  DESCRIPTION: 'Полный путь к web изображению с повышенной плотностью.',
-  EXAMPLE: 'uploads/file/2025/January/e0986884-f994-4899-a852-716757fb4b60@2x.web'
+  DESCRIPTION: 'Путь к web изображению с повышенной плотностью.',
+  EXAMPLE: 'avatar/2025/January/e0986884-f994-4899-a852-716757fb4b60@2x.web'
 }
 export const GENDER_PROPERTY = {
   DESCRIPTION: 'Пол пользователя: "female", "male" или "whatever".',
   EXAMPLE: 'female'
 }
-export const LOCATION_PROPERTY = {
+export const STATION_PROPERTY = {
   DESCRIPTION: 'Станция метро: "pionerskaya", "petrogradskaya", "udelnaya", "zvezdnaya" или "sportivnaya".',
   EXAMPLE: 'petrogradskaya'
+}
+export const LATITUDE_PROPERTY = {
+  DESCRIPTION: 'Широта станции метро.',
+  EXAMPLE: 60.002863
+}
+export const LONGITUDE_PROPERTY = {
+  DESCRIPTION: 'Долгота станция метро.',
+  EXAMPLE: 30.296682
+}
+export const METRO_STATION_PROPERTY = {
+  DESCRIPTION: 'Станция метро с координатами.',
 }
 export const READY_PROPERTY = {
   DESCRIPTION: 'Готовность пользователя к тренировкам: "true" или "false"',
@@ -80,6 +98,14 @@ export const READY_PROPERTY = {
 export const DATE_PROPERTY = {
   DESCRIPTION: 'Дата регистрации пользователя.',
   EXAMPLE: '2022-01-18T17:36:34.064Z'
+}
+export const NOTIFICATION_DATE_PROPERTY = {
+  DESCRIPTION: 'Дата добавления уведомления.',
+  EXAMPLE: '2022-01-18T17:36:34.064Z'
+}
+export const NOTIFICATION_TEXT_PROPERTY = {
+  DESCRIPTION: 'Текст уведомления.',
+  EXAMPLE: 'Катерина пригласила вас на тренировку'
 }
 export const EXERCISE_PROPERTY = {
   DESCRIPTION: 'Вид желаемых упражнений: "yoga", "running", "boxing", "stretching", "crossfit", "aerobics" или "pilates".',
@@ -138,8 +164,8 @@ export const TRAINING_RATING_PROPERTY = {
   EXAMPLE: 4
 }
 export const TRAINING_VIDEO_PROPERTY = {
-  DESCRIPTION: 'Полный путь к видео тренировки.',
-  EXAMPLE: 'uploads/video/2025/January/e0986884-f994-4899-a852-716757fb4b60.avi'
+  DESCRIPTION: 'Путь к видео тренировки.',
+  EXAMPLE: 'video/2025/January/e0986884-f994-4899-a852-716757fb4b60.avi'
 }
 export const COACH_NAME_PROPERTY = {
   DESCRIPTION: 'Имя тренера.',
@@ -219,4 +245,16 @@ export const ORDER_AMOUNT_PROPERTY = {
 export const PAYMENT_PROPERTY = {
   DESCRIPTION: 'Вариант оплаты заказа.',
   EXAMPLE: ['mir']
+}
+export const USER_APPLICATION_STATUS_PROPERTY = {
+  DESCRIPTION: 'Статус заявки на персональную/совместную тренировку.',
+  EXAMPLE: 'pending'
+}
+export const USER_APPLICATION_DATE_PROPERTY = {
+  DESCRIPTION: 'Дата публикации заявки.',
+  EXAMPLE: '2022-01-18T17:36:34.064Z'
+}
+export const USER_APPLICATION_UPDATE_DATE_PROPERTY = {
+  DESCRIPTION: 'Дата обновления заявки.',
+  EXAMPLE: '2022-01-18T17:36:34.064Z'
 }

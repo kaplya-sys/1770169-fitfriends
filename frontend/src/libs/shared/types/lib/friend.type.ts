@@ -2,8 +2,6 @@ import {UserType} from './user.type';
 
 export type FriendType = {
   id: string;
-  userId: string;
+  user: UserType;
   friend: UserType;
-  isJoinTraining?: boolean;
-  isPersonalTraining?: boolean;
 }

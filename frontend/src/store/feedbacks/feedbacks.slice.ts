@@ -18,7 +18,11 @@ const initialState: InitialState = {
 export const feedbacksSlice = createSlice({
   name: NameSpace.Feedbacks,
   initialState,
-  reducers: {},
+  reducers: {
+    addFeedback: (state, {payload}: {payload: FeedbackType}) => {
+      state.feedbacks = [payload, ...state.feedbacks];
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(getFeedbacksAction.pending, (state) => {
@@ -35,3 +39,5 @@ export const feedbacksSlice = createSlice({
       });
   },
 });
+
+export const {addFeedback} = feedbacksSlice.actions;

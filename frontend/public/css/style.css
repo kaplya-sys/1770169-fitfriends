@@ -7967,6 +7967,7 @@ input:active + .custom-textarea__text {
   display: block;
   border-radius: 50%;
   cursor: pointer;
+  overflow: hidden;
   -webkit-transition: -webkit-box-shadow 0.3s ease;
   transition: -webkit-box-shadow 0.3s ease;
   -o-transition: box-shadow 0.3s ease;
@@ -9431,7 +9432,7 @@ input:active + .custom-textarea__text {
   max-width: 1042px;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: unset;
   list-style: none;
 }
 

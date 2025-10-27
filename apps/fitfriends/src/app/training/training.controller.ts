@@ -104,12 +104,12 @@ export class TrainingController {
   @ApiBody({
     type: CreateTrainingSwaggerDTO
   })
-  @UseGuards(JWTAuthGuard)
-  @HttpCode(HttpStatus.CREATED)
-  @Post(Route.Create)
   @UseInterceptors(FileFieldsInterceptor([
     {name: FieldName.Video, maxCount: MAX_UPLOAD_FILES}
   ]))
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.CREATED)
+  @Post(Route.Create)
   public async create(
     @UploadedFiles(FilesTypeValidationPipe) files: RequestFiles,
     @Body(ParseFormDataJsonPipe) dto: CreateTrainingDTO,
@@ -216,8 +216,9 @@ export class TrainingController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Root)
-  public async index(@Query() query: TrainingsQuery) {
-
+  public async index(
+    @Query() query: TrainingsQuery
+  ) {
     const trainings = await this.trainingService.getTrainings(query);
 
     return fillDto(TrainingsWithPaginationRDO, {
@@ -242,7 +243,9 @@ export class TrainingController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Recommended)
-  public async getRecommended(@RequestTokenPayload() tokenPayload: TokenPayload) {
+  public async getRecommended(
+    @RequestTokenPayload() tokenPayload: TokenPayload
+  ) {
     const recommendedTrainings = await this.trainingService.getRecommendedTrainings(tokenPayload.sub);
 
     return recommendedTrainings.map((recommendedTraining) => fillDto(TrainingRDO, recommendedTraining.toObject(), {exposeDefaultValues: false}));
@@ -293,14 +296,18 @@ export class TrainingController {
     status: HttpStatus.UNAUTHORIZED,
     description: UNAUTHORIZED
   })
+  @UseInterceptors(FileFieldsInterceptor([
+    {name: FieldName.Video, maxCount: MAX_UPLOAD_FILES}
+  ]))
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Patch(Route.EditTraining)
   public async update(
+    @UploadedFiles(FilesTypeValidationPipe) files: RequestFiles,
     @Param('id', UUIDValidationPipe) id: string,
     @Body() dto: UpdateTrainingDTO
   ) {
-    const training = await this.trainingService.updateTraining(id, dto);
+    const training = await this.trainingService.updateTraining(id, dto, files);
 
     return fillDto(TrainingRDO, training.toObject(), {exposeDefaultValues: false});
   }
@@ -326,7 +333,9 @@ export class TrainingController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(Route.DeleteTraining)
-  public async delete(@Param('id', UUIDValidationPipe) id: string) {
+  public async delete(
+    @Param('id', UUIDValidationPipe) id: string
+  ) {
     await this.trainingService.deleteTrainingById(id);
   }
 
@@ -380,7 +389,9 @@ export class TrainingController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Feedbacks)
-  public async getFeedbacks(@Param('id', UUIDValidationPipe) id: string) {
+  public async getFeedbacks(
+    @Param('id', UUIDValidationPipe) id: string
+  ) {
     const feedbacks = await this.trainingService.getFeedbacksByTrainingId(id);
 
     return feedbacks.map((feedback) => fillDto(FeedbackRDO, feedback.toObject(), {exposeDefaultValues: false}));
@@ -408,7 +419,9 @@ export class TrainingController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Training)
-  public async show(@Param('id', UUIDValidationPipe) id: string) {
+  public async show(
+    @Param('id', UUIDValidationPipe) id: string
+  ) {
     const training = await this.trainingService.getTrainingById(id);
 
     return fillDto(TrainingRDO, training.toObject(), {exposeDefaultValues: false});

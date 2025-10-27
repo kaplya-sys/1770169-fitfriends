@@ -20,4 +20,5 @@ export type TrainingType = {
   coachName: string;
   specialOffer: boolean;
   createdAt: Date;
+  coachId: string;
 }

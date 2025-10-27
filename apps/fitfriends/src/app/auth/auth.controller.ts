@@ -35,6 +35,7 @@ import {
 import {fillDto} from '@1770169-fitfriends/helpers';
 import {
   AuthenticatedUserRDO,
+  BalanceRDO,
   BalanceWithPaginationRDO,
   FriendRDO,
   FriendsWithPaginationRDO,
@@ -46,12 +47,12 @@ import {
 import {
   FieldName,
   RequestFiles,
-  RequestWithTokenPayload,
   RequestWithUser,
-  Route
+  Route,
+  TokenPayload
 } from '@1770169-fitfriends/types';
 import {BalanceQuery, FriendsQuery, UsersQuery} from '@1770169-fitfriends/query';
-import {FilesTypeValidationPipe, UUIDValidationPipe} from '@1770169-fitfriends/core';
+import {FilesTypeValidationPipe, MongoIdValidationPipe, UUIDValidationPipe} from '@1770169-fitfriends/core';
 
 import {AuthService} from './auth.service';
 import {JWTAuthGuard} from '../guards/jwt-auth.guard';
@@ -79,15 +80,20 @@ import {
   UNAUTHORIZED,
   UPDATED_RESPONSE,
   ID_PARAM,
-  FRIEND_ID_QUERY
+  TRAINING_ID_PARAM,
+  DELETE_RESPONSE,
+  FILE_ID_PARAM
 } from './auth.constant';
-import {DELETED_RESPONSE} from '../training/training.constant';
+import {DELETED_RESPONSE, INTERNAL_SERVER_RESPONSE} from '../training/training.constant';
+import {RefreshTokenService} from '../refresh-token/refresh-token.service';
+import {RequestTokenPayload} from '../decorators/request-token-payload.decorator';
 
 @ApiTags(TAG)
 @Controller(ROUTE_PREFIX)
 export class AuthController {
   constructor(
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly refreshTokenService: RefreshTokenService
   ) {}
 
   @ApiResponse({
@@ -136,15 +142,37 @@ export class AuthController {
     description: UNAUTHORIZED
   })
   @ApiBody({
-      type: AuthUserDTO
-    })
+    type: AuthUserDTO
+  })
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post(Route.Login)
-  public async login(@Req() {user}: RequestWithUser) {
+  public async login(
+    @Req() {user}: RequestWithUser
+  ) {
     const token = await this.authService.createToken(user);
 
     return fillDto(AuthenticatedUserRDO, {...user, ...token});
+  }
+
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post(Route.Logout)
+  public async logout(
+    @RequestTokenPayload() tokenPayload: TokenPayload
+  ) {
+    this.refreshTokenService.deleteRefreshSessionByUserId(tokenPayload.sub);
   }
 
   @ApiResponse({
@@ -159,7 +187,9 @@ export class AuthController {
   @UseGuards(JWTRefreshGuard)
   @HttpCode(HttpStatus.OK)
   @Post(Route.RefreshToken)
-  public async refreshToken(@Req() {user}: RequestWithUser) {
+  public async refreshToken(
+    @Req() {user}: RequestWithUser
+  ) {
     return this.authService.createToken(user);
   }
 
@@ -175,8 +205,10 @@ export class AuthController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post(Route.AuthCheck)
-  public async checkToken(@Req() {user}: RequestWithTokenPayload) {
-    return fillDto(TokenPayloadRDO, user);
+  public async checkToken(
+    @RequestTokenPayload() tokenPayload: TokenPayload
+  ) {
+    return fillDto(TokenPayloadRDO, tokenPayload);
   }
 
   @ApiQuery({
@@ -198,7 +230,9 @@ export class AuthController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Root)
-  public async index(@Query() query: UsersQuery) {
+  public async index(
+    @Query() query: UsersQuery
+  ) {
     const users = await this.authService.getUsers(query);
 
     return fillDto(UsersWithPaginationRDO, {
@@ -260,6 +294,43 @@ export class AuthController {
       ...balance,
       entities: balance.entities.map((balance) => balance.toObject())
     }, {exposeDefaultValues: false});
+  }
+
+  @ApiParam({
+    name: USER_ID_PARAM.NAME,
+    type: String,
+    description: USER_ID_PARAM.DESCRIPTION,
+    example: USER_ID_PARAM.EXAMPLE
+  })
+   @ApiParam({
+    name: TRAINING_ID_PARAM.NAME,
+    type: String,
+    description: TRAINING_ID_PARAM.DESCRIPTION,
+    example: TRAINING_ID_PARAM.EXAMPLE
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: FOUND_RESPONSE,
+    type: BalanceRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Post(Route.UseUserBalance)
+  public async useBalance(
+    @Param('userId', UUIDValidationPipe) userId: string,
+    @Param('trainingId', UUIDValidationPipe) trainingId: string
+  ) {
+    const balance = await this.authService.useUserBalance(userId, trainingId);
+
+    return fillDto(BalanceRDO, balance.toObject(), {exposeDefaultValues: false});
   }
 
   @ApiParam({
@@ -340,13 +411,6 @@ export class AuthController {
   }
 
   @ApiQuery({
-    name: FRIEND_ID_QUERY.NAME,
-    type: String,
-    description: FRIEND_ID_QUERY.DESCRIPTION,
-    example: FRIEND_ID_QUERY.EXAMPLE,
-    required: false
-  })
-  @ApiQuery({
     name: LIMIT_QUERY.NAME,
     type: Number,
     description: LIMIT_QUERY.DESCRIPTION,
@@ -377,10 +441,10 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Get(Route.Friends)
   public async getFriends(
-    @Param('userId', UUIDValidationPipe) userId: string,
-    @Query() query: FriendsQuery
+    @Query() query: FriendsQuery,
+    @RequestTokenPayload() {sub}: TokenPayload
   ) {
-    const friends = await this.authService.getFriendsByUserId(userId, query);
+    const friends = await this.authService.getFriendsByUserId(sub, query);
 
     return fillDto(FriendsWithPaginationRDO, {
       ...friends,
@@ -437,7 +501,7 @@ export class AuthController {
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: UPDATED_RESPONSE,
+    description: DELETED_RESPONSE,
     type: UserRDO
   })
   @ApiResponse({
@@ -454,7 +518,7 @@ export class AuthController {
   public async deleteUserFriend(
     @Param('id', UUIDValidationPipe) id: string
   ) {
-    this.authService.deleteFriend(id)
+    await this.authService.deleteFriend(id)
   }
 
   @ApiParam({
@@ -482,7 +546,8 @@ export class AuthController {
   })
   @UseGuards(JWTAuthGuard)
   @UseInterceptors(FileFieldsInterceptor([
-    {name: FieldName.Avatar, maxCount: MAX_UPLOAD_FILES}
+    {name: FieldName.Avatar, maxCount: MAX_UPLOAD_FILES},
+    {name: FieldName.Qualification}
   ]))
   @HttpCode(HttpStatus.OK)
   @Patch(Route.EditUser)
@@ -504,8 +569,7 @@ export class AuthController {
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: UPDATED_RESPONSE,
-    type: UserRDO
+    description: DELETE_RESPONSE
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -517,11 +581,78 @@ export class AuthController {
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Patch(Route.DeleteUserAvatar)
+  @Delete(Route.DeleteUserAvatar)
   public async deleteUserAvatar(
     @Param('userId', UUIDValidationPipe) id: string
   ) {
-    this.authService.deleteUserAvatar(id);
+    await this.authService.deleteUserAvatar(id);
+  }
+
+  @ApiParam({
+    name: FILE_ID_PARAM.NAME,
+    type: String,
+    description: FILE_ID_PARAM.DESCRIPTION,
+    example: FILE_ID_PARAM.EXAMPLE
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: DELETE_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(Route.DeleteQualificationFile)
+  public async deleteQualificationFile(
+    @Param('fileId', MongoIdValidationPipe) id: string,
+    @RequestTokenPayload() tokenPayload: TokenPayload
+  ) {
+    await this.authService.deleteQualificationFile(id, tokenPayload.sub);
+  }
+
+  @ApiParam({
+    name: FILE_ID_PARAM.NAME,
+    type: String,
+    description: FILE_ID_PARAM.DESCRIPTION,
+    example: FILE_ID_PARAM.EXAMPLE
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: UPDATED_RESPONSE,
+    type: UserRDO
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: NOT_FOUND_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: INTERNAL_SERVER_RESPONSE
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: UNAUTHORIZED
+  })
+  @UseInterceptors(FileFieldsInterceptor([
+    {name: FieldName.Qualification}
+  ]))
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Patch(Route.UpdateQualificationFile)
+  public async updateQualificationFile(
+    @UploadedFiles(FilesTypeValidationPipe) files: RequestFiles,
+    @Param('fileId', MongoIdValidationPipe) id: string,
+    @RequestTokenPayload() tokenPayload: TokenPayload
+  ) {
+    const updatedUser = await this.authService.updateQualificationFile(id, tokenPayload.sub, files);
+
+    return fillDto(UserRDO, updatedUser.toObject(), {exposeDefaultValues: false});
   }
 
   @ApiParam({
@@ -544,8 +675,10 @@ export class AuthController {
   })
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(Route.DeleteTraining)
-  public async delete(@Param('id', UUIDValidationPipe) id: string) {
+  @Delete(Route.DeleteUser)
+  public async delete(
+    @Param('userId', UUIDValidationPipe) id: string
+  ) {
     this.authService.deleteUserById(id);
   }
 
@@ -571,7 +704,9 @@ export class AuthController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.User)
-  public async show(@Param('userId', UUIDValidationPipe) id: string) {
+  public async show(
+    @Param('userId', UUIDValidationPipe) id: string
+  ) {
     const user = await this.authService.getUserById(id);
 
     return fillDto(UserRDO, user.toObject(), {exposeDefaultValues: false});

@@ -5,8 +5,8 @@ import {
   GenderType,
   FitnessLevel,
   FitnessLevelType,
-  Location,
-  LocationType,
+  Station,
+  StationType,
   TrainingTime,
   TrainingTimeType,
   RoleType,
@@ -30,6 +30,13 @@ export const TRAINING_TIME_NAMES: Record<TrainingTimeType, string> = {
   [TrainingTime.ExtraLong]: '80-100',
 } as const;
 
+export const TRAINING_TIME_SECOND_NAMES: Record<TrainingTimeType, string> = {
+  [TrainingTime.Short]: '10_30',
+  [TrainingTime.Medium]: '30_50',
+  [TrainingTime.Long]: '50_80',
+  [TrainingTime.ExtraLong]: '80_100',
+} as const;
+
 export const TRAINING_TIME_NAMES_WITH_LABEL: Record<TrainingTimeType, string> = {
   [TrainingTime.Short]: '10 мин - 30 мин',
   [TrainingTime.Medium]: '30 мин - 50 мин',
@@ -37,18 +44,24 @@ export const TRAINING_TIME_NAMES_WITH_LABEL: Record<TrainingTimeType, string> = 
   [TrainingTime.ExtraLong]: '80 мин - 100 мин',
 } as const;
 
-export const LOCATION_NAME: Record<LocationType, string> = {
-  [Location.Pionerskaya]: 'Пионерская',
-  [Location.Petrogradskaya]: 'Петроградская',
-  [Location.Udelnaya]: 'Удельная',
-  [Location.Zvezdnaya]: 'Звёздная',
-  [Location.Sportivnaya]: 'Спортивная'
+export const STATION_NAME: Record<StationType, string> = {
+  [Station.Pionerskaya]: 'Пионерская',
+  [Station.Petrogradskaya]: 'Петроградская',
+  [Station.Udelnaya]: 'Удельная',
+  [Station.Zvezdnaya]: 'Звёздная',
+  [Station.Sportivnaya]: 'Спортивная'
 } as const;
 
 export const GENDER_NAME: Record<GenderType, string> = {
   [Gender.Male]: 'Мужской',
   [Gender.Female]: 'Женский',
   [Gender.Whatever]: 'Неважно'
+} as const;
+
+export const GENDER_SECOND_VARIANT_NAME: Record<GenderType, string> = {
+  [Gender.Male]: 'для_мужчин',
+  [Gender.Female]: 'для_женщин',
+  [Gender.Whatever]: 'для_всех'
 } as const;
 
 export const FITNESS_LEVEL_NAME: Record<FitnessLevelType, string> = {

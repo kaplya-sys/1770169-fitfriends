@@ -22,5 +22,11 @@ export const selectSpecialTrainings = createSelector(
 );
 export const selectPopularTrainings = createSelector(
   selectTrainings,
-  (trainingsWithPagination) => trainingsWithPagination?.entities.filter((training) => training.rating === RatingRange.Max)
+  (trainingsWithPagination) => {
+    if (trainingsWithPagination) {
+      return trainingsWithPagination?.entities.filter((training) => training.rating === RatingRange.Max);
+    }
+
+    return [];
+  }
 );

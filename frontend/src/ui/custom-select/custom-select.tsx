@@ -37,7 +37,7 @@ export const CustomSelect = <T,>({
     >
       <span className="custom-select__label">{title}</span>
       {placeholder && <div className="custom-select__placeholder">{placeholder}</div> }
-      {errorMessage && <span className="custom-select__error">{errorMessage}</span> }
+      <span className="custom-select__error">{errorMessage}</span>
       <button
         className="custom-select__button"
         type="button"

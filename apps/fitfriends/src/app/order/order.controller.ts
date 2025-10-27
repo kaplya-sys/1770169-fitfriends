@@ -87,7 +87,9 @@ export class OrderController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Root)
-  public async index(@Query() query: OrdersQuery) {
+  public async index(
+    @Query() query: OrdersQuery
+  ) {
     const orders = await this.orderService.getOrders(query);
 
     return fillDto(OrdersWithPaginationRDO, {
@@ -144,7 +146,9 @@ export class OrderController {
   @UseGuards(JWTAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get(Route.Order)
-  public async show(@Param('orderId', UUIDValidationPipe) orderId: string) {
+  public async show(
+    @Param('orderId', UUIDValidationPipe) orderId: string
+  ) {
     const order = await this.orderService.getOrderById(orderId);
 
     return fillDto(OrderRDO, order.toObject(), {exposeDefaultValues: false});

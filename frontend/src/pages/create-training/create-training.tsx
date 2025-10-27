@@ -1,4 +1,4 @@
-import {ChangeEvent, FormEvent, useState} from 'react';
+import {ChangeEvent, FormEvent, useRef, useState} from 'react';
 
 import {Layout} from '../../components/layout';
 import {CustomInput} from '../../ui/custom-input';
@@ -40,6 +40,7 @@ export const CreateTraining = () => {
   const [isTypeOpen, setIsTypeOpen] = useState<boolean>(false);
   const [isTrainingTimeOpen, setIsTrainingTimeOpen] = useState<boolean>(false);
   const [isLevelOpen, setIsLevelOpen] = useState<boolean>(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const dispatch = useAppDispatch();
 
   const handleFieldChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -69,19 +70,16 @@ export const CreateTraining = () => {
 
   const handleTypeClick = (type: ExerciseType) => {
     setData((prevState) => ({...prevState, type}));
-    setError((prevState) => ({...prevState, type: ''}));
     setIsTypeOpen((prevState) => !prevState);
   };
 
   const handleTrainingTimeClick = (trainingTime: TrainingTimeType) => {
     setData((prevState) => ({...prevState, trainingTime}));
-    setError((prevState) => ({...prevState, trainingTime: ''}));
     setIsTrainingTimeOpen((prevState) => !prevState);
   };
 
   const handleLevelClick = (level: FitnessLevelType) => {
     setData((prevState) => ({...prevState, level}));
-    setError((prevState) => ({...prevState, level: ''}));
     setIsLevelOpen((prevState) => !prevState);
   };
 
@@ -104,6 +102,19 @@ export const CreateTraining = () => {
 
     if (!newError) {
       dispatch(createTrainingAction(formData));
+      setError({});
+      setData((prevState) => ({
+        ...prevState,
+        title: '',
+        type: '',
+        description: '',
+        trainingTime: '',
+        level: '',
+        gender: '',
+        calories: '',
+        price: '',
+        video: null
+      }));
     } else {
       setError(newError);
     }
@@ -118,7 +129,7 @@ export const CreateTraining = () => {
               <h1 className="popup-form__title">Создание тренировки</h1>
             </div>
             <div className="popup-form__form">
-              <form onSubmit={handleFormSubmit}>
+              <form onSubmit={handleFormSubmit} ref={formRef}>
                 <div className="create-training">
                   <div className="create-training__wrapper">
                     <div className="create-training__block">

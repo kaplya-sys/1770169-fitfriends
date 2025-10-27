@@ -2,7 +2,7 @@ import {Injectable} from '@nestjs/common';
 
 import {BasePostgresRepository} from '@1770169-fitfriends/core';
 import {Prisma, PrismaClientService} from '@1770169-fitfriends/models';
-import {Order, Pagination} from '@1770169-fitfriends/types';
+import {Order, Pagination, SortDirection} from '@1770169-fitfriends/types';
 import {OrdersQuery} from '@1770169-fitfriends/query';
 
 import {OrderEntity} from './order.entity';
@@ -46,11 +46,13 @@ export class OrderRepository extends BasePostgresRepository<OrderEntity, Order> 
     };
     const orderBy: Prisma.OrderOrderByWithRelationInput[] = [
       {amount: query?.orderByAmount !== undefined ? query.orderByAmount : Prisma.skip},
-      {count: query?.orderByCount !== undefined ? query.orderByCount : Prisma.skip}
+      {count: query?.orderByCount !== undefined ? query.orderByCount : Prisma.skip},
+      {createdAt: SortDirection.Down}
     ];
+    const include: Prisma.OrderInclude = {training: true}
 
     const [records, orderCount] = await Promise.all([
-      this.prismaClient.order.findMany({where, orderBy, take, skip}),
+      this.prismaClient.order.findMany({where, orderBy, take, include, skip}),
       this.getOrderCount(where)
     ]);
 

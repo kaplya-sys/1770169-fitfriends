@@ -6,6 +6,7 @@ import {AppConfig} from './app/app.config';
 import {JwtConfig} from './jwt/jwt.config';
 import {MongoConfig} from './mongo/mongo.config';
 import {FilesConfig} from './files/files.config';
+import {MailConfig} from './mail/mail.config';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import {FilesConfig} from './files/files.config';
         JwtConfig,
         MongoConfig,
         FilesConfig,
+        MailConfig,
       ],
       envFilePath: ENV_FILE_PATH
     })

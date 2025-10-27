@@ -2,7 +2,7 @@ import {Injectable} from '@nestjs/common';
 
 import {BasePostgresRepository} from '@1770169-fitfriends/core';
 import {PrismaClientService} from '@1770169-fitfriends/models';
-import {Feedback} from '@1770169-fitfriends/types';
+import {Feedback, SortDirection} from '@1770169-fitfriends/types';
 
 import {FeedbackEntity} from './feedback.entity';
 
@@ -17,18 +17,21 @@ export class FeedbackRepository extends BasePostgresRepository<FeedbackEntity, F
   public override async save(entity: FeedbackEntity): Promise<FeedbackEntity> {
     const prismaObject = entity.toPrismaObject();
     const record = await this.prismaClient.feedback.create({
-      data: prismaObject
+      data: prismaObject,
+      include: {author: true}
     });
     entity.id = record.id;
+    entity.author = record.author;
 
     return entity;
   }
 
-  public async find(id: string) {
+  public async find(id: string): Promise<(FeedbackEntity | null)[]> {
     const records = await this.prismaClient.feedback.findMany({
       where: {
         trainingId: id
       },
+      orderBy: {createdAt: SortDirection.Down},
       include: {author: true}
     });
 

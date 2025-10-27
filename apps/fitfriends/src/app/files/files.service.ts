@@ -12,7 +12,7 @@ import {ConfigType} from '@nestjs/config';
 
 import {FilesConfig} from '@1770169-fitfriends/config';
 import {convertFileBuffer, createMessage, normalizePath} from '@1770169-fitfriends/helpers';
-import {StoredFile, FieldName, RequestFiles, VideoFormat} from '@1770169-fitfriends/types';
+import {StoredFile, FieldName, RequestFiles, VideoFormat, DocumentFormat} from '@1770169-fitfriends/types';
 
 import {FilesEntity} from './files.entity';
 import {
@@ -55,6 +55,22 @@ export class FilesService {
           video: {
             hashName: video,
             path: normalizePath(join(subDirectory, video))
+          }
+        };
+      }
+
+      if (Object.values(DocumentFormat).includes(mimetype as DocumentFormat)) {
+        const document = `${filename}.${fileExtension}`;
+        const documentPath = normalizePath(join(uploadDirectory, document));
+        await ensureDir(uploadDirectory);
+        await writeFile(documentPath, new Uint8Array(buffer));
+
+        return {
+          catalog,
+          subDirectory: normalizePath(subDirectory),
+          document: {
+            hashName: document,
+            path: normalizePath(join(subDirectory, document))
           }
         };
       }
@@ -132,12 +148,14 @@ export class FilesService {
         video: recordedFile.video && {
           hashName: recordedFile.video.hashName,
           path: recordedFile.video.path
+        },
+        document: recordedFile.document && {
+          hashName: recordedFile.document.hashName,
+          path: recordedFile.document.path
         }
       });
-
       const newFile = await this.filesRepository.save(filesEntity);
       uploads.push(newFile);
-
     }
   }
 

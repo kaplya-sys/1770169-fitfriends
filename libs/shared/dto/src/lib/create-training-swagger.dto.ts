@@ -1,7 +1,7 @@
-import {ApiProperty} from "@nestjs/swagger";
+import {ApiProperty} from '@nestjs/swagger';
 
-import {CreateTrainingDTO} from "./create-training.dto";
-import {VIDEO_PROPERTY} from "./dto.const";
+import {CreateTrainingDTO} from './create-training.dto';
+import {VIDEO_PROPERTY} from './dto.const';
 
 export class CreateTrainingSwaggerDTO extends CreateTrainingDTO {
   @ApiProperty({

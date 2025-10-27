@@ -1,19 +1,28 @@
 services:
-  mongo-fitfriends:
+  smtp_server:
+    image: gessnerfl/fake-smtp-server
+    container_name: fake-smtp-server
+    hostname: fitfriends_fake-smtp-server
+    ports:
+      - ${FAKE_SMTP_PORT}:8025
+      - ${FAKE_SMTP_UI_PORT}:8080
+    networks:
+      - 599c27540b41-network
+  mongodb-fitfriends:
     image: mongo:7.0
-    container_name: files_database
+    container_name: mongodb_database
     restart: always
     env_file:
       - .env
     ports:
-      - 27017:27017
+      - ${MONGO_INITDB_PORT}:27017
     volumes:
-      - files_data:/data/db
+      - mongodb_data:/data/db
     networks:
       - 599c27540b41-network
-  postgres-fitfriends:
+  postgresql-fitfriends:
     image: postgres:16.4
-    container_name: fitfriends_database
+    container_name: postgresql_database
     restart: always
     shm_size: 128mb
     env_file:
@@ -21,7 +30,23 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
-      - fitfriends_data:/var/lib/postgresql/data
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - 599c27540b41-network
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_postgres
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "${PGADMIN_PORT}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgresql-fitfriends
     networks:
       - 599c27540b41-network
 networks:
@@ -29,5 +54,6 @@ networks:
     name: 599c27540b41-network
     driver: bridge
 volumes:
-  files_data:
-  fitfriends_data:
+  mongodb_data:
+  postgresql_data:
+  pgadmin_data:

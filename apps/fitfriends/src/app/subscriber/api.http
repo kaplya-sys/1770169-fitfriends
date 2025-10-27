@@ -1,0 +1,26 @@
+@host = http://localhost:5000/api
+@access_token =
+@subscriptionId =
+@userId =
+
+# Add a subscriber by user ID.
+
+POST {{host}}/subscribers/{{userId}}/subscribe HTTP/1.1:id/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Delete a subscriber by subscription ID.
+
+DELETE {{host}}/subscribers/{{subscriptionId}}/unsubscribe HTTP/1.1:id/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+# Get subscribers by user ID.
+
+GET {{host}}/subscribers/{{userId}}/subscribers HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###

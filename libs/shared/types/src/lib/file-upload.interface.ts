@@ -13,4 +13,5 @@ export interface FileUpload extends Timestamps {
   imageWebp?: FileInfo;
   imageWebp2x?: FileInfo;
   video?: FileInfo;
+  document?: FileInfo;
 };

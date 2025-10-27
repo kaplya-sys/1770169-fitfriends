@@ -10,23 +10,31 @@ import {
   PaginatedResponseType,
   RequestOptionsType
 } from '../../libs/shared/types';
-import {REQUEST_ERROR_MESSAGE, TRAINING_ERROR_MESSAGE} from './api-actions.constant';
+import {AUTH_ERROR_MESSAGE, REQUEST_ERROR_MESSAGE, TRAINING_ERROR_MESSAGE} from './api-actions.constant';
 import {getRouteWithParam} from '../../libs/shared/helpers';
-import {RootState} from '../store';
+import {AppDispatch, RootState} from '../store';
+import {getUserBalanceAction} from './user-balance.api-actions';
 
 export const createOrderAction = createAsyncThunk<OrderType, CreateOrderType, {
+  dispatch: AppDispatch;
   extra: AxiosInstance;
   rejectValue: ErrorRequestType | string;
   state: RootState;
-}>('order/createOrder', async (createData, {rejectWithValue, extra: api, getState}) => {
+}>('order/createOrder', async (createData, {dispatch, rejectWithValue, extra: api, getState}) => {
   try {
     const state = getState();
     const training = state[NameSpace.Training].training;
+    const user = state[NameSpace.Auth].authenticatedUser;
+
+    if (!user) {
+      throw new Error(AUTH_ERROR_MESSAGE);
+    }
 
     if (!training) {
       throw new Error(TRAINING_ERROR_MESSAGE);
     }
     const {data} = await api.post<OrderType>(getRouteWithParam(ApiRoute.CreateOrder, {id: training.id}), createData);
+    dispatch(getUserBalanceAction({id: user.id}));
 
     return data;
   } catch (error: unknown) {

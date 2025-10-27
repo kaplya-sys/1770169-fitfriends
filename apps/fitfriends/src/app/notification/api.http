@@ -1,0 +1,19 @@
+@host = http://localhost:5000/api
+@access_token =
+@notificationId =
+
+# Get notifications.
+
+GET {{host}}/notifications HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+
+###
+# Delete notification by notification ID.
+
+DELETE {{host}}/notifications/{{notificationId}}/delete HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###

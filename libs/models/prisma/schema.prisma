@@ -4,7 +4,7 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-enum Location {
+enum Station {
   pionerskaya
   petrogradskaya
   udelnaya
@@ -52,6 +52,12 @@ enum PaymentMethod {
   umoney
 }
 
+enum UserApplicationStatus {
+  pending
+  rejected
+  accepted
+}
+
 generator client {
   provider        = "prisma-client"
   previewFeatures = ["strictUndefinedChecks"]
@@ -73,18 +79,21 @@ model User {
   gender          Gender
   birthday        DateTime?
   description     String?           @db.VarChar(140)
-  location        Location
   role            Role
   backgroundIds   String[]
   isReady         Boolean           @default(false) @map("is_ready")
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
   questionnaire   Questionnaire?
+  stationId       String            @map("station_id") @db.VarChar(36)
+  station         MetroStation      @relation(fields: [stationId], references: [id], onDelete: Cascade)
   balance         Balance[]
   refreshSessions RefreshSessions[]
   feedbacks       Feedback[]
   orders          Order[]
   trainings       Training[]
+  notifications   Notification[]
+  userApplication UserApplication[]
   friends         Friend[]          @relation("UserFriends")
   friendsOf       Friend[]          @relation("FriendUsers")
 
@@ -104,15 +113,13 @@ model RefreshSessions {
 }
 
 model Friend {
-  id                 String   @id @default(uuid())
-  userId             String   @map("user_id") @db.VarChar(36)
-  user               User     @relation("UserFriends", fields: [userId], references: [id], onDelete: Cascade)
-  friendId           String   @map("friend_id") @db.VarChar(36)
-  friend             User     @relation("FriendUsers", fields: [friendId], references: [id], onDelete: Cascade)
-  isJoinTraining     Boolean? @map("is_join_training")
-  isPersonalTraining Boolean? @map("is_personal_training")
-  createdAt          DateTime @default(now()) @map("created_at")
-  updatedAt          DateTime @updatedAt @map("updated_at")
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id") @db.VarChar(36)
+  user      User     @relation("UserFriends", fields: [userId], references: [id], onDelete: Cascade)
+  friendId  String   @map("friend_id") @db.VarChar(36)
+  friend    User     @relation("FriendUsers", fields: [friendId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([userId, friendId])
   @@map("friends")
@@ -198,4 +205,37 @@ model Order {
   training   Training      @relation(fields: [trainingId], references: [id], onDelete: Cascade)
 
   @@map("orders")
+}
+
+model MetroStation {
+  id        String   @id @default(uuid())
+  latitude  Float
+  longitude Float
+  station   Station
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User[]
+
+  @@map("metro-stations")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id") @db.VarChar(36)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text      String   @db.VarChar(140)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
+}
+
+model UserApplication {
+  id          String                @id @default(uuid())
+  initiatorId String                @map("initiator_id") @db.VarChar(36)
+  userId      String                @map("user_id") @db.VarChar(36)
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status      UserApplicationStatus
+  createdAt   DateTime              @default(now()) @map("created_at")
+  updatedAt   DateTime              @updatedAt @map("updated_at")
+
+  @@map("user-applications")
 }

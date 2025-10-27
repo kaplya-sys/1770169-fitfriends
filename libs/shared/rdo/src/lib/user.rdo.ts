@@ -1,7 +1,7 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {Expose, Type} from 'class-transformer';
 
-import {Gender, Location, Role} from '@1770169-fitfriends/models';
+import {Gender, Role} from '@1770169-fitfriends/models';
 
 import {
   AVATAR_PROPERTY,
@@ -12,7 +12,7 @@ import {
   EMAIL_PROPERTY,
   GENDER_PROPERTY,
   ID_PROPERTY,
-  LOCATION_PROPERTY,
+  METRO_STATION_PROPERTY,
   NAME_PROPERTY,
   QUESTIONNAIRE_PROPERTY,
   READY_PROPERTY,
@@ -20,6 +20,7 @@ import {
 } from './rdo.constant';
 import {ImageRDO} from './image.rdo';
 import {QuestionnaireRdo} from './questionnaire.rdo';
+import {StationRDO} from './station.rdo';
 
 export class UserRDO {
   @ApiProperty({
@@ -66,11 +67,12 @@ export class UserRDO {
   public gender!: Gender;
 
   @ApiProperty({
-    description: LOCATION_PROPERTY.DESCRIPTION,
-    example: LOCATION_PROPERTY.EXAMPLE
+    description: METRO_STATION_PROPERTY.DESCRIPTION,
+    type: StationRDO,
   })
+  @Type(() => StationRDO)
   @Expose()
-  public location!: Location;
+  public station!: StationRDO;
 
   @ApiProperty({
     description: BACKGROUND_PROPERTY.DESCRIPTION,

@@ -1,4 +1,4 @@
-import {ChangeEvent, useState} from 'react';
+import {ChangeEvent, useEffect, useState} from 'react';
 import classNames from 'classnames';
 
 import {Payment} from '../payment';
@@ -7,6 +7,7 @@ import {Quantity} from '../quantity';
 import {useAppDispatch} from '../../hooks';
 import {CreateOrderType, TrainingType} from '../../libs/shared/types';
 import {createOrderAction} from '../../store';
+import {formatNumber, isEscape} from '../../libs/shared/helpers';
 
 type PopupBuyPropsType = {
   product: TrainingType;
@@ -14,7 +15,7 @@ type PopupBuyPropsType = {
   onCloseClick: () => void;
 }
 
-export const PopupBuy = ({product, isActive,onCloseClick}: PopupBuyPropsType) => {
+export const PopupBuy = ({product, isActive, onCloseClick}: PopupBuyPropsType) => {
   const [data, setData] = useState<CreateOrderType>({
     exercise: product.type,
     price: product.price,
@@ -22,21 +23,46 @@ export const PopupBuy = ({product, isActive,onCloseClick}: PopupBuyPropsType) =>
     amount: 0,
     payment: null
   });
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (isActive) {
+      document.addEventListener('keydown', handleKeyPressEsc);
+    }
+
+    return () => document.removeEventListener('keydown', handleKeyPressEsc);
+  }, [isActive]);
+
+  useEffect(() => {
+    if (data.count > 0 && data.payment) {
+      return setIsDisabled(false);
+    }
+    setIsDisabled(true);
+  }, [data]);
+
+  const handleKeyPressEsc = (evt: KeyboardEvent) => {
+    if (isEscape(evt.key)) {
+      onCloseClick();
+    }
+  };
   const handleIncrementClick = () => {
-    setData((prevState) => ({...prevState, count: prevState.count + 1}));
+    setData((prevState) => ({...prevState, count: prevState.count + 1, amount: (prevState.count + 1) * prevState.price}));
   };
   const handleDecrementClick = () => {
-    if (data.count >= 0) {
-      setData((prevState) => ({...prevState, count: prevState.count - 1}));
+    if (data.count > 0) {
+      setData((prevState) => ({...prevState, count: prevState.count - 1, amount: (prevState.count - 1) * prevState.price}));
     }
   };
   const handlePaymentChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setData((prevState) => ({...prevState, payment: evt.target.value}));
   };
   const handleBuyClick = () => {
-    dispatch(createOrderAction({...data, amount: data.count * data.price}));
+    dispatch(createOrderAction(data));
+    setData((prevState) => ({...prevState, count: 0, amount: 0, payment: null}));
+    onCloseClick();
+  };
+  const handleCloseClick = () => {
     setData((prevState) => ({...prevState, count: 0, amount: 0, payment: null}));
     onCloseClick();
   };
@@ -53,7 +79,7 @@ export const PopupBuy = ({product, isActive,onCloseClick}: PopupBuyPropsType) =>
                   className="btn-icon btn-icon--outlined btn-icon--big"
                   type="button"
                   aria-label="close"
-                  onClick={onCloseClick}
+                  onClick={handleCloseClick}
                 >
                   <svg width="20" height="20" aria-hidden="true">
                     <use xlinkHref="#icon-cross"></use>
@@ -72,7 +98,7 @@ export const PopupBuy = ({product, isActive,onCloseClick}: PopupBuyPropsType) =>
                   </div>
                   <div className="popup__product-info">
                     <h3 className="popup__product-title">{product.title}</h3>
-                    <p className="popup__product-price">{`${product.price} ₽`}</p>
+                    <p className="popup__product-price">{`${formatNumber(product.price)} ₽`}</p>
                   </div>
                   <div className="popup__product-quantity">
                     <p className="popup__quantity">Количество</p>
@@ -92,10 +118,10 @@ export const PopupBuy = ({product, isActive,onCloseClick}: PopupBuyPropsType) =>
                   <svg className="popup__total-dash" width="310" height="2" aria-hidden="true">
                     <use xlinkHref="#dash-line"></use>
                   </svg>
-                  <p className="popup__total-price">4&nbsp;000&nbsp;₽</p>
+                  <p className="popup__total-price">{`${formatNumber(data.amount)}\u00A0₽`}</p>
                 </div>
                 <div className="popup__button">
-                  <button className="btn" type="button" onClick={handleBuyClick}>Купить</button>
+                  <button className="btn" type="button" disabled={isDisabled} onClick={handleBuyClick}>Купить</button>
                 </div>
               </div>
             </div>
