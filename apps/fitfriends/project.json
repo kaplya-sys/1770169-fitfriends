@@ -24,38 +24,45 @@
         }
       }
     },
-      "db:validate": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "npx prisma validate",
-          "cwd": "libs/models/prisma"
-        }
-      },
-      "db:generate": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "npx prisma generate",
-          "cwd": "libs/models/prisma"
-        }
-      },
-      "db:reset": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "npx prisma migrate reset --force --skip-generate --skip-seed",
-          "cwd": "libs/models/prisma"
-        }
-      },
-      "db:migrate": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "npx prisma migrate dev --skip-generate --skip-seed",
-          "cwd": "libs/models/prisma"
-        }
-      },
-      "db:fill": {
+    "db:validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma validate",
+        "cwd": "libs/models/prisma"
+      }
+    },
+    "db:generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma generate",
+        "cwd": "libs/models/prisma"
+      }
+    },
+    "db:reset": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate reset --force --skip-generate --skip-seed",
+        "cwd": "libs/models/prisma"
+      }
+    },
+    "db:migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --skip-generate --skip-seed",
+        "cwd": "libs/models/prisma"
+      }
+    },
+    "db:fill": {
       "executor": "nx:run-commands",
       "options": {
         "command": "npx ts-node seed.ts",
+        "cwd": "libs/models/prisma"
+      }
+    },
+		"db:fill-location": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node location-seed.ts",
         "cwd": "libs/models/prisma"
       }
     },
