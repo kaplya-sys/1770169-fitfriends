@@ -25,12 +25,12 @@ async function bootstrap() {
     transform: true
   }));
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: ['http://localhost:4200', 'http://64.188.90.50'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
   });
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
   Logger.log(createMessage(APP_RUN_MESSAGE, [hostname, port, globalPrefix]));
 }
 

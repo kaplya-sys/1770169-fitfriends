@@ -44,7 +44,7 @@ male
 Content-Disposition: form-data; name="role"
 
 user
---MyBoundary-
+--MyBoundary--
 
 ###
 # Create a coach.
@@ -80,7 +80,7 @@ female
 Content-Disposition: form-data; name="role"
 
 coach
---MyBoundary-
+--MyBoundary--
 
 ###
 # Login.
@@ -105,15 +105,37 @@ Content-Type: application/json
 
 POST {{host}}/users/{{userId}}/create-user-questionnaire HTTP/1.1
 Authorization: Bearer {{access_token}}
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=MyBoundary
 
-{
-  "fitnessLevel": "amateur",
-  "trainingTime": "long",
-  "exercises": ["crossfit", "running", "stretching"],
-  "caloriesLose": "4000",
-  "caloriesWaste": "1200"
-}
+--MyBoundary
+Content-Disposition: form-data; name="fitnessLevel"
+
+amateur
+--MyBoundary
+Content-Disposition: form-data; name="trainingTime"
+
+long
+--MyBoundary
+Content-Disposition: form-data; name="exercises"
+
+crossfit
+--MyBoundary
+Content-Disposition: form-data; name="exercises"
+
+running
+--MyBoundary
+Content-Disposition: form-data; name="exercises"
+
+stretching
+--MyBoundary
+Content-Disposition: form-data; name="caloriesLose"
+
+4000
+--MyBoundary
+Content-Disposition: form-data; name="caloriesWaste"
+
+1200
+--MyBoundary--
 
 ###
 # Create a questionnaire for the coach.
@@ -147,7 +169,7 @@ Content-Disposition: form-data; name="experience"
 Content-Disposition: form-data; name="isPersonal"
 
 true
---MyBoundary-
+--MyBoundary--
 
 ###
 # Refresh the token.
@@ -184,7 +206,7 @@ Content-Disposition: form-data; name="description"
 Content-Disposition: form-data; name="station"
 
 udelnaya
---MyBoundary-
+--MyBoundary--
 
 ###
 # Delete the user.
@@ -317,6 +339,6 @@ Content-Disposition: form-data; name="qualification"; filename="{{certificate_na
 Content-Type: application/pdf
 
 < {{certificate_path}}
---MyBoundary-
+--MyBoundary--
 
 ###

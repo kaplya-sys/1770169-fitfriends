@@ -47,7 +47,7 @@ export class AuthenticatedUserRDO {
   })
   @Expose()
   public refreshToken!: string;
-  
+
   @ApiProperty({
     description: ROLE_PROPERTY.DESCRIPTION,
     example: ROLE_PROPERTY.EXAMPLE

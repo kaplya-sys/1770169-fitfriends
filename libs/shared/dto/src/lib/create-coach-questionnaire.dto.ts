@@ -36,6 +36,13 @@ export class CreateCoachQuestionnaireDTO implements CreateCoachQuestionnaire {
     maxItems: EXERCISE_PROPERTY.MAX_ITEMS,
     isArray: true
   })
+  @Transform(({value}) => {
+    if (Array.isArray(value)) {
+      return value;
+    }
+
+    return [value];
+  })
   @IsArray()
   @ArrayMaxSize(EXERCISE_PROPERTY.MAX_ITEMS)
   @IsNotEmpty()

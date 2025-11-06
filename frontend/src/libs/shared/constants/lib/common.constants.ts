@@ -1,4 +1,4 @@
-export const STATIC_BASE_PATH = 'http://localhost:5000/static';
+export const STATIC_BASE_PATH = import.meta.env.VITE_STATIC_URL || 'http://localhost:5000/static';
 export const MAX_EXERCISES_LENGTH = 3;
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_ELEMENTS_VIEW = 5;
